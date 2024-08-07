@@ -6,7 +6,7 @@ import { execSync } from "child_process";
 
 export function peprInit() {
   it("should create a new Pepr project", () => {
-    const peprAlias = "file:pepr-0.0.0-development.tgz";
+    const peprAlias = "file:peppr-0.0.0-development.tgz";
     execSync(`TEST_MODE=true npx --yes ${peprAlias} init`, { stdio: "inherit" });
   });
 }

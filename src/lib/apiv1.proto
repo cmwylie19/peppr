@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package api;
+option go_package = "github.com/cmwylie19/watch-informer/api;api";
+service Watcher {
+    rpc StartWatch(WatchRequest) returns (WatchResponse);
+    rpc WatchEvents(stream EventRequest) returns (stream ResourceEvent);
+}
+
+message WatchRequest {
+    string group = 1;
+    string version = 2;
+    string resource = 3;
+    string namespace = 4;  // Optional: Namespace to watch, empty for all namespaces
+}
+
+message WatchResponse {
+    string message = 1;
+}
+
+message EventRequest {
+    string session_id = 1;  // Session ID for client stream tracking
+}
+
+message ResourceEvent {
+    string eventType = 1;  // e.g., "ADD", "UPDATE", "DELETE"
+    string details = 2;    // Details of the event
+}

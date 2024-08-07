@@ -8,7 +8,7 @@ import Log from "./logger";
 import { Queue } from "./queue";
 import { Binding, Event } from "./types";
 import { metricsCollector } from "./metrics";
-
+import { startWatching, configureWatch } from "./watchClient";
 // Watch configuration
 const watchCfg: WatchCfg = {
   resyncFailureMax: process.env.PEPR_RESYNC_FAILURE_MAX ? parseInt(process.env.PEPR_RESYNC_FAILURE_MAX, 10) : 5,
@@ -78,6 +78,25 @@ async function runBinding(binding: Binding, capabilityNamespaces: string[]) {
   queue.setReconcile(watchCallback);
 
   // Setup the resource watch
+  
+  // start configure what to watch
+  // group-version-resource
+  const v = binding?.kind?.version ?? "v1"
+  const session_id = `${binding.model.name}-${v}-${binding.kind?.kind}`
+  const configWatch = (session_id: string) => {
+    const watch = configureWatch(session_id);
+    watch.on('data', (event: string) => {
+      Log.debug('Received event:', event)
+      startWatching(binding.kind.group, v, binding.kind?.kind, binding.filters.namespaces[0])
+  })
+    watch.on('error', (error: Error) => Log.error('Error:', error.message))
+    watch.on('end', () =>{
+      Log.debug('Stream ended, reconnecting...')
+      configWatch(session_id)
+    }) 
+  }
+  configWatch(session_id)
+
   const watcher = K8s(binding.model, binding.filters).Watch(async (obj, type) => {
     Log.debug(obj, `Watch event ${type} received`);
 
