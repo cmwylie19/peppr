@@ -123,7 +123,7 @@ RegisterKind(ProxyConfig, {
 The generated types can be imported into Pepr directly, _there is no additional logic needed to make them to work_.
 
 ```typescript
-import { Capability, K8s, Log, a, kind } from "pepr";
+import { Capability, K8s, Log, a, kind } from "peppr";
 
 import { Gateway } from "../crds/gateway-v1beta1";
 import {

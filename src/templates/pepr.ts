@@ -1,4 +1,4 @@
-import { PeprModule } from "pepr";
+import { PeprModule } from "peppr";
 // cfg loads your pepr configuration from package.json
 import cfg from "./package.json";
 

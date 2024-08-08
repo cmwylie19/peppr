@@ -123,7 +123,7 @@ npx kubernetes-fluent-client crd https://gist.githubusercontent.com/cmwylie19/69
 Change the first lines of the generated file to the following:
 
 ```typescript
-import { a, RegisterKind } from "pepr";
+import { a, RegisterKind } from "peppr";
 export class WebApp extends a.GenericKind {
     spec?:       Spec;
     status?:     Status;
@@ -217,7 +217,7 @@ export const WebAppCRD = {
 Add a `register.ts` file to the `capabilities/crd/` folder and add the following. This will auto register the CRD on startup.
 
 ```typescript
-import { K8s, Log, kind } from "pepr";
+import { K8s, Log, kind } from "peppr";
 
 import { WebAppCRD } from "./source/webapp.crd";
 
@@ -236,7 +236,7 @@ export const RegisterCRD = () => {
 Finally add a `validate.ts` file to the `crd` folder and add the following. This will ensure that instances of the WebApp resource are in valid namespaces and have a maximum of 7 replicas.
 
 ```typescript
-import { PeprValidateRequest } from "pepr";
+import { PeprValidateRequest } from "peppr";
 
 import { WebApp } from "./generated/webapp-v1alpha1";
 
@@ -274,7 +274,7 @@ In this section we will create helper functions to help with the reconciliation 
 Create a `controller` folder in the `capabilities` folder and create a `generators.ts` file. This file will contain functions that generate Kubernetes Objects for the Operator to deploy (with the ownerReferences auto-included). Since these resources are owned by the WebApp resource, they will be deleted when the WebApp resource is deleted.
 
 ```typescript
-import { kind, K8s, Log, sdk } from "pepr";
+import { kind, K8s, Log, sdk } from "peppr";
 import { WebApp } from "../crd/generated/webapp-v1alpha1";
 
 const { getOwnerRefFrom } = sdk;
@@ -620,7 +620,7 @@ Now, create the function that reacts to changes across WebApp instances. This fu
 In the base of the `capabilities` folder, create a `reconciler.ts` file and add the following:
 
 ```typescript
-import { K8s, Log, sdk } from "pepr";
+import { K8s, Log, sdk } from "peppr";
 import Deploy from "./controller/generators";
 import { Phase, Status, WebApp } from "./crd";
 
@@ -691,7 +691,7 @@ async function updateStatus(instance: WebApp, status: Status) {
 Finally create the `index.ts` file in the `capabilities` folder and add the following:
 
 ```typescript
-import { Capability, a, Log } from "pepr";
+import { Capability, a, Log } from "peppr";
 import { WebApp } from "./crd";
 import { validator } from "./crd/validator";
 import { WebAppCRD } from "./crd/source/webapp.crd";

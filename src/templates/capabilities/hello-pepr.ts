@@ -8,7 +8,7 @@ import {
   fetch,
   fetchStatus,
   kind,
-} from "pepr";
+} from "peppr";
 
 /**
  *  The HelloPepr Capability is an example capability to demonstrate some general concepts of Pepr.
