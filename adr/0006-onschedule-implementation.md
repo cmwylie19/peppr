@@ -8,12 +8,12 @@ Accepted
 
 ## Context
 
-Zarf wrote a Pepr module to facilitate the development in [using ECR as an external registry during 'Zarf Init'](https://github.com/defenseunicorns/zarf/issues/1594). They are running into a challenge where the ECR Registry token is expiring every ~12 hours. Currently, they are having to maintain two completely different codebases, one being the Pepr module that communicates with AWS, and another being a Go app that they run as a `CronJob` to refresh the token. They are interested in rewriting the Go and scheduling logic in Pepr.
+Zarf wrote a peppr module to facilitate the development in [using ECR as an external registry during 'Zarf Init'](https://github.com/defenseunicorns/zarf/issues/1594). They are running into a challenge where the ECR Registry token is expiring every ~12 hours. Currently, they are having to maintain two completely different codebases, one being the peppr module that communicates with AWS, and another being a Go app that they run as a `CronJob` to refresh the token. They are interested in rewriting the Go and scheduling logic in peppr.
 
 We considered a few options:
-- setTimeout - Pepr is created with DevEx being a first class citizen and using a setTimeout doesn't cover persistence and stylistically different than the fluent API.
+- setTimeout - peppr is created with DevEx being a first class citizen and using a setTimeout doesn't cover persistence and stylistically different than the fluent API.
 - setInterval - " " 
-- using a `CronJob` - Forces the user to create a separate container image and maintain two codebases while they already have Pepr which should be able to handle this.
+- using a `CronJob` - Forces the user to create a separate container image and maintain two codebases while they already have peppr which should be able to handle this.
 - Use the crontab API - Provide a crontab string to run at the given time. Too big, didn't want to implement at this point.
 - Use the `OnSchedule` API - Provide a fluent API to run at the given time, with a completions argument.
 
@@ -45,12 +45,12 @@ The watch controller runs a single instance, this means we can avoid multiple co
 
 ### Why `OnSchedule`?
 
-1. **Covers CronJob usecase**: We can cover the repeatability of a kubernetes native `CronJob` using `OnSchedule` to allow Zarf team to consoludate this functionlity into Pepr.
-2. **Backed by etcd**: We can mitigate the risk of Pepr being down by using etcd as the backing store for the `OnSchedule` API and warn the user that these `jobs` should be idempotent.
+1. **Covers CronJob usecase**: We can cover the repeatability of a kubernetes native `CronJob` using `OnSchedule` to allow Zarf team to consoludate this functionlity into peppr.
+2. **Backed by etcd**: We can mitigate the risk of peppr being down by using etcd as the backing store for the `OnSchedule` API and warn the user that these `jobs` should be idempotent.
 
 
 ## Consequences
 
-1. **Developer Experience**: Improved developer experience by extending the functionality provided in Pepr. Reduce the need to maintain a separate codebase to accomplish scheduled `job` type operations.
+1. **Developer Experience**: Improved developer experience by extending the functionality provided in peppr. Reduce the need to maintain a separate codebase to accomplish scheduled `job` type operations.
 2. **Test Stability**: Need to extend the internal tests to cover `OnSchedule`.
 3. **Documentation**: Existing documentation will need to be updated to reflect these changes.

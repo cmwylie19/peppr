@@ -1,4 +1,4 @@
-# Ignore node_modules and Pepr build artifacts
+# Ignore node_modules and peppr build artifacts
 node_modules
 dist
 insecure*

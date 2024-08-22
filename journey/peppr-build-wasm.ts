@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { expect, it } from "@jest/globals";
 import { loadYaml } from "@kubernetes/client-node";
@@ -9,20 +9,20 @@ import { resolve } from "path";
 
 import { cwd } from "./entrypoint.test";
 
-// test npx pepr build -o dst
-const outputDir = "dist/pepr-test-module/child/folder";
-export function peprBuild() {
+// test npx peppr build -o dst
+const outputDir = "dist/peppr-test-module/child/folder";
+export function pepprBuild() {
 
   it("should build artifacts in the dst folder", async () => {
     await fs.mkdir(outputDir, { recursive: true })
   });
 
-  it("should successfully build the Pepr project with arguments", async () => {
-    execSync(`npx pepr build -r gchr.io/defenseunicorns --rbac-mode scoped -o ${outputDir}`, { cwd: cwd, stdio: "inherit" });
+  it("should successfully build the peppr project with arguments", async () => {
+    execSync(`npx peppr build -r gchr.io/defenseunicorns --rbac-mode scoped -o ${outputDir}`, { cwd: cwd, stdio: "inherit" });
   });
 
   it("should generate produce the K8s yaml file", async () => {
-    await fs.access(resolve(cwd, outputDir, "pepr-module-static-test.yaml"));
+    await fs.access(resolve(cwd, outputDir, "peppr-module-static-test.yaml"));
   });
 
   it("should generate a custom image in zarf.yaml", async () => {
@@ -37,29 +37,29 @@ export function peprBuild() {
 
 async function validateClusterRoleYaml() {
   // Read the generated yaml files
-  const k8sYaml = await fs.readFile(resolve(cwd, outputDir, "pepr-module-static-test.yaml"), "utf8");
+  const k8sYaml = await fs.readFile(resolve(cwd, outputDir, "peppr-module-static-test.yaml"), "utf8");
   const cr = await fs.readFile(resolve("journey", "resources", "clusterrole.yaml"), "utf8");
 
   expect(k8sYaml.includes(cr)).toEqual(true)
 }
 
 async function validateZarfYaml() {
-  // Get the version of the pepr binary
-  const peprVer = execSync("npx pepr --version", { cwd }).toString().trim();
+  // Get the version of the peppr binary
+  const pepprVer = execSync("npx peppr --version", { cwd }).toString().trim();
 
   // Read the generated yaml files
-  const k8sYaml = await fs.readFile(resolve(cwd, outputDir, "pepr-module-static-test.yaml"), "utf8");
+  const k8sYaml = await fs.readFile(resolve(cwd, outputDir, "peppr-module-static-test.yaml"), "utf8");
   const zarfYAML = await fs.readFile(resolve(cwd, outputDir, "zarf.yaml"), "utf8");
 
   // The expected image name
-  const expectedImage = `gchr.io/defenseunicorns/custom-pepr-controller:0.0.0-development`;
+  const expectedImage = `gchr.io/defenseunicorns/custom-peppr-controller:0.0.0-development`;
 
   // The expected zarf yaml contents
   const expectedZarfYaml = {
     kind: "ZarfPackageConfig",
     metadata: {
-      name: "pepr-static-test",
-      description: "Pepr Module: A test module for Pepr",
+      name: "peppr-static-test",
+      description: "peppr Module: A test module for peppr",
       url: "https://github.com/cmwylie19/peppr",
       version: "0.0.1",
     },
@@ -70,8 +70,8 @@ async function validateZarfYaml() {
         manifests: [
           {
             name: "module",
-            namespace: "pepr-system",
-            files: ["pepr-module-static-test.yaml"],
+            namespace: "peppr-system",
+            files: ["peppr-module-static-test.yaml"],
           },
         ],
         images: [expectedImage],

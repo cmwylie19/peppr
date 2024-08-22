@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 export function nsTemplate() {
   return `
     apiVersion: v1
     kind: Namespace
     metadata:
-        name: pepr-system
+        name: peppr-system
         {{- if .Values.namespace.annotations }}
         annotations:
             {{- toYaml .Values.namespace.annotations | nindent 6 }}
@@ -53,7 +53,7 @@ export function watcherDeployTemplate(buildTimestamp: string) {
       kind: Deployment
       metadata:
         name: {{ .Values.uuid }}-watcher
-        namespace: pepr-system
+        namespace: peppr-system
         annotations:
           {{- toYaml .Values.watcher.annotations | nindent 4 }}
         labels:
@@ -65,7 +65,7 @@ export function watcherDeployTemplate(buildTimestamp: string) {
         selector:
           matchLabels:
             app: {{ .Values.uuid }}-watcher
-            pepr.dev/controller: watcher
+            peppr.dev/controller: watcher
         template:
           metadata:
             annotations: 
@@ -75,7 +75,7 @@ export function watcherDeployTemplate(buildTimestamp: string) {
               {{- end }}
             labels:
               app: {{ .Values.uuid }}-watcher
-              pepr.dev/controller: watcher
+              peppr.dev/controller: watcher
           spec:
             terminationGracePeriodSeconds: {{ .Values.watcher.terminationGracePeriodSeconds }}
             serviceAccountName: {{ .Values.uuid }}
@@ -87,7 +87,7 @@ export function watcherDeployTemplate(buildTimestamp: string) {
                 imagePullPolicy: IfNotPresent
                 command:
                   - node
-                  - /app/node_modules/pepr/dist/controller.js
+                  - /app/node_modules/peppr/dist/controller.js
                   - {{ .Values.hash }}
                 readinessProbe:
                   httpGet:
@@ -105,7 +105,7 @@ export function watcherDeployTemplate(buildTimestamp: string) {
                   {{- toYaml .Values.watcher.resources | nindent 12 }}
                 env:
                   {{- toYaml .Values.watcher.env | nindent 12 }}
-                  - name: PEPR_WATCH_MODE
+                  - name: peppr_WATCH_MODE
                     value: "true"
                 envFrom:
                   {{- toYaml .Values.watcher.envFrom | nindent 12 }}
@@ -140,7 +140,7 @@ export function admissionDeployTemplate(buildTimestamp: string) {
       kind: Deployment
       metadata:
         name: {{ .Values.uuid }}
-        namespace: pepr-system
+        namespace: peppr-system
         annotations:
           {{- toYaml .Values.admission.annotations | nindent 4 }}
         labels:
@@ -150,7 +150,7 @@ export function admissionDeployTemplate(buildTimestamp: string) {
         selector:
           matchLabels:
             app: {{ .Values.uuid }}
-            pepr.dev/controller: admission
+            peppr.dev/controller: admission
         template:
           metadata:
             annotations:
@@ -160,7 +160,7 @@ export function admissionDeployTemplate(buildTimestamp: string) {
               {{- end }}
             labels:
               app: {{ .Values.uuid }}
-              pepr.dev/controller: admission
+              peppr.dev/controller: admission
           spec:
             terminationGracePeriodSeconds: {{ .Values.admission.terminationGracePeriodSeconds }}
             priorityClassName: system-node-critical
@@ -173,7 +173,7 @@ export function admissionDeployTemplate(buildTimestamp: string) {
                 imagePullPolicy: IfNotPresent
                 command:
                   - node
-                  - /app/node_modules/pepr/dist/controller.js
+                  - /app/node_modules/peppr/dist/controller.js
                   - {{ .Values.hash }}
                 readinessProbe:
                   httpGet:
@@ -191,7 +191,7 @@ export function admissionDeployTemplate(buildTimestamp: string) {
                   {{- toYaml .Values.admission.resources | nindent 12 }}
                 env:
                   {{- toYaml .Values.admission.env | nindent 12 }}
-                  - name: PEPR_WATCH_MODE
+                  - name: peppr_WATCH_MODE
                     value: "false"
                 envFrom:
                   {{- toYaml .Values.admission.envFrom | nindent 12 }}
@@ -240,10 +240,10 @@ export function serviceMonitorTemplate(name: string) {
       spec:
         selector:
           matchLabels:
-            pepr.dev/controller: ${name}
+            peppr.dev/controller: ${name}
         namespaceSelector:
           matchNames:
-            - pepr-system
+            - peppr-system
         endpoints:
           - targetPort: 3000
             scheme: https

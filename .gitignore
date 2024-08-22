@@ -8,7 +8,7 @@
 bin
 testbin/*
 Dockerfile.cross
-pepr
+peppr
 dist/
 *.js
 *.js.amp
@@ -20,8 +20,8 @@ node_modules/
 stats.html
 .vscode
 insecure-tls*
-pepr-test-module
-pepr-upgrade-test
+peppr-test-module
+peppr-upgrade-test
 *.tgz
 coverage/
 src/.DS_Store

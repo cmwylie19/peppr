@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { beforeEach, expect, jest, test, describe } from "@jest/globals";
 import { clone } from "ramda";
 import { Capability } from "./capability";
 import { Schedule } from "./schedule";
 import { Errors } from "./errors";
-import { PackageJSON, PeprModule } from "./module";
+import { PackageJSON, pepprModule } from "./module";
 import { CapabilityExport } from "./types";
 
 // Mock Controller
@@ -27,9 +27,9 @@ beforeEach(() => {
 // Mock PackageJSON
 const packageJSON: PackageJSON = {
   description: "Test Description",
-  pepr: {
+  peppr: {
     uuid: "20e17cf6-a2e4-46b2-b626-75d88d96c88b",
-    description: "Development module for pepr",
+    description: "Development module for peppr",
     onError: "ignore",
     alwaysIgnore: {
       namespaces: [],
@@ -38,49 +38,49 @@ const packageJSON: PackageJSON = {
 };
 
 test("should instantiate Controller and start it with the default port", () => {
-  new PeprModule(packageJSON);
+  new pepprModule(packageJSON);
   expect(startServerMock).toHaveBeenCalledWith(3000);
 });
 
 test("should instantiate Controller and start it with the specified port", () => {
-  const module = new PeprModule(packageJSON, [], { deferStart: true });
+  const module = new pepprModule(packageJSON, [], { deferStart: true });
   const port = Math.floor(Math.random() * 10000) + 1000;
   module.start(port);
   expect(startServerMock).toHaveBeenCalledWith(port);
 });
 
 test("should not start if deferStart is true", () => {
-  new PeprModule(packageJSON, [], { deferStart: true });
+  new pepprModule(packageJSON, [], { deferStart: true });
   expect(startServerMock).not.toHaveBeenCalled();
 });
 
-test("should reject invalid pepr onError conditions", () => {
+test("should reject invalid peppr onError conditions", () => {
   const cfg = clone(packageJSON);
-  cfg.pepr.onError = "invalidError";
-  expect(() => new PeprModule(cfg)).toThrow();
+  cfg.peppr.onError = "invalidError";
+  expect(() => new pepprModule(cfg)).toThrow();
 });
 
-test("should allow valid pepr onError conditions", () => {
+test("should allow valid peppr onError conditions", () => {
   const cfg = clone(packageJSON);
-  cfg.pepr.onError = Errors.audit;
-  expect(() => new PeprModule(cfg)).not.toThrow();
+  cfg.peppr.onError = Errors.audit;
+  expect(() => new pepprModule(cfg)).not.toThrow();
 
-  cfg.pepr.onError = Errors.ignore;
-  expect(() => new PeprModule(cfg)).not.toThrow();
+  cfg.peppr.onError = Errors.ignore;
+  expect(() => new pepprModule(cfg)).not.toThrow();
 
-  cfg.pepr.onError = Errors.reject;
-  expect(() => new PeprModule(cfg)).not.toThrow();
+  cfg.peppr.onError = Errors.reject;
+  expect(() => new pepprModule(cfg)).not.toThrow();
 });
 
-test("should not create a controller if PEPR_MODE is set to build", () => {
-  process.env.PEPR_MODE = "build";
-  new PeprModule(packageJSON);
+test("should not create a controller if peppr_MODE is set to build", () => {
+  process.env.peppr_MODE = "build";
+  new pepprModule(packageJSON);
   expect(startServerMock).not.toHaveBeenCalled();
 });
 
-test("should send the capabilities to the parent process if PEPR_MODE is set to build", () => {
+test("should send the capabilities to the parent process if peppr_MODE is set to build", () => {
   const sendMock = jest.spyOn(process, "send").mockImplementation(() => true);
-  process.env.PEPR_MODE = "build";
+  process.env.peppr_MODE = "build";
 
   const capability = new Capability({
     name: "test",
@@ -95,7 +95,7 @@ test("should send the capabilities to the parent process if PEPR_MODE is set to 
     hasSchedule: capability.hasSchedule,
   };
 
-  new PeprModule(packageJSON, [capability]);
+  new pepprModule(packageJSON, [capability]);
   expect(sendMock).toHaveBeenCalledWith([expected]);
 });
 

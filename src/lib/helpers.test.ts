@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { Binding, CapabilityExport } from "./types";
 import {
@@ -51,11 +51,11 @@ jest.mock("fs", () => {
 
 const mockCapabilities: CapabilityExport[] = JSON.parse(`[
     {
-        "name": "hello-pepr",
+        "name": "hello-peppr",
         "description": "A simple example capability to show how things work.",
         "namespaces": [
-            "pepr-demo",
-            "pepr-demo-2"
+            "peppr-demo",
+            "peppr-demo-2"
         ],
         "bindings": [
             {
@@ -81,7 +81,7 @@ const mockCapabilities: CapabilityExport[] = JSON.parse(`[
                 },
                 "event": "DELETE",
                 "filters": {
-                    "name": "pepr-demo-2",
+                    "name": "peppr-demo-2",
                     "namespaces": [],
                     "labels": {},
                     "annotations": {}
@@ -222,7 +222,7 @@ const mockCapabilities: CapabilityExport[] = JSON.parse(`[
                 "filters": {
                     "name": "example-4a",
                     "namespaces": [
-                        "pepr-demo-2"
+                        "peppr-demo-2"
                     ],
                     "labels": {},
                     "annotations": {}
@@ -263,7 +263,7 @@ const mockCapabilities: CapabilityExport[] = JSON.parse(`[
             },
             {
                 "kind": {
-                    "group": "pepr.dev",
+                    "group": "peppr.dev",
                     "version": "v1",
                     "kind": "Unicorn"
                 },
@@ -278,7 +278,7 @@ const mockCapabilities: CapabilityExport[] = JSON.parse(`[
             },
             {
                 "kind": {
-                    "group": "pepr.dev",
+                    "group": "peppr.dev",
                     "version": "v1",
                     "kind": "Unicorn"
                 },
@@ -341,9 +341,9 @@ describe("createRBACMap", () => {
     const result = createRBACMap(mockCapabilities);
 
     const expected = {
-      "pepr.dev/v1/peprstore": {
+      "peppr.dev/v1/pepprstore": {
         verbs: ["create", "get", "patch", "watch"],
-        plural: "peprstores",
+        plural: "pepprstores",
       },
       "apiextensions.k8s.io/v1/customresourcedefinition": {
         verbs: ["patch", "create"],
@@ -376,7 +376,7 @@ describe("createDirectoryIfNotExists function", () => {
     (fs.access as jest.Mock).mockRejectedValue({ code: "ENOENT" } as never);
     (fs.mkdir as jest.Mock).mockResolvedValue(undefined as never);
 
-    const directoryPath = "/pepr/pepr-test-module/asdf";
+    const directoryPath = "/peppr/peppr-test-module/asdf";
 
     await createDirectoryIfNotExists(directoryPath);
 
@@ -388,7 +388,7 @@ describe("createDirectoryIfNotExists function", () => {
     jest.resetAllMocks();
     (fs.access as jest.Mock).mockResolvedValue(undefined as never);
 
-    const directoryPath = "/pepr/pepr-test-module/asdf";
+    const directoryPath = "/peppr/peppr-test-module/asdf";
 
     await createDirectoryIfNotExists(directoryPath);
 
@@ -400,7 +400,7 @@ describe("createDirectoryIfNotExists function", () => {
     jest.resetAllMocks();
     (fs.access as jest.Mock).mockRejectedValue({ code: "ERROR" } as never);
 
-    const directoryPath = "/pepr/pepr-test-module/asdf";
+    const directoryPath = "/peppr/peppr-test-module/asdf";
 
     try {
       await createDirectoryIfNotExists(directoryPath);
@@ -491,7 +491,7 @@ describe("bindingAndCapabilityNSConflict", () => {
 describe("generateWatchNamespaceError", () => {
   test("returns error for ignored namespace conflict", () => {
     const error = generateWatchNamespaceError(["ns1"], ["ns1"], []);
-    expect(error).toBe("Binding uses a Pepr ignored namespace: ignoredNamespaces: [ns1] bindingNamespaces: [ns1].");
+    expect(error).toBe("Binding uses a peppr ignored namespace: ignoredNamespaces: [ns1] bindingNamespaces: [ns1].");
   });
 
   test("returns error for binding and capability namespace conflict", () => {
@@ -504,7 +504,7 @@ describe("generateWatchNamespaceError", () => {
   test("returns combined error for both conflicts", () => {
     const error = generateWatchNamespaceError(["ns1"], ["ns1"], ["ns3", "ns4"]);
     expect(error).toBe(
-      "Binding uses a Pepr ignored namespace: ignoredNamespaces: [ns1] bindingNamespaces: [ns1]. Binding uses namespace not governed by capability: bindingNamespaces: [ns1] capabilityNamespaces: [ns3, ns4].",
+      "Binding uses a peppr ignored namespace: ignoredNamespaces: [ns1] bindingNamespaces: [ns1]. Binding uses namespace not governed by capability: bindingNamespaces: [ns1] capabilityNamespaces: [ns3, ns4].",
     );
   });
 
@@ -632,7 +632,7 @@ describe("namespaceComplianceValidator", () => {
       namespaceComplianceValidator(nonNsViolation[0], ["miami"]);
     } catch (e) {
       expect(e.message).toBe(
-        "Error in test-capability-namespaces capability. A binding violates namespace rules. Please check ignoredNamespaces and capability namespaces: Binding uses a Pepr ignored namespace: ignoredNamespaces: [miami] bindingNamespaces: [miami].",
+        "Error in test-capability-namespaces capability. A binding violates namespace rules. Please check ignoredNamespaces and capability namespaces: Binding uses a peppr ignored namespace: ignoredNamespaces: [miami] bindingNamespaces: [miami].",
       );
     }
   });
@@ -646,7 +646,7 @@ describe("namespaceComplianceValidator", () => {
       namespaceComplianceValidator(allNSCapabilities[0], ["new york"]);
     } catch (e) {
       expect(e.message).toBe(
-        "Error in test-capability-namespaces capability. A binding violates namespace rules. Please check ignoredNamespaces and capability namespaces: Binding uses a Pepr ignored namespace: ignoredNamespaces: [new york] bindingNamespaces: [new york].",
+        "Error in test-capability-namespaces capability. A binding violates namespace rules. Please check ignoredNamespaces and capability namespaces: Binding uses a peppr ignored namespace: ignoredNamespaces: [new york] bindingNamespaces: [new york].",
       );
     }
   });
@@ -669,7 +669,7 @@ describe("checkDeploymentStatus", () => {
         {
           metadata: {
             name: "watcher",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 1,
@@ -681,7 +681,7 @@ describe("checkDeploymentStatus", () => {
         {
           metadata: {
             name: "admission",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 2,
@@ -701,7 +701,7 @@ describe("checkDeploymentStatus", () => {
     });
 
     const expected = true;
-    const result = await checkDeploymentStatus("pepr-system");
+    const result = await checkDeploymentStatus("peppr-system");
     expect(result).toBe(expected);
   });
 
@@ -711,7 +711,7 @@ describe("checkDeploymentStatus", () => {
         {
           metadata: {
             name: "watcher",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 1,
@@ -723,7 +723,7 @@ describe("checkDeploymentStatus", () => {
         {
           metadata: {
             name: "admission",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 2,
@@ -743,7 +743,7 @@ describe("checkDeploymentStatus", () => {
     });
 
     const expected = false;
-    const result = await checkDeploymentStatus("pepr-system");
+    const result = await checkDeploymentStatus("peppr-system");
     expect(result).toBe(expected);
   });
 });
@@ -766,7 +766,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "watcher",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 1,
@@ -778,7 +778,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "admission",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 2,
@@ -808,7 +808,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "watcher",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 1,
@@ -820,7 +820,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "admission",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 2,
@@ -837,7 +837,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "watcher",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 1,
@@ -849,7 +849,7 @@ describe("namespaceDeploymentsReady", () => {
         {
           metadata: {
             name: "admission",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
           },
           spec: {
             replicas: 2,
@@ -925,13 +925,13 @@ describe("dedent", () => {
     const input = `
       kind: Namespace
       metadata:
-        name: pepr-system
+        name: peppr-system
       `;
     const inputArray = dedent(input).split(/\r?\n/);
 
     expect(inputArray[0]).toBe("kind: Namespace");
     expect(inputArray[1]).toBe("metadata:");
-    expect(inputArray[2]).toBe("  name: pepr-system");
+    expect(inputArray[2]).toBe("  name: peppr-system");
   });
 
   test("does not remove internal spacing of lines", () => {

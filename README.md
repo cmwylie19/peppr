@@ -1,2 +1,2 @@
-# Not the real Pepr
-Real Pepr is [here](https://github.com/defenseunicorns/pepr).
+# Not the real peppr
+Real peppr is [here](https://github.com/defenseunicorns/peppr).

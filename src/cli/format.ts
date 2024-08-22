@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { ESLint } from "eslint";
 import { promises as fs } from "fs";
@@ -10,10 +10,10 @@ import { RootCmd } from "./root";
 export default function (program: RootCmd) {
   program
     .command("format")
-    .description("Lint and format this Pepr module")
+    .description("Lint and format this peppr module")
     .option("-v, --validate-only", "Do not modify files, only validate formatting")
     .action(async opts => {
-      const success = await peprFormat(opts.validateOnly);
+      const success = await pepprFormat(opts.validateOnly);
 
       if (success) {
         console.info("✅ Module formatted");
@@ -28,7 +28,7 @@ export default function (program: RootCmd) {
  * @param validateOnly
  * @returns success
  */
-export async function peprFormat(validateOnly: boolean) {
+export async function pepprFormat(validateOnly: boolean) {
   {
     try {
       const eslint = new ESLint();

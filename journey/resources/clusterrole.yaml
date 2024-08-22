@@ -2,12 +2,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: pepr-static-test
+  name: peppr-static-test
 rules:
   - apiGroups:
-      - pepr.dev
+      - peppr.dev
     resources:
-      - peprstores
+      - pepprstores
     verbs:
       - create
       - get

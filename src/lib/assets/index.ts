@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import crypto from "crypto";
 import { dumpYaml } from "@kubernetes/client-node";
@@ -36,13 +36,13 @@ export class Assets {
     readonly path: string,
     readonly host?: string,
   ) {
-    this.name = `pepr-${config.uuid}`;
+    this.name = `peppr-${config.uuid}`;
     this.buildTimestamp = `${Date.now()}`;
     this.alwaysIgnore = config.alwaysIgnore;
-    this.image = `ghcr.io/cmwylie19/peppr/controller:v${config.peprVersion}`;
+    this.image = `ghcr.io/cmwylie19/peppr/controller:v${config.pepprVersion}`;
     this.hash = "";
     // Generate the ephemeral tls things
-    this.tls = genTLS(this.host || `${this.name}.pepr-system.svc`);
+    this.tls = genTLS(this.host || `${this.name}.peppr-system.svc`);
 
     // Generate the api token for the controller / webhook
     this.apiToken = crypto.randomBytes(32).toString("hex");

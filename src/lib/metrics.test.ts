@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { expect, test } from "@jest/globals";
 import { performance } from "perf_hooks";
@@ -58,16 +58,16 @@ test("observeEnd updates summary", async () => {
   expect(metrics).toMatch(/testPrefix_validate_sum \d+\.\d+/);
 });
 
-test("coverage tests, with duplicate counters, default prefix (pepr) and still works properly", async () => {
+test("coverage tests, with duplicate counters, default prefix (peppr) and still works properly", async () => {
   const collector = new MetricsCollector();
   collector.addCounter("testCounter", "testHelp");
   // second one should log, but still work fine TODO: validate log
   collector.addCounter("testCounter", "testHelp");
   let metrics = await collector.getMetrics();
-  expect(metrics).toMatch(/pepr_testCounter 0/);
+  expect(metrics).toMatch(/peppr_testCounter 0/);
   collector.incCounter("testCounter");
   metrics = await collector.getMetrics();
-  expect(metrics).toMatch(/pepr_testCounter 1/);
+  expect(metrics).toMatch(/peppr_testCounter 1/);
   collector.addSummary("testSummary", "testHelp");
   // second one should log, but still work fine TODO: validate log
   collector.addSummary("testSummary", "testHelp");
@@ -77,8 +77,8 @@ test("coverage tests, with duplicate counters, default prefix (pepr) and still w
   collector.observeEnd(startTime, "testSummary");
   collector.observeEnd(startTime, "testSummary");
   metrics = await collector.getMetrics();
-  expect(metrics).toMatch(/pepr_testSummary_count 2/);
-  expect(metrics).toMatch(/pepr_testSummary_sum \d+\.\d+/);
+  expect(metrics).toMatch(/peppr_testSummary_count 2/);
+  expect(metrics).toMatch(/peppr_testSummary_sum \d+\.\d+/);
 });
 
 test("incCacheMiss increments cache miss gauge", async () => {
@@ -109,8 +109,8 @@ test("initCacheMissWindow initializes cache miss gauge to zero", async () => {
 });
 
 test("should initialize cache miss window and maintain size limit", async () => {
-  process.env.PEPR_MAX_CACHE_MISS_WINDOWS = "3";
-  const collector = new MetricsCollector("pepr");
+  process.env.peppr_MAX_CACHE_MISS_WINDOWS = "3";
+  const collector = new MetricsCollector("peppr");
   collector.initCacheMissWindow("window1");
   collector.initCacheMissWindow("window2");
   collector.initCacheMissWindow("window3");

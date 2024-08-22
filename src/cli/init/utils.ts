@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { promises as fs } from "fs";
 
 /**
- * Sanitize a user input name to be used as a pepr module directory name
+ * Sanitize a user input name to be used as a peppr module directory name
  *
  * @param name the user input name
  * @returns the sanitized name

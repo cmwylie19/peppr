@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { pino, stdTimeFunctions } from "pino";
 
-const isPrettyLog = process.env.PEPR_PRETTY_LOGS === "true";
+const isPrettyLog = process.env.peppr_PRETTY_LOGS === "true";
 
 const pretty = {
   target: "pino-pretty",

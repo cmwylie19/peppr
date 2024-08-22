@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { kind } from "kubernetes-fluent-client";
 
@@ -11,7 +11,7 @@ export function apiTokenSecret(name: string, apiToken: string): kind.Secret {
     kind: "Secret",
     metadata: {
       name: `${name}-api-token`,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
     },
     type: "Opaque",
     data: {
@@ -26,7 +26,7 @@ export function tlsSecret(name: string, tls: TLSOut): kind.Secret {
     kind: "Secret",
     metadata: {
       name: `${name}-tls`,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
     },
     type: "kubernetes.io/tls",
     data: {
@@ -42,15 +42,15 @@ export function service(name: string): kind.Service {
     kind: "Service",
     metadata: {
       name,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
       labels: {
-        "pepr.dev/controller": "admission",
+        "peppr.dev/controller": "admission",
       },
     },
     spec: {
       selector: {
         app: name,
-        "pepr.dev/controller": "admission",
+        "peppr.dev/controller": "admission",
       },
       ports: [
         {
@@ -68,15 +68,15 @@ export function watcherService(name: string): kind.Service {
     kind: "Service",
     metadata: {
       name: `${name}-watcher`,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
       labels: {
-        "pepr.dev/controller": "watcher",
+        "peppr.dev/controller": "watcher",
       },
     },
     spec: {
       selector: {
         app: `${name}-watcher`,
-        "pepr.dev/controller": "watcher",
+        "peppr.dev/controller": "watcher",
       },
       ports: [
         {

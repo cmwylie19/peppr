@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { createDockerfile } from "./included-files";
 import { expect, describe, test } from "@jest/globals";
@@ -7,7 +7,7 @@ import { promises as fs } from "fs";
 
 describe("createDockerfile", () => {
   const version = "0.0.1";
-  const description = "Pepr supports WASM modules!";
+  const description = "peppr supports WASM modules!";
   const includedFiles = ["main.wasm", "wasm_exec.js"];
   test("should create a Dockerfile.controller with the correct content", async () => {
     await createDockerfile(version, description, includedFiles);

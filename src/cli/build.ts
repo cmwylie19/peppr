@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { execSync, execFileSync } from "child_process";
 import { BuildOptions, BuildResult, analyzeMetafile, context } from "esbuild";
@@ -9,20 +9,20 @@ import { createDockerfile } from "../lib/included-files";
 import { Assets } from "../lib/assets";
 import { dependencies, version } from "./init/templates";
 import { RootCmd } from "./root";
-import { peprFormat } from "./format";
+import { pepprFormat } from "./format";
 import { Option } from "commander";
 import { createDirectoryIfNotExists, validateCapabilityNames, parseTimeout } from "../lib/helpers";
 import { sanitizeResourceName } from "../sdk/sdk";
 
-const peprTS = "pepr.ts";
+const pepprTS = "peppr.ts";
 let outputDir: string = "dist";
 export type Reloader = (opts: BuildResult<BuildOptions>) => void | Promise<void>;
 
 export default function (program: RootCmd) {
   program
     .command("build")
-    .description("Build a Pepr Module for deployment")
-    .option("-e, --entry-point [file]", "Specify the entry point file to build with.", peprTS)
+    .description("Build a peppr Module for deployment")
+    .option("-e, --entry-point [file]", "Specify the entry point file to build with.", pepprTS)
     .option(
       "-n, --no-embed",
       "Disables embedding of deployment files into output module.  Useful when creating library modules intended solely for reuse/distribution via NPM.",
@@ -43,7 +43,7 @@ export default function (program: RootCmd) {
     )
     .option(
       "-v, --version <version>. Example: '0.27.3'",
-      "The version of the Pepr image to use in the deployment manifests.",
+      "The version of the peppr image to use in the deployment manifests.",
     )
     .option(
       "--withPullSecret <imagePullSecret>",
@@ -84,7 +84,7 @@ export default function (program: RootCmd) {
       const { cfg, path, uuid } = await buildModule(undefined, opts.entryPoint, opts.embed);
 
       // Files to include in controller image for WASM support
-      const { includedFiles } = cfg.pepr;
+      const { includedFiles } = cfg.peppr;
 
       let image: string = "";
 
@@ -99,18 +99,18 @@ export default function (program: RootCmd) {
 
       // Check if there is a custom timeout defined
       if (opts.timeout !== undefined) {
-        cfg.pepr.webhookTimeout = opts.timeout;
+        cfg.peppr.webhookTimeout = opts.timeout;
       }
 
       if (opts.registryInfo !== undefined) {
         console.info(`Including ${includedFiles.length} files in controller image.`);
 
         // for journey test to make sure the image is built
-        image = `${opts.registryInfo}/custom-pepr-controller:${cfg.pepr.peprVersion}`;
+        image = `${opts.registryInfo}/custom-peppr-controller:${cfg.peppr.pepprVersion}`;
 
         // only actually build/push if there are files to include
         if (includedFiles.length > 0) {
-          await createDockerfile(cfg.pepr.peprVersion, cfg.description, includedFiles);
+          await createDockerfile(cfg.peppr.pepprVersion, cfg.description, includedFiles);
           execSync(`docker build --tag ${image} -f Dockerfile.controller .`, { stdio: "inherit" });
           execSync(`docker push ${image}`, { stdio: "inherit" });
         }
@@ -124,13 +124,13 @@ export default function (program: RootCmd) {
 
       // set the image version if provided
       if (opts.version) {
-        cfg.pepr.peprVersion = opts.version;
+        cfg.peppr.pepprVersion = opts.version;
       }
 
       // Generate a secret for the module
       const assets = new Assets(
         {
-          ...cfg.pepr,
+          ...cfg.peppr,
           appVersion: cfg.version,
           description: cfg.description,
         },
@@ -140,9 +140,9 @@ export default function (program: RootCmd) {
       // If registry is set to Iron Bank, use Iron Bank image
       if (opts?.registry == "Iron Bank") {
         console.warn(
-          `\n\tThis command assumes the latest release. Pepr's Iron Bank image release cycle is dictated by renovate and is typically released a few days after the GitHub release.\n\tAs an alternative you may consider custom --custom-image to target a specific image and version.`,
+          `\n\tThis command assumes the latest release. peppr's Iron Bank image release cycle is dictated by renovate and is typically released a few days after the GitHub release.\n\tAs an alternative you may consider custom --custom-image to target a specific image and version.`,
         );
-        image = `registry1.dso.mil/ironbank/opensource/cmwylie19/peppr/controller:v${cfg.pepr.peprVersion}`;
+        image = `registry1.dso.mil/ironbank/opensource/cmwylie19/peppr/controller:v${cfg.peppr.pepprVersion}`;
       }
 
       // if image is a custom image, use that instead of the default
@@ -161,7 +161,7 @@ export default function (program: RootCmd) {
         }
       }
 
-      const yamlFile = `pepr-module-${uuid}.yaml`;
+      const yamlFile = `peppr-module-${uuid}.yaml`;
       const chartPath = `${uuid}-chart`;
       const yamlPath = resolve(outputDir, yamlFile);
       const yaml = await assets.allYaml(opts.rbacMode, opts.withPullSecret);
@@ -194,13 +194,13 @@ export default function (program: RootCmd) {
 // Create a list of external libraries to exclude from the bundle, these are already stored in the container
 const externalLibs = Object.keys(dependencies);
 
-// Add the pepr library to the list of external libraries
-externalLibs.push("pepr");
+// Add the peppr library to the list of external libraries
+externalLibs.push("peppr");
 
 // Add the kubernetes client to the list of external libraries as it is pulled in by kubernetes-fluent-client
 externalLibs.push("@kubernetes/client-node");
 
-export async function loadModule(entryPoint = peprTS) {
+export async function loadModule(entryPoint = pepprTS) {
   // Resolve path to the module / files
   const entryPointPath = resolve(".", entryPoint);
   const modulePath = dirname(entryPointPath);
@@ -220,11 +220,11 @@ export async function loadModule(entryPoint = peprTS) {
   // Read the module's UUID from the package.json file
   const moduleText = await fs.readFile(cfgPath, { encoding: "utf-8" });
   const cfg = JSON.parse(moduleText);
-  const { uuid } = cfg.pepr;
-  const name = `pepr-${uuid}.js`;
+  const { uuid } = cfg.peppr;
+  const name = `peppr-${uuid}.js`;
 
-  // Set the Pepr version from the current running version
-  cfg.pepr.peprVersion = version;
+  // Set the peppr version from the current running version
+  cfg.peppr.pepprVersion = version;
 
   // Exit if the module's UUID could not be found
   if (!uuid) {
@@ -241,16 +241,16 @@ export async function loadModule(entryPoint = peprTS) {
   };
 }
 
-export async function buildModule(reloader?: Reloader, entryPoint = peprTS, embed = true) {
+export async function buildModule(reloader?: Reloader, entryPoint = pepprTS, embed = true) {
   try {
     const { cfg, modulePath, path, uuid } = await loadModule(entryPoint);
 
-    const validFormat = await peprFormat(true);
+    const validFormat = await pepprFormat(true);
 
     if (!validFormat) {
       console.log(
         "\x1b[33m%s\x1b[0m",
-        "Formatting errors were found. The build will continue, but you may want to run `npx pepr format` to address any issues.",
+        "Formatting errors were found. The build will continue, but you may want to run `npx peppr format` to address any issues.",
       );
     }
 
@@ -349,7 +349,7 @@ export async function buildModule(reloader?: Reloader, entryPoint = peprTS, embe
         // If the regex didn't match, leave a generic error
         if (conflicts.length < 1) {
           console.warn(
-            `\n\tOne or more imported Pepr Capabilities seem to be using an incompatible version of Pepr.\n\tTry updating your Pepr Capabilities to their latest versions.`,
+            `\n\tOne or more imported peppr Capabilities seem to be using an incompatible version of peppr.\n\tTry updating your peppr Capabilities to their latest versions.`,
             "Version Conflict",
           );
         }
@@ -357,7 +357,7 @@ export async function buildModule(reloader?: Reloader, entryPoint = peprTS, embe
         // Otherwise, loop through each conflicting package and print an error
         conflicts.forEach(match => {
           console.warn(
-            `\n\tPackage '${match[1]}' seems to be incompatible with your current version of Pepr.\n\tTry updating to the latest version.`,
+            `\n\tPackage '${match[1]}' seems to be incompatible with your current version of peppr.\n\tTry updating to the latest version.`,
             "Version Conflict",
           );
         });

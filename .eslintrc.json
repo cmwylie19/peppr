@@ -21,7 +21,7 @@
     "node_modules",
     "dist",
     "hack",
-    "pepr-test-module",
+    "peppr-test-module",
     "build.mjs",
     "journey",
     "__mocks__"

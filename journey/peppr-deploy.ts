@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { describe, expect, it } from "@jest/globals";
 import { execSync, spawnSync, spawn } from "child_process";
@@ -9,22 +9,22 @@ import { destroyModule } from "../src/lib/assets/destroy";
 import { cwd } from "./entrypoint.test";
 import {
   deleteConfigMap,
-  noWaitPeprStoreKey,
+  noWaitpepprStoreKey,
   waitForConfigMap,
   waitForConfigMapKey,
   waitForDeploymentReady,
   waitForNamespace,
-  waitForPeprStoreKey,
+  waitForpepprStoreKey,
   waitForSecret,
 } from "./k8s";
 import nock from 'nock';
 
-export function peprDeploy() {
-  // Purge the Pepr module from the cluster before running the tests
-  destroyModule("pepr-static-test");
+export function pepprDeploy() {
+  // Purge the peppr module from the cluster before running the tests
+  destroyModule("peppr-static-test");
 
-  it("should deploy the Pepr controller into the test cluster", async () => {
-    // Apply the store crd and pepr-system ns
+  it("should deploy the peppr controller into the test cluster", async () => {
+    // Apply the store crd and peppr-system ns
     await applyStoreCRD();
 
     // Apply the store
@@ -34,10 +34,10 @@ export function peprDeploy() {
      * when controller starts up, it will migrate the store
      * and later on the keys will be tested to validate the migration
      */
-    execSync("npx pepr deploy -i pepr:dev --confirm", { cwd, stdio: "inherit" });
+    execSync("npx peppr deploy -i peppr:dev --confirm", { cwd, stdio: "inherit" });
 
     // Wait for the deployments to be ready
-    await Promise.all([waitForDeploymentReady("pepr-system", "pepr-static-test"), waitForDeploymentReady("pepr-system", "pepr-static-test-watcher")]);
+    await Promise.all([waitForDeploymentReady("peppr-system", "peppr-static-test"), waitForDeploymentReady("peppr-system", "peppr-static-test-watcher")]);
   });
 
   cleanupSamples();
@@ -58,10 +58,10 @@ export function peprDeploy() {
       return new Promise(poll);
     }
 
-    it("npx pepr monitor should display validation results to console", async () => {
+    it("npx peppr monitor should display validation results to console", async () => {
       await testValidate();
 
-      const cmd = ['pepr', 'monitor', 'static-test']
+      const cmd = ['peppr', 'monitor', 'static-test']
 
       const proc = spawn('npx', cmd, { shell: true })
 
@@ -89,15 +89,15 @@ export function peprDeploy() {
 
   describe("should display the UUIDs of the deployed modules", testUUID);
 
-  describe("should store data in the PeprStore", testStore);
+  describe("should store data in the pepprStore", testStore);
 
   cleanupSamples();
 }
 
 function cleanupSamples() {
   try {
-    // Remove the sample yaml for the HelloPepr capability
-    execSync("kubectl delete -f hello-pepr.samples.yaml --ignore-not-found", {
+    // Remove the sample yaml for the Hellopeppr capability
+    execSync("kubectl delete -f hello-peppr.samples.yaml --ignore-not-found", {
       cwd: resolve(cwd, "capabilities"),
       stdio: "inherit",
     });
@@ -112,7 +112,7 @@ function cleanupSamples() {
 function testUUID() {
 
   it("should display the UUIDs of the deployed modules", async () => {
-    const uuidOut = spawnSync("npx pepr uuid", {
+    const uuidOut = spawnSync("npx peppr uuid", {
       shell: true, // Run command in a shell
       encoding: "utf-8", // Encode result as string
     });
@@ -129,7 +129,7 @@ function testUUID() {
   });
 
   it("should display the UUIDs of the deployed modules with a specific UUID", async () => {
-    const uuidOut = spawnSync("npx pepr uuid static-test", {
+    const uuidOut = spawnSync("npx peppr uuid static-test", {
       shell: true, // Run command in a shell
       encoding: "utf-8", // Encode result as string
     });
@@ -154,9 +154,9 @@ function testIgnore() {
         namespace: "default",
       },
     });
-    expect(cm.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBeUndefined();
-    expect(cm.metadata?.annotations?.["pepr.dev"]).toBeUndefined();
-    expect(cm.metadata?.labels?.["pepr"]).toBeUndefined();
+    expect(cm.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBeUndefined();
+    expect(cm.metadata?.annotations?.["peppr.dev"]).toBeUndefined();
+    expect(cm.metadata?.labels?.["peppr"]).toBeUndefined();
   });
 
   it("should ignore resources not in the capability namespaces during validation", async () => {
@@ -169,15 +169,15 @@ function testIgnore() {
         },
       },
     });
-    expect(cm.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBeUndefined();
-    expect(cm.metadata?.annotations?.["pepr.dev"]).toBeUndefined();
-    expect(cm.metadata?.labels?.["pepr"]).toBeUndefined();
+    expect(cm.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBeUndefined();
+    expect(cm.metadata?.annotations?.["peppr.dev"]).toBeUndefined();
+    expect(cm.metadata?.labels?.["peppr"]).toBeUndefined();
   });
 }
 
 async function testValidate() {
-  // Apply the sample yaml for the HelloPepr capability
-  const applyOut = spawnSync("kubectl apply -f hello-pepr.samples.yaml", {
+  // Apply the sample yaml for the Hellopeppr capability
+  const applyOut = spawnSync("kubectl apply -f hello-peppr.samples.yaml", {
     shell: true, // Run command in a shell
     encoding: "utf-8", // Encode result as string
     cwd: resolve(cwd, "capabilities"),
@@ -190,8 +190,8 @@ async function testValidate() {
 
   // Check if the expected lines are in the output
   const expected = [
-    `Error from server: error when creating "hello-pepr.samples.yaml": `,
-    `admission webhook "pepr-static-test.pepr.dev" denied the request: `,
+    `Error from server: error when creating "hello-peppr.samples.yaml": `,
+    `admission webhook "peppr-static-test.peppr.dev" denied the request: `,
     `No evil CM annotations allowed.\n`,
   ].join("");
   expect(stderr).toMatch(expected);
@@ -201,65 +201,65 @@ async function testValidate() {
 function testMutate() {
   it("should mutate the namespace", async () => {
     // Wait for the namespace to be created
-    const ns = await waitForNamespace("pepr-demo");
+    const ns = await waitForNamespace("peppr-demo");
 
     // Check if the namespace has the correct labels and annotations
     expect(ns.metadata?.labels).toEqual({
       "keep-me": "please",
-      "kubernetes.io/metadata.name": "pepr-demo",
+      "kubernetes.io/metadata.name": "peppr-demo",
     });
-    expect(ns.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
+    expect(ns.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
   });
 
   it("should mutate example-1", async () => {
-    const cm1 = await waitForConfigMap("pepr-demo", "example-1");
-    expect(cm1.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
-    expect(cm1.metadata?.annotations?.["pepr.dev"]).toBe("annotations-work-too");
-    expect(cm1.metadata?.labels?.["pepr"]).toBe("was-here");
+    const cm1 = await waitForConfigMap("peppr-demo", "example-1");
+    expect(cm1.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
+    expect(cm1.metadata?.annotations?.["peppr.dev"]).toBe("annotations-work-too");
+    expect(cm1.metadata?.labels?.["peppr"]).toBe("was-here");
   });
 
   it("should mutate example-2", async () => {
-    const cm2 = await waitForConfigMap("pepr-demo", "example-2");
-    expect(cm2.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
-    expect(cm2.metadata?.annotations?.["pepr.dev"]).toBe("annotations-work-too");
-    expect(cm2.metadata?.labels?.["pepr"]).toBe("was-here");
+    const cm2 = await waitForConfigMap("peppr-demo", "example-2");
+    expect(cm2.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
+    expect(cm2.metadata?.annotations?.["peppr.dev"]).toBe("annotations-work-too");
+    expect(cm2.metadata?.labels?.["peppr"]).toBe("was-here");
   });
 
   it("should mutate example-3", async () => {
-    const cm3 = await waitForConfigMap("pepr-demo", "example-3");
+    const cm3 = await waitForConfigMap("peppr-demo", "example-3");
 
-    expect(cm3.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
-    expect(cm3.metadata?.annotations?.["pepr.dev"]).toBe("making-waves");
+    expect(cm3.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
+    expect(cm3.metadata?.annotations?.["peppr.dev"]).toBe("making-waves");
     expect(cm3.data).toEqual({ key: "ex-3-val", username: "system:admin" });
   });
 
   it("should mutate example-4", async () => {
-    const cm4 = await waitForConfigMap("pepr-demo", "example-4");
-    expect(cm4.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
-    expect(cm4.metadata?.labels?.["pepr.dev/first"]).toBe("true");
-    expect(cm4.metadata?.labels?.["pepr.dev/second"]).toBe("true");
-    expect(cm4.metadata?.labels?.["pepr.dev/third"]).toBe("true");
+    const cm4 = await waitForConfigMap("peppr-demo", "example-4");
+    expect(cm4.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
+    expect(cm4.metadata?.labels?.["peppr.dev/first"]).toBe("true");
+    expect(cm4.metadata?.labels?.["peppr.dev/second"]).toBe("true");
+    expect(cm4.metadata?.labels?.["peppr.dev/third"]).toBe("true");
   });
 
   it("should mutate example-4a", async () => {
-    const cm4a = await waitForConfigMap("pepr-demo-2", "example-4a");
-    expect(cm4a.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
-    expect(cm4a.metadata?.labels?.["pepr.dev/first"]).toBe("true");
-    expect(cm4a.metadata?.labels?.["pepr.dev/second"]).toBe("true");
-    expect(cm4a.metadata?.labels?.["pepr.dev/third"]).toBe("true");
+    const cm4a = await waitForConfigMap("peppr-demo-2", "example-4a");
+    expect(cm4a.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
+    expect(cm4a.metadata?.labels?.["peppr.dev/first"]).toBe("true");
+    expect(cm4a.metadata?.labels?.["peppr.dev/second"]).toBe("true");
+    expect(cm4a.metadata?.labels?.["peppr.dev/third"]).toBe("true");
   });
 
   it("should mutate example-5", async () => {
 
-    const cm5 = await waitForConfigMap("pepr-demo", "example-5");
+    const cm5 = await waitForConfigMap("peppr-demo", "example-5");
 
-    expect(cm5.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
+    expect(cm5.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
   });
 
   it("should mutate secret-1", async () => {
-    const s1 = await waitForSecret("pepr-demo", "secret-1");
+    const s1 = await waitForSecret("peppr-demo", "secret-1");
 
-    expect(s1.metadata?.annotations?.["static-test.pepr.dev/hello-pepr"]).toBe("succeeded");
+    expect(s1.metadata?.annotations?.["static-test.peppr.dev/hello-peppr"]).toBe("succeeded");
     expect(s1.data?.["example"]).toBe("dW5pY29ybiBtYWdpYyAtIG1vZGlmaWVkIGJ5IFBlcHI=");
     expect(s1.data?.["magic"]).toBe("Y2hhbmdlLXdpdGhvdXQtZW5jb2Rpbmc=");
     expect(s1.data?.["binary-data"]).toBe(
@@ -273,61 +273,61 @@ function testMutate() {
 
 
 function testStore() {
-  it("should create the PeprStore", async () => {
-    const resp = await waitForPeprStoreKey("pepr-static-test-store", "__pepr_do_not_delete__");
+  it("should create the pepprStore", async () => {
+    const resp = await waitForpepprStoreKey("peppr-static-test-store", "__peppr_do_not_delete__");
     expect(resp).toBe("k-thx-bye");
   });
 
-  it("should write the correct data to the PeprStore", async () => {
-    const key1 = await waitForPeprStoreKey("pepr-static-test-store", `hello-pepr-v2-example-1`);
+  it("should write the correct data to the pepprStore", async () => {
+    const key1 = await waitForpepprStoreKey("peppr-static-test-store", `hello-peppr-v2-example-1`);
     expect(key1).toBe("was-here");
 
     // Should have been migrated and removed
-    const nullKey1 = await noWaitPeprStoreKey("pepr-static-test-store", `hello-pepr-example-1`);
+    const nullKey1 = await noWaitpepprStoreKey("peppr-static-test-store", `hello-peppr-example-1`);
     expect(nullKey1).toBeUndefined();
 
-    const key2 = await waitForPeprStoreKey("pepr-static-test-store", `hello-pepr-v2-example-1-data`);
+    const key2 = await waitForpepprStoreKey("peppr-static-test-store", `hello-peppr-v2-example-1-data`);
     expect(key2).toBe(JSON.stringify({ key: "ex-1-val" }));
 
     // Should have been migrated and removed
-    const nullKey2 = await noWaitPeprStoreKey("pepr-static-test-store", `hello-pepr-example-1-data`);
+    const nullKey2 = await noWaitpepprStoreKey("peppr-static-test-store", `hello-peppr-example-1-data`);
     expect(nullKey2).toBeUndefined();
 
     // Should have a key from the joke url and getItem should have worked
-    const key3 = await waitForPeprStoreKey("pepr-static-test-store", `hello-pepr-v2-https://icanhazdadjoke.com/`);
+    const key3 = await waitForpepprStoreKey("peppr-static-test-store", `hello-peppr-v2-https://icanhazdadjoke.com/`);
     expect(key3).toBeTruthy();
 
-    const cm = await waitForConfigMapKey("pepr-demo", "example-5", "chuck-says");
+    const cm = await waitForConfigMapKey("peppr-demo", "example-5", "chuck-says");
 
     expect(cm.data?.["chuck-says"]).toBeTruthy();
   });
 
-  it("should write the correct data to the PeprStore from a Watch Action", async () => {
-    const key = await waitForPeprStoreKey("pepr-static-test-store", `hello-pepr-v2-watch-data`);
+  it("should write the correct data to the pepprStore from a Watch Action", async () => {
+    const key = await waitForpepprStoreKey("peppr-static-test-store", `hello-peppr-v2-watch-data`);
     expect(key).toBe("This data was stored by a Watch Action.");
   });
 }
 
 async function applyStoreCRD() {
   // Apply the store crd
-  const appliedStoreCRD = spawnSync("kubectl apply -f journey/resources/pepr-store-crd.yaml", {
+  const appliedStoreCRD = spawnSync("kubectl apply -f journey/resources/peppr-store-crd.yaml", {
     shell: true, // Run command in a shell
     encoding: "utf-8", // Encode result as string
     cwd: resolve(cwd, ".."),
   });
   const { stdout } = appliedStoreCRD;
 
-  expect(stdout).toContain("customresourcedefinition.apiextensions.k8s.io/peprstores.pepr.dev");
+  expect(stdout).toContain("customresourcedefinition.apiextensions.k8s.io/pepprstores.peppr.dev");
 }
 
 async function applyLegacyStoreResource() {
   // Apply the store
-  const appliedStore = spawnSync("kubectl apply -f journey/resources/non-migrated-peprstore.yaml", {
+  const appliedStore = spawnSync("kubectl apply -f journey/resources/non-migrated-pepprstore.yaml", {
     shell: true, // Run command in a shell
     encoding: "utf-8", // Encode result as string
     cwd: resolve(cwd, ".."),
   });
   const { stdout } = appliedStore;
 
-  expect(stdout).toContain("peprstore.pepr.dev/pepr-static-test-store");
+  expect(stdout).toContain("pepprstore.peppr.dev/peppr-static-test-store");
 }

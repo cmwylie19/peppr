@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import prompt from "prompts";
 
@@ -14,7 +14,7 @@ import { deployImagePullSecret } from "../lib/assets/deploy";
 export default function (program: RootCmd) {
   program
     .command("deploy")
-    .description("Deploy a Pepr Module")
+    .description("Deploy a peppr Module")
     .option("-i, --image [image]", "Override the image tag")
     .option("--confirm", "Skip confirmation prompt")
     .option("--pullSecret <name>", "Deploy imagePullSecret for Controller private registry")
@@ -77,7 +77,7 @@ export default function (program: RootCmd) {
       // Generate a secret for the module
       const webhook = new Assets(
         {
-          ...cfg.pepr,
+          ...cfg.peppr,
           description: cfg.description,
         },
         path,
@@ -88,13 +88,13 @@ export default function (program: RootCmd) {
       }
 
       // Identify conf'd webhookTimeout to give to deploy call
-      const timeout = cfg.pepr.webhookTimeout ? cfg.pepr.webhookTimeout : 10;
+      const timeout = cfg.peppr.webhookTimeout ? cfg.peppr.webhookTimeout : 10;
 
       try {
         await webhook.deploy(opts.force, timeout);
         // wait for capabilities to be loaded and test names
         validateCapabilityNames(webhook.capabilities);
-        // Wait for the pepr-system resources to be fully up
+        // Wait for the peppr-system resources to be fully up
         await namespaceDeploymentsReady();
         console.info(`✅ Module deployed successfully`);
       } catch (e) {

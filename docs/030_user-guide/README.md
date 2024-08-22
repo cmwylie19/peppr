@@ -1,20 +1,20 @@
 # User Guide
 
-In this section you can find detailed information about Pepr and how to use it.
+In this section you can find detailed information about peppr and how to use it.
 
 ## User Guide Sections
 
 You can find the following information in this section:
 
-### [Pepr CLI](010_pepr-cli.md)
+### [peppr CLI](010_peppr-cli.md)
 
-### [Pepr Modules](020_pepr-modules.md)
+### [peppr Modules](020_peppr-modules.md)
 
-### [Pepr Actions](030_actions.md)
+### [peppr Actions](030_actions.md)
 
-### [Pepr Capabilities](040_capabilities.md)
+### [peppr Capabilities](040_capabilities.md)
 
-### [Pepr Store](050_store.md)
+### [peppr Store](050_store.md)
 
 ### [Custom Resources](070_custom-resources.md)
 

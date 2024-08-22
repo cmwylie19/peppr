@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { dumpYaml } from "@kubernetes/client-node";
 import { inspect } from "util";
@@ -7,9 +7,9 @@ import { v4 as uuidv4, v5 as uuidv5 } from "uuid";
 
 import eslintJSON from "../../templates/.eslintrc.template.json";
 import prettierJSON from "../../templates/.prettierrc.json";
-import samplesJSON from "../../templates/capabilities/hello-pepr.samples.json";
-import { gitIgnore, helloPeprTS, packageJSON, peprTS, readmeMd } from "../../templates/data.json";
-import peprSnippetsJSON from "../../templates/pepr.code-snippets.json";
+import samplesJSON from "../../templates/capabilities/hello-peppr.samples.json";
+import { gitIgnore, hellopepprTS, packageJSON, pepprTS, readmeMd } from "../../templates/data.json";
+import pepprSnippetsJSON from "../../templates/peppr.code-snippets.json";
 import settingsJSON from "../../templates/settings.json";
 import tsConfigJSON from "../../templates/tsconfig.module.json";
 import { sanitizeName } from "./utils";
@@ -34,17 +34,17 @@ export function genPkgJSON(opts: InitOptions, pgkVerOverride?: string) {
     name,
     version: "0.0.1",
     description: opts.description,
-    keywords: ["pepr", "k8s", "policy-engine", "pepr-module", "security"],
+    keywords: ["peppr", "k8s", "policy-engine", "peppr-module", "security"],
     engines: {
       node: ">=18.0.0",
     },
-    pepr: {
+    peppr: {
       uuid: pgkVerOverride ? "static-test" : uuid,
       onError: opts.errorBehavior,
       webhookTimeout: 10,
       customLabels: {
         namespace: {
-          "pepr.dev": "",
+          "peppr.dev": "",
         },
       },
       alwaysIgnore: {
@@ -57,7 +57,7 @@ export function genPkgJSON(opts: InitOptions, pgkVerOverride?: string) {
       "k3d-setup": scripts["test:journey:k3d"],
     },
     dependencies: {
-      pepr: pgkVerOverride || version,
+      peppr: pgkVerOverride || version,
       nock: "13.5.4",
     },
     devDependencies: {
@@ -72,10 +72,10 @@ export function genPkgJSON(opts: InitOptions, pgkVerOverride?: string) {
   };
 }
 
-export function genPeprTS() {
+export function genpepprTS() {
   return {
-    path: "pepr.ts",
-    data: peprTS,
+    path: "peppr.ts",
+    data: pepprTS,
   };
 }
 
@@ -84,9 +84,9 @@ export const readme = {
   data: readmeMd,
 };
 
-export const helloPepr = {
-  path: "hello-pepr.ts",
-  data: helloPeprTS,
+export const hellopeppr = {
+  path: "hello-peppr.ts",
+  data: hellopepprTS,
 };
 
 export const gitignore = {
@@ -95,13 +95,13 @@ export const gitignore = {
 };
 
 export const samplesYaml = {
-  path: "hello-pepr.samples.yaml",
+  path: "hello-peppr.samples.yaml",
   data: samplesJSON.map(r => dumpYaml(r, { noRefs: true })).join("---\n"),
 };
 
 export const snippet = {
-  path: "pepr.code-snippets",
-  data: peprSnippetsJSON,
+  path: "peppr.code-snippets",
+  data: pepprSnippetsJSON,
 };
 
 export const codeSettings = {

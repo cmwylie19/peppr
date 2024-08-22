@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 import { loadAllYaml } from "@kubernetes/client-node";
 import { expect, it } from "@jest/globals";
 import { loadYaml } from "@kubernetes/client-node";
@@ -10,14 +10,14 @@ import { V1ObjectMeta, KubernetesObject } from '@kubernetes/client-node';
 import yaml from "js-yaml";
 import { cwd } from "./entrypoint.test";
 
-export function peprBuild() {
-  it("should successfully build the Pepr project", async () => {
-    execSync("npx pepr build", { cwd: cwd, stdio: "inherit" });
+export function pepprBuild() {
+  it("should successfully build the peppr project", async () => {
+    execSync("npx peppr build", { cwd: cwd, stdio: "inherit" });
     validateHelmChart();
   });
 
   it("should generate produce the K8s yaml file", async () => {
-    await fs.access(resolve(cwd, "dist", "pepr-module-static-test.yaml"));
+    await fs.access(resolve(cwd, "dist", "peppr-module-static-test.yaml"));
   });
 
   it("should generate the zarf.yaml file", async () => {
@@ -37,7 +37,7 @@ export function peprBuild() {
 
     const expectedWatcherEnv = [
       {
-        "name": "PEPR_PRETTY_LOG",
+        "name": "peppr_PRETTY_LOG",
         "value": "false"
       },
       {
@@ -56,7 +56,7 @@ export function peprBuild() {
 
     const expectedAdmissionEnv = [
       {
-        "name": "PEPR_PRETTY_LOG",
+        "name": "peppr_PRETTY_LOG",
         "value": "false"
       },
       {
@@ -86,7 +86,7 @@ export function peprBuild() {
 
 async function validateHelmChart() {
 
-  const k8sYaml = await fs.readFile(resolve(cwd, "dist", "pepr-module-static-test.yaml"), "utf8");
+  const k8sYaml = await fs.readFile(resolve(cwd, "dist", "peppr-module-static-test.yaml"), "utf8");
   const helmOutput = execSync('helm template .', { cwd: `${cwd}/dist/static-test-chart` }).toString();
 
   const helmParsed = parseYAMLToJSON(helmOutput);
@@ -103,22 +103,22 @@ async function validateHelmChart() {
   }
 }
 async function validateZarfYaml() {
-  // Get the version of the pepr binary
-  const peprVer = execSync("npx pepr --version", { cwd }).toString().trim();
+  // Get the version of the peppr binary
+  const pepprVer = execSync("npx peppr --version", { cwd }).toString().trim();
 
   // Read the generated yaml files
-  const k8sYaml = await fs.readFile(resolve(cwd, "dist", "pepr-module-static-test.yaml"), "utf8");
+  const k8sYaml = await fs.readFile(resolve(cwd, "dist", "peppr-module-static-test.yaml"), "utf8");
   const zarfYAML = await fs.readFile(resolve(cwd, "dist", "zarf.yaml"), "utf8");
 
   // The expected image name
-  const expectedImage = `ghcr.io/cmwylie19/peppr/controller:v${peprVer}`;
+  const expectedImage = `ghcr.io/cmwylie19/peppr/controller:v${pepprVer}`;
 
   // The expected zarf yaml contents
   const expectedZarfYaml = {
     kind: "ZarfPackageConfig",
     metadata: {
-      name: "pepr-static-test",
-      description: "Pepr Module: A test module for Pepr",
+      name: "peppr-static-test",
+      description: "peppr Module: A test module for peppr",
       url: "https://github.com/cmwylie19/peppr",
       version: "0.0.1",
     },
@@ -129,8 +129,8 @@ async function validateZarfYaml() {
         manifests: [
           {
             name: "module",
-            namespace: "pepr-system",
-            files: ["pepr-module-static-test.yaml"],
+            namespace: "peppr-system",
+            files: ["peppr-module-static-test.yaml"],
           },
         ],
         images: [expectedImage],

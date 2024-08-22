@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { clone } from "ramda";
 import Log from "./logger";
@@ -24,7 +24,7 @@ export function v2UnescapedStoreKey(key: string) {
 export function stripV2Prefix(key: string) {
   return key.replace(/^v2-/, "");
 }
-export interface PeprStore {
+export interface pepprStore {
   /**
    * Returns the current value associated with the given key, or null if the given key does not exist.
    */
@@ -69,12 +69,12 @@ export interface PeprStore {
 }
 
 /**
- * A key-value data store that can be used to persist data that should be shared across Pepr controllers and capabilities.
+ * A key-value data store that can be used to persist data that should be shared across peppr controllers and capabilities.
  *
  * The API is similar to the [Storage API](https://developer.mozilla.org/docs/Web/API/Storage)
  */
 
-export class Storage implements PeprStore {
+export class Storage implements pepprStore {
   #store: DataStore = {};
   #send!: DataSender;
   #subscribers: Record<number, DataReceiver> = {};
@@ -86,7 +86,7 @@ export class Storage implements PeprStore {
   };
 
   receive = (data: DataStore) => {
-    Log.debug(data, `Pepr store data received`);
+    Log.debug(data, `peppr store data received`);
     this.#store = data || {};
 
     this.#onReady();

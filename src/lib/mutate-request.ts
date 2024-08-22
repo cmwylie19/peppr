@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { KubernetesObject } from "kubernetes-fluent-client";
 import { clone, mergeDeepRight } from "ramda";
@@ -11,7 +11,7 @@ import { DeepPartial } from "./types";
  * The RequestWrapper class provides methods to modify Kubernetes objects in the context
  * of a mutating webhook request.
  */
-export class PeprMutateRequest<T extends KubernetesObject> {
+export class pepprMutateRequest<T extends KubernetesObject> {
   Raw: T;
 
   #input: AdmissionRequest<T>;
@@ -60,7 +60,7 @@ export class PeprMutateRequest<T extends KubernetesObject> {
     }
 
     if (!this.Raw) {
-      throw new Error("unable to load the request object into PeprRequest.RawP");
+      throw new Error("unable to load the request object into pepprRequest.RawP");
     }
   }
 

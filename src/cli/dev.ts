@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { ChildProcess, fork } from "child_process";
 import { promises as fs } from "fs";
@@ -9,7 +9,7 @@ import { Assets } from "../lib/assets";
 import { buildModule, loadModule } from "./build";
 import { RootCmd } from "./root";
 import { K8s, kind } from "kubernetes-fluent-client";
-import { PeprStore } from "../lib/k8s";
+import { pepprStore } from "../lib/k8s";
 export default function (program: RootCmd) {
   program
     .command("dev")
@@ -37,7 +37,7 @@ export default function (program: RootCmd) {
       // Generate a secret for the module
       const webhook = new Assets(
         {
-          ...cfg.pepr,
+          ...cfg.peppr,
           description: cfg.description,
         },
         path,
@@ -50,9 +50,9 @@ export default function (program: RootCmd) {
 
       try {
         let program: ChildProcess;
-        const name = `pepr-${cfg.pepr.uuid}`;
-        const scheduleStore = `pepr-${cfg.pepr.uuid}-schedule`;
-        const store = `pepr-${cfg.pepr.uuid}-store`;
+        const name = `peppr-${cfg.peppr.uuid}`;
+        const scheduleStore = `peppr-${cfg.peppr.uuid}-schedule`;
+        const store = `peppr-${cfg.peppr.uuid}-store`;
 
         // Run the processed javascript file
         const runFork = async () => {
@@ -73,9 +73,9 @@ export default function (program: RootCmd) {
             env: {
               ...process.env,
               LOG_LEVEL: "debug",
-              PEPR_MODE: "dev",
-              PEPR_API_TOKEN: webhook.apiToken,
-              PEPR_PRETTY_LOGS: "true",
+              peppr_MODE: "dev",
+              peppr_API_TOKEN: webhook.apiToken,
+              peppr_PRETTY_LOGS: "true",
               SSL_KEY_PATH: "insecure-tls.key",
               SSL_CERT_PATH: "insecure-tls.crt",
             },
@@ -86,8 +86,8 @@ export default function (program: RootCmd) {
             await Promise.all([
               K8s(kind.MutatingWebhookConfiguration).Delete(name),
               K8s(kind.ValidatingWebhookConfiguration).Delete(name),
-              K8s(PeprStore).InNamespace("pepr-system").Delete(scheduleStore),
-              K8s(PeprStore).InNamespace("pepr-system").Delete(store),
+              K8s(pepprStore).InNamespace("peppr-system").Delete(scheduleStore),
+              K8s(pepprStore).InNamespace("peppr-system").Delete(store),
             ]);
           });
 

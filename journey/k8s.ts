@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { K8s, kind } from "kubernetes-fluent-client";
 
-import { PeprStore } from "../src/lib/k8s";
+import { pepprStore } from "../src/lib/k8s";
 
 export function sleep(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
@@ -28,17 +28,17 @@ export async function waitForDeploymentReady(namespace: string, name: string) {
   }
 }
 
-export async function noWaitPeprStoreKey(name: string, matchKey: string) {
-    const store = await K8s(PeprStore).InNamespace("pepr-system").Get(name);
+export async function noWaitpepprStoreKey(name: string, matchKey: string) {
+    const store = await K8s(pepprStore).InNamespace("peppr-system").Get(name);
     if (store.data[matchKey]) {
       return store.data[matchKey];
     }
 }
 
 
-export async function waitForPeprStoreKey(name: string, matchKey: string) {
+export async function waitForpepprStoreKey(name: string, matchKey: string) {
   try {
-    const store = await K8s(PeprStore).InNamespace("pepr-system").Get(name);
+    const store = await K8s(pepprStore).InNamespace("peppr-system").Get(name);
     if (store.data[matchKey]) {
       return store.data[matchKey];
     }
@@ -46,7 +46,7 @@ export async function waitForPeprStoreKey(name: string, matchKey: string) {
     throw new Error("Key not found");
   } catch (error) {
     await sleep(2);
-    return waitForPeprStoreKey(name, matchKey);
+    return waitForpepprStoreKey(name, matchKey);
   }
 }
 

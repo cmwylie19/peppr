@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
-import { PeprValidateRequest } from "../lib/validate-request";
-import { PeprMutateRequest } from "../lib/mutate-request";
+import { pepprValidateRequest } from "../lib/validate-request";
+import { pepprMutateRequest } from "../lib/mutate-request";
 import { a } from "../lib";
 import { V1OwnerReference } from "@kubernetes/client-node";
 import { GenericKind } from "kubernetes-fluent-client";
@@ -16,7 +16,7 @@ import Log from "../lib/logger";
  * @returns the list of containers in the pod
  */
 export function containers(
-  request: PeprValidateRequest<a.Pod> | PeprMutateRequest<a.Pod>,
+  request: pepprValidateRequest<a.Pod> | pepprMutateRequest<a.Pod>,
   containerType?: "containers" | "initContainers" | "ephemeralContainers",
 ) {
   const containers = request.Raw.spec?.containers || [];

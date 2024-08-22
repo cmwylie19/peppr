@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { GenericClass, GroupVersionKind, KubernetesObject } from "kubernetes-fluent-client";
 import { WatchAction } from "kubernetes-fluent-client/dist/fluent/types";
 
-import { PeprMutateRequest } from "./mutate-request";
-import { PeprValidateRequest } from "./validate-request";
+import { pepprMutateRequest } from "./mutate-request";
+import { pepprValidateRequest } from "./validate-request";
 
 /**
  * Specifically for deploying images with a private registry
@@ -215,11 +215,11 @@ export type MutateActionChain<T extends GenericClass> = ValidateActionChain<T> &
 };
 
 export type MutateAction<T extends GenericClass, K extends KubernetesObject = InstanceType<T>> = (
-  req: PeprMutateRequest<K>,
-) => Promise<void> | void | Promise<PeprMutateRequest<K>> | PeprMutateRequest<K>;
+  req: pepprMutateRequest<K>,
+) => Promise<void> | void | Promise<pepprMutateRequest<K>> | pepprMutateRequest<K>;
 
 export type ValidateAction<T extends GenericClass, K extends KubernetesObject = InstanceType<T>> = (
-  req: PeprValidateRequest<K>,
+  req: pepprValidateRequest<K>,
 ) => Promise<ValidateActionResponse> | ValidateActionResponse;
 
 export type ValidateActionResponse = {

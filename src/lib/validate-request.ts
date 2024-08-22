@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 /* eslint-disable class-methods-use-this */
 
@@ -13,7 +13,7 @@ import { ValidateActionResponse } from "./types";
  * The RequestWrapper class provides methods to modify Kubernetes objects in the context
  * of a mutating webhook request.
  */
-export class PeprValidateRequest<T extends KubernetesObject> {
+export class pepprValidateRequest<T extends KubernetesObject> {
   Raw: T;
 
   #input: AdmissionRequest<T>;
@@ -50,7 +50,7 @@ export class PeprValidateRequest<T extends KubernetesObject> {
     }
 
     if (!this.Raw) {
-      throw new Error("unable to load the request object into PeprRequest.Raw");
+      throw new Error("unable to load the request object into pepprRequest.Raw");
     }
   }
 

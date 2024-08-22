@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { KubernetesObject } from "kubernetes-fluent-client";
 
 import { Operation, AdmissionRequest } from "./k8s";
 import { ValidateActionResponse } from "./types";
-import { PeprValidateRequest } from "./validate-request";
+import { pepprValidateRequest } from "./validate-request";
 
-describe("PeprValidateRequest", () => {
+describe("pepprValidateRequest", () => {
   let mockRequest: AdmissionRequest<KubernetesObject>;
 
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe("PeprValidateRequest", () => {
   });
 
   it("should initialize correctly for non-DELETE operations", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.Raw).toEqual(mockRequest.object);
   });
 
@@ -64,7 +64,7 @@ describe("PeprValidateRequest", () => {
       },
     };
 
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.Raw).toEqual(mockRequest.oldObject);
   });
 
@@ -79,35 +79,35 @@ describe("PeprValidateRequest", () => {
         },
       },
     };
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.OldResource).toEqual(mockRequest.oldObject);
   });
 
   it("should provide access to the request object", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.Request).toEqual(mockRequest);
   });
 
   it("should check if a label exists", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.HasLabel("test-label")).toBeTruthy();
     expect(wrapper.HasLabel("non-existent-label")).toBeFalsy();
   });
 
   it("should check if an annotation exists", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     expect(wrapper.HasAnnotation("test-annotation")).toBeTruthy();
     expect(wrapper.HasAnnotation("non-existent-annotation")).toBeFalsy();
   });
 
   it("should create an approval response", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     const response: ValidateActionResponse = wrapper.Approve();
     expect(response).toEqual({ allowed: true });
   });
 
   it("should create a denial response", () => {
-    const wrapper = new PeprValidateRequest(mockRequest);
+    const wrapper = new pepprValidateRequest(mockRequest);
     const response: ValidateActionResponse = wrapper.Deny("Not allowed", 403);
     expect(response).toEqual({ allowed: false, statusMessage: "Not allowed", statusCode: 403 });
   });
@@ -117,8 +117,8 @@ describe("PeprValidateRequest", () => {
       ...mockRequest,
       object: undefined as unknown as KubernetesObject,
     };
-    expect(() => new PeprValidateRequest(mockRequest)).toThrowError(
-      "unable to load the request object into PeprRequest.Raw",
+    expect(() => new pepprValidateRequest(mockRequest)).toThrowError(
+      "unable to load the request object into pepprRequest.Raw",
     );
   });
 });

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 /* eslint-disable class-methods-use-this */
 
@@ -47,9 +47,9 @@ export class MetricsCollector {
 
   /**
    * Creates a MetricsCollector instance with prefixed metrics.
-   * @param [prefix='pepr'] - The prefix for the metric names.
+   * @param [prefix='peppr'] - The prefix for the metric names.
    */
-  constructor(prefix = "pepr") {
+  constructor(prefix = "peppr") {
     this.#registry = new Registry();
     this.#prefix = prefix;
     this.addCounter(this.#metricNames.errors, "Mutation/Validate errors encountered");
@@ -167,8 +167,8 @@ export class MetricsCollector {
    * Manages the size of the cache miss gauge map.
    */
   #rollCacheMissWindows = () => {
-    const maxCacheMissWindows = process.env.PEPR_MAX_CACHE_MISS_WINDOWS
-      ? parseInt(process.env.PEPR_MAX_CACHE_MISS_WINDOWS, 10)
+    const maxCacheMissWindows = process.env.peppr_MAX_CACHE_MISS_WINDOWS
+      ? parseInt(process.env.peppr_MAX_CACHE_MISS_WINDOWS, 10)
       : undefined;
 
     if (maxCacheMissWindows !== undefined && this.#cacheMissWindows.size >= maxCacheMissWindows) {
@@ -179,4 +179,4 @@ export class MetricsCollector {
   };
 }
 
-export const metricsCollector = new MetricsCollector("pepr");
+export const metricsCollector = new MetricsCollector("peppr");

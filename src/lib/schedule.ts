@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
-import { PeprStore } from "./storage";
+import { pepprStore } from "./storage";
 
 type Unit = "seconds" | "second" | "minute" | "minutes" | "hours" | "hour";
 
@@ -39,7 +39,7 @@ export interface Schedule {
 
 export class OnSchedule implements Schedule {
   intervalId: NodeJS.Timeout | null = null;
-  store: PeprStore | undefined;
+  store: pepprStore | undefined;
   name!: string;
   completions?: number | undefined;
   every: number;
@@ -57,7 +57,7 @@ export class OnSchedule implements Schedule {
     this.startTime = schedule?.startTime;
     this.completions = schedule?.completions;
   }
-  setStore(store: PeprStore) {
+  setStore(store: pepprStore) {
     this.store = store;
     this.startInterval();
   }

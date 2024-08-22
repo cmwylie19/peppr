@@ -2,28 +2,28 @@ import {
   Capability,
   K8s,
   Log,
-  PeprMutateRequest,
+  pepprMutateRequest,
   RegisterKind,
   a,
   fetch,
   fetchStatus,
   kind,
-} from "pepr";
+} from "peppr";
 import nock from "nock";
 
 /**
- *  The HelloPepr Capability is an example capability to demonstrate some general concepts of Pepr.
- *  To test this capability you run `pepr dev`and then run the following command:
- *  `kubectl apply -f capabilities/hello-pepr.samples.yaml`
+ *  The Hellopeppr Capability is an example capability to demonstrate some general concepts of peppr.
+ *  To test this capability you run `peppr dev`and then run the following command:
+ *  `kubectl apply -f capabilities/hello-peppr.samples.yaml`
  */
-export const HelloPepr = new Capability({
-  name: "hello-pepr",
+export const Hellopeppr = new Capability({
+  name: "hello-peppr",
   description: "A simple example capability to show how things work.",
-  namespaces: ["pepr-demo", "pepr-demo-2"],
+  namespaces: ["peppr-demo", "peppr-demo-2"],
 });
 
 // Use the 'When' function to create a new action, use 'Store' to persist data
-const { When, Store } = HelloPepr;
+const { When, Store } = Hellopeppr;
 
 /**
  * ---------------------------------------------------------------------------------------------------
@@ -43,29 +43,29 @@ When(a.Namespace)
  *                                   Watch Action with K8s SSA (Namespace)                           *
  * ---------------------------------------------------------------------------------------------------
  *
- * This action watches for the `pepr-demo-2` namespace to be created, then creates a ConfigMap with
- * the name `pepr-ssa-demo` and adds the namespace UID to the ConfigMap data. Because Pepr uses
+ * This action watches for the `peppr-demo-2` namespace to be created, then creates a ConfigMap with
+ * the name `peppr-ssa-demo` and adds the namespace UID to the ConfigMap data. Because peppr uses
  * server-side apply for this operation, the ConfigMap will be created or updated if it already exists.
  */
 When(a.Namespace)
   .IsCreated()
-  .WithName("pepr-demo-2")
+  .WithName("peppr-demo-2")
   .Watch(async ns => {
-    Log.info("Namespace pepr-demo-2 was created.");
+    Log.info("Namespace peppr-demo-2 was created.");
 
     try {
       // Apply the ConfigMap using K8s server-side apply
       await K8s(kind.ConfigMap).Apply({
         metadata: {
-          name: "pepr-ssa-demo",
-          namespace: "pepr-demo-2",
+          name: "peppr-ssa-demo",
+          namespace: "peppr-demo-2",
         },
         data: {
           "ns-uid": ns.metadata.uid,
         },
       });
     } catch (error) {
-      // You can use the Log object to log messages to the Pepr controller pod
+      // You can use the Log object to log messages to the peppr controller pod
       Log.error(error, "Failed to apply ConfigMap using server-side apply.");
     }
 
@@ -82,18 +82,18 @@ When(a.Namespace)
  * In this example, when a ConfigMap is created with the name `example-1`, then add a label and annotation.
  *
  * Equivalent to manually running:
- * `kubectl label configmap example-1 pepr=was-here`
- * `kubectl annotate configmap example-1 pepr.dev=annotations-work-too`
+ * `kubectl label configmap example-1 peppr=was-here`
+ * `kubectl annotate configmap example-1 peppr.dev=annotations-work-too`
  */
 When(a.ConfigMap)
   .IsCreated()
   .WithName("example-1")
   .Mutate(request => {
     request
-      .SetLabel("pepr", "was-here")
-      .SetAnnotation("pepr.dev", "annotations-work-too");
+      .SetLabel("peppr", "was-here")
+      .SetAnnotation("peppr.dev", "annotations-work-too");
 
-    // Use the Store to persist data between requests and Pepr controller pods
+    // Use the Store to persist data between requests and peppr controller pods
     Store.setItem("example-1", "was-here");
 
     // This data is written asynchronously and can be read back via `Store.getItem()` or `Store.subscribe()`
@@ -108,7 +108,7 @@ When(a.ConfigMap)
  * This combines 3 different types of actions: 'Mutate', 'Validate', and 'Watch'. The order
  * of the actions is required, but each action is optional. In this example, when a ConfigMap is created
  * with the name `example-2`, then add a label and annotation, validate that the ConfigMap has the label
- * `pepr`, and log the request.
+ * `peppr`, and log the request.
  */
 When(a.ConfigMap)
   .IsCreated()
@@ -120,10 +120,10 @@ When(a.ConfigMap)
     request.Merge({
       metadata: {
         labels: {
-          pepr: "was-here",
+          peppr: "was-here",
         },
         annotations: {
-          "pepr.dev": "annotations-work-too",
+          "peppr.dev": "annotations-work-too",
         },
       },
     });
@@ -131,13 +131,13 @@ When(a.ConfigMap)
   .Validate(request => {
     // This Validate Action will validate the request before it is persisted to the cluster
 
-    // Approve the request if the ConfigMap has the label 'pepr'
-    if (request.HasLabel("pepr")) {
+    // Approve the request if the ConfigMap has the label 'peppr'
+    if (request.HasLabel("peppr")) {
       return request.Approve();
     }
 
     // Otherwise, deny the request with an error message (optional)
-    return request.Deny("ConfigMap must have label 'pepr'");
+    return request.Deny("ConfigMap must have label 'peppr'");
   })
   .Watch((cm, phase) => {
     // This Watch Action will watch the ConfigMap after it has been persisted to the cluster
@@ -169,7 +169,7 @@ When(a.ConfigMap)
  * ---------------------------------------------------------------------------------------------------
  *
  * This action combines different styles. Unlike the previous actions, this one will look
- * for any ConfigMap in the `pepr-demo` namespace that has the label `change=by-label` during either
+ * for any ConfigMap in the `peppr-demo` namespace that has the label `change=by-label` during either
  * CREATE or UPDATE. Note that all conditions added such as `WithName()`, `WithLabel()`, `InNamespace()`,
  * are ANDs so all conditions must be true for the request to be processed.
  */
@@ -188,7 +188,7 @@ When(a.ConfigMap)
     cm.data["uid"] = uid;
 
     // You can still mix other ways of making changes too
-    request.SetAnnotation("pepr.dev", "making-waves");
+    request.SetAnnotation("peppr.dev", "making-waves");
   });
 
 // This action validates the label `change=by-label` is deleted
@@ -213,10 +213,10 @@ When(a.ConfigMap)
 When(a.ConfigMap).IsCreated().WithName("example-4").Mutate(example4Cb);
 
 // This function uses the complete type definition, but is not required.
-function example4Cb(cm: PeprMutateRequest<a.ConfigMap>) {
-  cm.SetLabel("pepr.dev/first", "true");
-  cm.SetLabel("pepr.dev/second", "true");
-  cm.SetLabel("pepr.dev/third", "true");
+function example4Cb(cm: pepprMutateRequest<a.ConfigMap>) {
+  cm.SetLabel("peppr.dev/first", "true");
+  cm.SetLabel("peppr.dev/second", "true");
+  cm.SetLabel("peppr.dev/third", "true");
 }
 
 /**
@@ -224,13 +224,13 @@ function example4Cb(cm: PeprMutateRequest<a.ConfigMap>) {
  *                                   Mutate Action (CM Example 4a)                                *
  * ---------------------------------------------------------------------------------------------------
  *
- * This is the same as Example 4, except this only operates on a CM in the `pepr-demo-2` namespace.
+ * This is the same as Example 4, except this only operates on a CM in the `peppr-demo-2` namespace.
  * Note because the Capability defines namespaces, the namespace specified here must be one of those.
  * Alternatively, you can remove the namespace from the Capability definition and specify it here.
  */
 When(a.ConfigMap)
   .IsCreated()
-  .InNamespace("pepr-demo-2")
+  .InNamespace("peppr-demo-2")
   .WithName("example-4a")
   .Mutate(example4Cb);
 
@@ -239,10 +239,10 @@ When(a.ConfigMap)
  *                                   Mutate Action (CM Example 5)                                *
  * ---------------------------------------------------------------------------------------------------
  *
- * This action is a bit more complex. It will look for any ConfigMap in the `pepr-demo`
+ * This action is a bit more complex. It will look for any ConfigMap in the `peppr-demo`
  * namespace that has the label `chuck-norris` during CREATE. When it finds one, it will fetch a
  * random Chuck Norris joke from the API and add it to the ConfigMap. This is a great example of how
- * you can use Pepr to make changes to your K8s objects based on external data.
+ * you can use peppr to make changes to your K8s objects based on external data.
  *
  * Note the use of the `async` keyword. This is required for any action that uses `await` or `fetch()`.
  *
@@ -325,7 +325,7 @@ When(a.ConfigMap)
  * ---------------------------------------------------------------------------------------------------
  *
  * The K8s JS client provides incomplete support for base64 encoding/decoding handling for secrets,
- * unlike the GO client. To make this less painful, Pepr automatically handles base64 encoding/decoding
+ * unlike the GO client. To make this less painful, peppr automatically handles base64 encoding/decoding
  * secret data before and after the action is executed.
  */
 When(a.Secret)
@@ -338,7 +338,7 @@ When(a.Secret)
     secret.data.magic = "change-without-encoding";
 
     // You can modify the data directly, and it will be encoded at the end of all processing
-    secret.data.example += " - modified by Pepr";
+    secret.data.example += " - modified by peppr";
   });
 
 /**
@@ -346,32 +346,32 @@ When(a.Secret)
  *                                   Mutate Action (Untyped Custom Resource)                     *
  * ---------------------------------------------------------------------------------------------------
  *
- * Out of the box, Pepr supports all the standard Kubernetes objects. However, you can also create
+ * Out of the box, peppr supports all the standard Kubernetes objects. However, you can also create
  * your own types. This is useful if you are working with an Operator that creates custom resources.
  * There are two ways to do this, the first is to use the `When()` function with a `GenericKind`,
  * the second is to create a new class that extends `GenericKind` and use the `RegisterKind()` function.
  *
  * This example shows how to use the `When()` function with a `GenericKind`. Note that you
- * must specify the `group`, `version`, and `kind` of the object (if applicable). This is how Pepr knows
+ * must specify the `group`, `version`, and `kind` of the object (if applicable). This is how peppr knows
  * if the action should be triggered or not. Since we are using a `GenericKind`,
- * Pepr will not be able to provide any intellisense for the object, so you will need to refer to the
+ * peppr will not be able to provide any intellisense for the object, so you will need to refer to the
  * Kubernetes API documentation for the object you are working with.
  *
- * You will need to wait for the CRD in `hello-pepr.samples.yaml` to be created, then you can apply
+ * You will need to wait for the CRD in `hello-peppr.samples.yaml` to be created, then you can apply
  *
  * ```yaml
- * apiVersion: pepr.dev/v1
+ * apiVersion: peppr.dev/v1
  * kind: Unicorn
  * metadata:
  *   name: example-1
- *   namespace: pepr-demo
+ *   namespace: peppr-demo
  * spec:
  *   message: replace-me
  *   counter: 0
  * ```
  */
 When(a.GenericKind, {
-  group: "pepr.dev",
+  group: "peppr.dev",
   version: "v1",
   kind: "Unicorn",
 })
@@ -380,7 +380,7 @@ When(a.GenericKind, {
   .Mutate(request => {
     request.Merge({
       spec: {
-        message: "Hello Pepr without type data!",
+        message: "Hello peppr without type data!",
         counter: Math.random(),
       },
     });
@@ -394,20 +394,20 @@ When(a.GenericKind, {
  * This example shows how to use the `RegisterKind()` function to create a new type. This is useful
  * if you are working with an Operator that creates custom resources and you want to have intellisense
  * for the object. Note that you must specify the `group`, `version`, and `kind` of the object (if applicable)
- * as this is how Pepr knows if the action should be triggered or not.
+ * as this is how peppr knows if the action should be triggered or not.
  *
- * Once you register a new Kind with Pepr, you can use the `When()` function with the new Kind. Ideally,
- * you should register custom Kinds at the top of your Capability file or Pepr Module so they are available
+ * Once you register a new Kind with peppr, you can use the `When()` function with the new Kind. Ideally,
+ * you should register custom Kinds at the top of your Capability file or peppr Module so they are available
  * to all actions, but we are putting it here for demonstration purposes.
  *
- * You will need to wait for the CRD in `hello-pepr.samples.yaml` to be created, then you can apply
+ * You will need to wait for the CRD in `hello-peppr.samples.yaml` to be created, then you can apply
  *
  * ```yaml
- * apiVersion: pepr.dev/v1
+ * apiVersion: peppr.dev/v1
  * kind: Unicorn
  * metadata:
  *   name: example-2
- *   namespace: pepr-demo
+ *   namespace: peppr-demo
  * spec:
  *   message: replace-me
  *   counter: 0
@@ -420,7 +420,7 @@ class UnicornKind extends a.GenericKind {
      *
      * @example
      * ```ts
-     * request.Raw.spec.message = "Hello Pepr!";
+     * request.Raw.spec.message = "Hello peppr!";
      * ```
      * */
     message: string;
@@ -429,7 +429,7 @@ class UnicornKind extends a.GenericKind {
 }
 
 RegisterKind(UnicornKind, {
-  group: "pepr.dev",
+  group: "peppr.dev",
   version: "v1",
   kind: "Unicorn",
 });
@@ -440,15 +440,15 @@ When(UnicornKind)
   .Mutate(request => {
     request.Merge({
       spec: {
-        message: "Hello Pepr with type data!",
+        message: "Hello peppr with type data!",
         counter: Math.random(),
       },
     });
   });
 
 /**
- * A callback function that is called once the Pepr Store is fully loaded.
+ * A callback function that is called once the peppr Store is fully loaded.
  */
 Store.onReady(data => {
-  Log.info(data, "Pepr Store Ready");
+  Log.info(data, "peppr Store Ready");
 });

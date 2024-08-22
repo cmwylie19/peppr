@@ -1,8 +1,8 @@
 {
-  "Create a new Pepr capability": {
-    "prefix": "create pepr capability",
+  "Create a new peppr capability": {
+    "prefix": "create peppr capability",
     "body": [
-      "import { Capability, a } from 'pepr';",
+      "import { Capability, a } from 'peppr';",
       "",
       "export const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = new Capability({",
       "\tname: '${TM_FILENAME_BASE}',",
@@ -16,6 +16,6 @@
       "// When(a.<Kind>).Is<Event>().Then(change => change.<changes>",
       "When(${3:})"
     ],
-    "description": "Creates a new Pepr capability with a specified description, optional namespaces, and adds a When statement for the specified value."
+    "description": "Creates a new peppr capability with a specified description, optional namespaces, and adds a When statement for the specified value."
   }
 }

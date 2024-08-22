@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { promises as fs } from "fs";
 import { K8s, KubernetesObject, kind } from "kubernetes-fluent-client";
@@ -150,9 +150,9 @@ export function createRBACMap(capabilities: CapabilityExport[]): RBACMap {
     capability.bindings.forEach(binding => {
       const key = `${binding.kind.group}/${binding.kind.version}/${binding.kind.kind}`;
 
-      acc["pepr.dev/v1/peprstore"] = {
+      acc["peppr.dev/v1/pepprstore"] = {
         verbs: ["create", "get", "patch", "watch"],
-        plural: "peprstores",
+        plural: "pepprstores",
       };
 
       acc["apiextensions.k8s.io/v1/customresourcedefinition"] = {
@@ -220,7 +220,7 @@ export function generateWatchNamespaceError(
 
   // check if binding uses an ignored namespace
   if (ignoredNamespaceConflict(ignoredNamespaces, bindingNamespaces)) {
-    err += `Binding uses a Pepr ignored namespace: ignoredNamespaces: [${ignoredNamespaces.join(
+    err += `Binding uses a peppr ignored namespace: ignoredNamespaces: [${ignoredNamespaces.join(
       ", ",
     )}] bindingNamespaces: [${bindingNamespaces.join(", ")}].`;
   }
@@ -253,7 +253,7 @@ export function namespaceComplianceValidator(capability: CapabilityExport, ignor
   }
 }
 
-// check to see if all replicas are ready for all deployments in the pepr-system namespace
+// check to see if all replicas are ready for all deployments in the peppr-system namespace
 // returns true if all deployments are ready, false otherwise
 export async function checkDeploymentStatus(namespace: string) {
   const deployments = await K8s(kind.Deployment).InNamespace(namespace).Get();
@@ -279,8 +279,8 @@ export async function checkDeploymentStatus(namespace: string) {
   return status;
 }
 
-// wait for all deployments in the pepr-system namespace to be ready
-export async function namespaceDeploymentsReady(namespace: string = "pepr-system") {
+// wait for all deployments in the peppr-system namespace to be ready
+export async function namespaceDeploymentsReady(namespace: string = "peppr-system") {
   Log.info(`Checking ${namespace} deployments status...`);
   let ready = false;
   while (!ready) {

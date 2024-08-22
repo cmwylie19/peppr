@@ -2,16 +2,16 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: peprstores.pepr.dev
+  name: pepprstores.peppr.dev
 spec:
   conversion:
     strategy: None
-  group: pepr.dev
+  group: peppr.dev
   names:
-    kind: PeprStore
-    listKind: PeprStoreList
-    plural: peprstores
-    singular: peprstore
+    kind: pepprStore
+    listKind: pepprStoreList
+    plural: pepprstores
+    singular: pepprstore
   scope: Namespaced
   versions:
   - name: v1
@@ -30,7 +30,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    kubernetes.io/metadata.name: pepr-system
-  name: pepr-system
+    kubernetes.io/metadata.name: peppr-system
+  name: peppr-system
 spec: {}
 

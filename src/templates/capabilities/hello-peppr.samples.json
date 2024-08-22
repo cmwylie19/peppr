@@ -3,7 +3,7 @@
     "apiVersion": "v1",
     "kind": "Namespace",
     "metadata": {
-      "name": "pepr-demo",
+      "name": "peppr-demo",
       "labels": {
         "keep-me": "please",
         "remove-me": "please"
@@ -14,7 +14,7 @@
     "apiVersion": "v1",
     "kind": "Namespace",
     "metadata": {
-      "name": "pepr-demo-2"
+      "name": "peppr-demo-2"
     }
   },
   {
@@ -22,7 +22,7 @@
     "kind": "Secret",
     "metadata": {
       "name": "secret-1",
-      "namespace": "pepr-demo"
+      "namespace": "peppr-demo"
     },
     "data": {
       "example": "dW5pY29ybiBtYWdpYw==",
@@ -35,7 +35,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-1",
-      "namespace": "pepr-demo"
+      "namespace": "peppr-demo"
     },
     "data": {
       "key": "ex-1-val"
@@ -46,7 +46,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-2",
-      "namespace": "pepr-demo"
+      "namespace": "peppr-demo"
     },
     "data": {
       "key": "ex-2-val"
@@ -57,7 +57,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-evil-cm",
-      "namespace": "pepr-demo",
+      "namespace": "peppr-demo",
       "annotations": {
         "evil": "true"
       }
@@ -71,7 +71,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-3",
-      "namespace": "pepr-demo",
+      "namespace": "peppr-demo",
       "labels": {
         "change": "by-label"
       }
@@ -85,7 +85,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-4",
-      "namespace": "pepr-demo"
+      "namespace": "peppr-demo"
     },
     "data": {
       "key": "ex-4-val"
@@ -96,7 +96,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-4a",
-      "namespace": "pepr-demo-2"
+      "namespace": "peppr-demo-2"
     },
     "data": {
       "key": "ex-4-val"
@@ -107,7 +107,7 @@
     "kind": "ConfigMap",
     "metadata": {
       "name": "example-5",
-      "namespace": "pepr-demo",
+      "namespace": "peppr-demo",
       "labels": {
         "chuck-norris": "test"
       }
@@ -120,10 +120,10 @@
     "apiVersion": "apiextensions.k8s.io/v1",
     "kind": "CustomResourceDefinition",
     "metadata": {
-      "name": "unicorns.pepr.dev"
+      "name": "unicorns.peppr.dev"
     },
     "spec": {
-      "group": "pepr.dev",
+      "group": "peppr.dev",
       "versions": [
         {
           "name": "v1",

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { dumpYaml } from "@kubernetes/client-node";
 import crypto from "crypto";
@@ -20,7 +20,7 @@ export async function overridesFile({ hash, name, image, config, apiToken }: Ass
     namespace: {
       annotations: {},
       labels: {
-        "pepr.dev": "",
+        "peppr.dev": "",
       },
     },
     uuid: name,
@@ -32,12 +32,12 @@ export async function overridesFile({ hash, name, image, config, apiToken }: Ass
       envFrom: [],
       image,
       annotations: {
-        "pepr.dev/description": `${config.description}` || "",
+        "peppr.dev/description": `${config.description}` || "",
       },
       labels: {
         app: name,
-        "pepr.dev/controller": "admission",
-        "pepr.dev/uuid": config.uuid,
+        "peppr.dev/controller": "admission",
+        "peppr.dev/uuid": config.uuid,
       },
       securityContext: {
         runAsUser: 65532,
@@ -82,12 +82,12 @@ export async function overridesFile({ hash, name, image, config, apiToken }: Ass
       envFrom: [],
       image,
       annotations: {
-        "pepr.dev/description": `${config.description}` || "",
+        "peppr.dev/description": `${config.description}` || "",
       },
       labels: {
         app: `${name}-watcher`,
-        "pepr.dev/controller": "watcher",
-        "pepr.dev/uuid": config.uuid,
+        "peppr.dev/controller": "watcher",
+        "peppr.dev/uuid": config.uuid,
       },
       securityContext: {
         runAsUser: 65532,
@@ -135,7 +135,7 @@ export function zarfYaml({ name, image, config }: Assets, path: string) {
     kind: "ZarfPackageConfig",
     metadata: {
       name,
-      description: `Pepr Module: ${config.description}`,
+      description: `peppr Module: ${config.description}`,
       url: "https://github.com/cmwylie19/peppr",
       version: `${config.appVersion || "0.0.1"}`,
     },
@@ -146,7 +146,7 @@ export function zarfYaml({ name, image, config }: Assets, path: string) {
         manifests: [
           {
             name: "module",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
             files: [path],
           },
         ],
@@ -163,7 +163,7 @@ export function zarfYamlChart({ name, image, config }: Assets, path: string) {
     kind: "ZarfPackageConfig",
     metadata: {
       name,
-      description: `Pepr Module: ${config.description}`,
+      description: `peppr Module: ${config.description}`,
       url: "https://github.com/cmwylie19/peppr",
       version: `${config.appVersion || "0.0.1"}`,
     },
@@ -174,7 +174,7 @@ export function zarfYamlChart({ name, image, config }: Assets, path: string) {
         charts: [
           {
             name: "module",
-            namespace: "pepr-system",
+            namespace: "peppr-system",
             version: `${config.appVersion || "0.0.1"}`,
             localPath: path,
           },

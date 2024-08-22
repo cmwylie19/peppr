@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { fork } from "child_process";
 import crypto from "crypto";
@@ -10,7 +10,7 @@ import { gunzipSync } from "zlib";
 import { K8s, kind } from "kubernetes-fluent-client";
 import Log from "../lib/logger";
 import { packageJSON } from "../templates/data.json";
-import { peprStoreCRD } from "../lib/assets/store";
+import { pepprStoreCRD } from "../lib/assets/store";
 import { validateHash } from "../lib/helpers";
 const { version } = packageJSON;
 
@@ -55,21 +55,21 @@ function runModule(expectedHash: string) {
   }
 }
 
-Log.info(`Pepr Controller (v${version})`);
+Log.info(`peppr Controller (v${version})`);
 
 const hash = process.argv[2];
 
 const startup = async () => {
   try {
-    Log.info("Applying the Pepr Store CRD if it doesn't exist");
-    await K8s(kind.CustomResourceDefinition).Apply(peprStoreCRD, { force: true });
+    Log.info("Applying the peppr Store CRD if it doesn't exist");
+    await K8s(kind.CustomResourceDefinition).Apply(pepprStoreCRD, { force: true });
 
     validateHash(hash);
     runModule(hash);
   } catch (err) {
-    Log.error(err, `Error starting Pepr Store CRD`);
+    Log.error(err, `Error starting peppr Store CRD`);
     process.exit(1);
   }
 };
 
-startup().catch(err => Log.error(err, `Error starting Pepr Controller`));
+startup().catch(err => Log.error(err, `Error starting peppr Controller`));

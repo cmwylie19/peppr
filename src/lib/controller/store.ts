@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { Operation } from "fast-json-patch";
 import { K8s } from "kubernetes-fluent-client";
 import { startsWith } from "ramda";
 
 import { Capability } from "../capability";
-import { PeprStore } from "../k8s";
+import { pepprStore } from "../k8s";
 import Log from "../logger";
 import { DataOp, DataSender, DataStore, Storage } from "../storage";
 
-const namespace = "pepr-system";
+const namespace = "peppr-system";
 export const debounceBackoff = 5000;
 
-export class PeprControllerStore {
+export class pepprControllerStore {
   #name: string;
   #stores: Record<string, Storage> = {};
   #sendDebounce: NodeJS.Timeout | undefined;
@@ -22,7 +22,7 @@ export class PeprControllerStore {
   constructor(capabilities: Capability[], name: string, onReady?: () => void) {
     this.#onReady = onReady;
 
-    // Setup Pepr State bindings
+    // Setup peppr State bindings
     this.#name = name;
 
     if (name.includes("schedule")) {
@@ -58,11 +58,11 @@ export class PeprControllerStore {
     // Add a jitter to the Store creation to avoid collisions
     setTimeout(
       () =>
-        K8s(PeprStore)
+        K8s(pepprStore)
           .InNamespace(namespace)
           .Get(this.#name)
           // If the get succeeds, migrate and setup the watch
-          .then(async (store: PeprStore) => await this.#migrateAndSetupWatch(store))
+          .then(async (store: pepprStore) => await this.#migrateAndSetupWatch(store))
           // Otherwise, create the resource
           .catch(this.#createStoreResource),
       Math.random() * 3000,
@@ -70,12 +70,12 @@ export class PeprControllerStore {
   }
 
   #setupWatch = () => {
-    const watcher = K8s(PeprStore, { name: this.#name, namespace }).Watch(this.#receive);
-    watcher.start().catch(e => Log.error(e, "Error starting Pepr store watch"));
+    const watcher = K8s(pepprStore, { name: this.#name, namespace }).Watch(this.#receive);
+    watcher.start().catch(e => Log.error(e, "Error starting peppr store watch"));
   };
 
-  #migrateAndSetupWatch = async (store: PeprStore) => {
-    Log.debug(store, "Pepr Store migration");
+  #migrateAndSetupWatch = async (store: pepprStore) => {
+    Log.debug(store, "peppr Store migration");
     const data: DataStore = store.data || {};
     const migrateCache: Record<string, Operation> = {};
 
@@ -91,9 +91,9 @@ export class PeprControllerStore {
 
       try {
         // Send the patch to the cluster
-        await K8s(PeprStore, { namespace, name: this.#name }).Patch(payload);
+        await K8s(pepprStore, { namespace, name: this.#name }).Patch(payload);
       } catch (err) {
-        Log.error(err, "Pepr store update failure");
+        Log.error(err, "peppr store update failure");
 
         if (err.status === 422) {
           Object.keys(migrateCache).forEach(key => delete migrateCache[key]);
@@ -157,8 +157,8 @@ export class PeprControllerStore {
     this.#setupWatch();
   };
 
-  #receive = (store: PeprStore) => {
-    Log.debug(store, "Pepr Store update");
+  #receive = (store: pepprStore) => {
+    Log.debug(store, "peppr Store update");
 
     // Wrap the update in a debounced function
     const debounced = () => {
@@ -247,9 +247,9 @@ export class PeprControllerStore {
 
       try {
         // Send the patch to the cluster
-        await K8s(PeprStore, { namespace, name: this.#name }).Patch(payload);
+        await K8s(pepprStore, { namespace, name: this.#name }).Patch(payload);
       } catch (err) {
-        Log.error(err, "Pepr store update failure");
+        Log.error(err, "peppr store update failure");
 
         if (err.status === 422) {
           Object.keys(sendCache).forEach(key => delete sendCache[key]);
@@ -270,7 +270,7 @@ export class PeprControllerStore {
     // Send any cached updates every debounceBackoff milliseconds
     setInterval(() => {
       if (Object.keys(sendCache).length > 0) {
-        Log.debug(sendCache, "Sending updates to Pepr store");
+        Log.debug(sendCache, "Sending updates to peppr store");
         void flushCache();
       }
     }, debounceBackoff);
@@ -279,25 +279,25 @@ export class PeprControllerStore {
   };
 
   #createStoreResource = async (e: unknown) => {
-    Log.info(`Pepr store not found, creating...`);
+    Log.info(`peppr store not found, creating...`);
     Log.debug(e);
 
     try {
-      await K8s(PeprStore).Apply({
+      await K8s(pepprStore).Apply({
         metadata: {
           name: this.#name,
           namespace,
         },
         data: {
           // JSON Patch will die if the data is empty, so we need to add a placeholder
-          __pepr_do_not_delete__: "k-thx-bye",
+          __peppr_do_not_delete__: "k-thx-bye",
         },
       });
 
       // Now that the resource exists, setup the watch
       this.#setupWatch();
     } catch (err) {
-      Log.error(err, "Failed to create Pepr store");
+      Log.error(err, "Failed to create peppr store");
     }
   };
 }

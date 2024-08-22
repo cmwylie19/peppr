@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { afterAll, expect, it } from "@jest/globals";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
@@ -19,21 +19,21 @@ const fetchOpts: RequestInit = {
 
 let expectedLines = [
   "Establishing connection to Kubernetes",
-  "Capability hello-pepr registered",
+  "Capability hello-peppr registered",
   "Mutate Action configured for CREATE",
   "Validate Action configured for CREATE",
   "Server listening on port 3000",
   "Controller startup complete",
-  `"hello-pepr-v2-example-1-data": "{\\"key\\":\\"ex-1-val\\"}"`,
-  `"hello-pepr-v2-watch-data": "This data was stored by a Watch Action."`,
+  `"hello-peppr-v2-example-1-data": "{\\"key\\":\\"ex-1-val\\"}"`,
+  `"hello-peppr-v2-watch-data": "This data was stored by a Watch Action."`,
 ];
 
-export function peprDev() {
+export function pepprDev() {
   let cmd: ChildProcessWithoutNullStreams;
   let success = false;
 
-  it("should start the Pepr dev server", () => {
-    cmd = spawn("npx", ["pepr", "dev", "--confirm"], { cwd, stdio: "pipe" });
+  it("should start the peppr dev server", () => {
+    cmd = spawn("npx", ["peppr", "dev", "--confirm"], { cwd, stdio: "pipe" });
 
     // This command should not exit on its own
     cmd.on("close", code => {
@@ -97,10 +97,10 @@ export function peprDev() {
 
   it("should expose Prometheus metrics", async () => {
     const metrics = await validateMetrics();
-    expect(metrics).toMatch("pepr_validate");
-    expect(metrics).toMatch("pepr_mutate");
-    expect(metrics).toMatch("pepr_errors");
-    expect(metrics).toMatch("pepr_alerts");
+    expect(metrics).toMatch("peppr_validate");
+    expect(metrics).toMatch("peppr_mutate");
+    expect(metrics).toMatch("peppr_errors");
+    expect(metrics).toMatch("peppr_alerts");
   });
 
   afterAll(() => {

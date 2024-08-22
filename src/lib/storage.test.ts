@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { DataStore, Storage, v2StoreKey, v2UnescapedStoreKey, stripV2Prefix } from "./storage";
@@ -162,7 +162,7 @@ describe("Storage", () => {
   });
 
   it("should get an item", () => {
-    const keys = ["key1", "!", "!", "pepr", "https://google.com", "sftp://here:22", "!"];
+    const keys = ["key1", "!", "!", "peppr", "https://google.com", "sftp://here:22", "!"];
     const results = ["value1", null, "!", "was-here", "3f7dd007-568f-4f4a-bbac-2e6bfff93860", "your-machine", " "];
 
     keys.map((key, i) => {

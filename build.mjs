@@ -23,7 +23,7 @@ async function builder() {
       entryPoints: ["src/cli.ts"],
       outfile: "dist/cli.js",
       define: {
-        'process.env.PEPR_PRETTY_LOGS': '"true"',
+        'process.env.peppr_PRETTY_LOGS': '"true"',
       },
     });
 

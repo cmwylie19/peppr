@@ -31,9 +31,9 @@ RUN npm run build && \
     rm -rf node_modules/ramda/dist && \
     rm -rf node_modules/ramda/es && \
     find . -name "*.ts" -type f -delete && \
-    mkdir node_modules/pepr && \
-    cp -r dist node_modules/pepr/dist && \
-    cp package.json node_modules/pepr
+    mkdir node_modules/peppr && \
+    cp -r dist node_modules/peppr/dist && \
+    cp package.json node_modules/peppr
 
 ##### DELIVER #####
 

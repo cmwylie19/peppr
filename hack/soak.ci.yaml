@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: pepr-system
+  name: peppr-system
   labels:
-    pepr.dev: ''
+    peppr.dev: ''
     istio-injection: enabled
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: pepr-soak-ci
+  name: peppr-soak-ci
 rules:
   - apiGroups:
       - '*'
@@ -27,27 +27,27 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: pepr-soak-ci
+  name: peppr-soak-ci
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: pepr-soak-ci
+  name: peppr-soak-ci
 subjects:
   - kind: ServiceAccount
-    name: pepr-soak-ci
-    namespace: pepr-system
+    name: peppr-soak-ci
+    namespace: peppr-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: pepr-soak-ci
-  namespace: pepr-system
+  name: peppr-soak-ci
+  namespace: peppr-system
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: pepr-soak-ci-api-token
-  namespace: pepr-system
+  name: peppr-soak-ci-api-token
+  namespace: peppr-system
 type: Opaque
 data:
   value: >-
@@ -56,8 +56,8 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: pepr-soak-ci-tls
-  namespace: pepr-system
+  name: peppr-soak-ci-tls
+  namespace: peppr-system
 type: kubernetes.io/tls
 data:
   tls.crt: >-
@@ -68,31 +68,31 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pepr-soak-ci
-  namespace: pepr-system
+  name: peppr-soak-ci
+  namespace: peppr-system
   annotations:
-    pepr.dev/description: soak test for watch controller
+    peppr.dev/description: soak test for watch controller
   labels:
-    app: pepr-soak-ci
-    pepr.dev/controller: admission
-    pepr.dev/uuid: soak-ci
+    app: peppr-soak-ci
+    peppr.dev/controller: admission
+    peppr.dev/uuid: soak-ci
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pepr-soak-ci
-      pepr.dev/controller: admission
+      app: peppr-soak-ci
+      peppr.dev/controller: admission
   template:
     metadata:
       annotations:
         buildTimestamp: '1724191807324'
       labels:
-        app: pepr-soak-ci
-        pepr.dev/controller: admission
+        app: peppr-soak-ci
+        peppr.dev/controller: admission
     spec:
       terminationGracePeriodSeconds: 5
       priorityClassName: system-node-critical
-      serviceAccountName: pepr-soak-ci
+      serviceAccountName: peppr-soak-ci
       securityContext:
         runAsUser: 65532
         runAsGroup: 65532
@@ -100,11 +100,11 @@ spec:
         fsGroup: 65532
       containers:
         - name: server
-          image: pepr:dev
+          image: peppr:dev
           imagePullPolicy: IfNotPresent
           command:
             - node
-            - /app/node_modules/pepr/dist/controller.js
+            - /app/node_modules/peppr/dist/controller.js
             - 72bd9a27f01b365525d6bd9b153743cddc39044d105345c3c2bc5de405dbcdf3
           readinessProbe:
             httpGet:
@@ -126,9 +126,9 @@ spec:
               memory: 256Mi
               cpu: 500m
           env:
-            - name: PEPR_WATCH_MODE
+            - name: peppr_WATCH_MODE
               value: 'false'
-            - name: PEPR_PRETTY_LOG
+            - name: peppr_PRETTY_LOG
               value: 'false'
             - name: LOG_LEVEL
               value: debug
@@ -153,25 +153,25 @@ spec:
       volumes:
         - name: tls-certs
           secret:
-            secretName: pepr-soak-ci-tls
+            secretName: peppr-soak-ci-tls
         - name: api-token
           secret:
-            secretName: pepr-soak-ci-api-token
+            secretName: peppr-soak-ci-api-token
         - name: module
           secret:
-            secretName: pepr-soak-ci-module
+            secretName: peppr-soak-ci-module
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: pepr-soak-ci
-  namespace: pepr-system
+  name: peppr-soak-ci
+  namespace: peppr-system
   labels:
-    pepr.dev/controller: admission
+    peppr.dev/controller: admission
 spec:
   selector:
-    app: pepr-soak-ci
-    pepr.dev/controller: admission
+    app: peppr-soak-ci
+    peppr.dev/controller: admission
   ports:
     - port: 443
       targetPort: 3000
@@ -179,14 +179,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pepr-soak-ci-watcher
-  namespace: pepr-system
+  name: peppr-soak-ci-watcher
+  namespace: peppr-system
   labels:
-    pepr.dev/controller: watcher
+    peppr.dev/controller: watcher
 spec:
   selector:
-    app: pepr-soak-ci-watcher
-    pepr.dev/controller: watcher
+    app: peppr-soak-ci-watcher
+    peppr.dev/controller: watcher
   ports:
     - port: 443
       targetPort: 3000
@@ -194,8 +194,8 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: pepr-soak-ci-module
-  namespace: pepr-system
+  name: peppr-soak-ci-module
+  namespace: peppr-system
 type: Opaque
 data:
   module-72bd9a27f01b365525d6bd9b153743cddc39044d105345c3c2bc5de405dbcdf3.js.gz: >-
@@ -204,13 +204,13 @@ data:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: pepr-soak-ci-store
-  namespace: pepr-system
+  name: peppr-soak-ci-store
+  namespace: peppr-system
 rules:
   - apiGroups:
-      - pepr.dev
+      - peppr.dev
     resources:
-      - peprstores
+      - pepprstores
     resourceNames:
       - ''
     verbs:
@@ -222,46 +222,46 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pepr-soak-ci-store
-  namespace: pepr-system
+  name: peppr-soak-ci-store
+  namespace: peppr-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: pepr-soak-ci-store
+  name: peppr-soak-ci-store
 subjects:
   - kind: ServiceAccount
-    name: pepr-soak-ci-store
-    namespace: pepr-system
+    name: peppr-soak-ci-store
+    namespace: peppr-system
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pepr-soak-ci-watcher
-  namespace: pepr-system
+  name: peppr-soak-ci-watcher
+  namespace: peppr-system
   annotations:
-    pepr.dev/description: soak test for watch controller
+    peppr.dev/description: soak test for watch controller
   labels:
-    app: pepr-soak-ci-watcher
-    pepr.dev/controller: watcher
-    pepr.dev/uuid: soak-ci
+    app: peppr-soak-ci-watcher
+    peppr.dev/controller: watcher
+    peppr.dev/uuid: soak-ci
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: pepr-soak-ci-watcher
-      pepr.dev/controller: watcher
+      app: peppr-soak-ci-watcher
+      peppr.dev/controller: watcher
   template:
     metadata:
       annotations:
         buildTimestamp: '1724191807324'
       labels:
-        app: pepr-soak-ci-watcher
-        pepr.dev/controller: watcher
+        app: peppr-soak-ci-watcher
+        peppr.dev/controller: watcher
     spec:
       terminationGracePeriodSeconds: 5
-      serviceAccountName: pepr-soak-ci
+      serviceAccountName: peppr-soak-ci
       securityContext:
         runAsUser: 65532
         runAsGroup: 65532
@@ -269,11 +269,11 @@ spec:
         fsGroup: 65532
       containers:
         - name: watcher
-          image: pepr:dev
+          image: peppr:dev
           imagePullPolicy: IfNotPresent
           command:
             - node
-            - /app/node_modules/pepr/dist/controller.js
+            - /app/node_modules/peppr/dist/controller.js
             - 72bd9a27f01b365525d6bd9b153743cddc39044d105345c3c2bc5de405dbcdf3
           readinessProbe:
             httpGet:
@@ -310,18 +310,18 @@ spec:
               mountPath: /app/load
               readOnly: true
           env:
-            - name: PEPR_LAST_SEEN_LIMIT_SECONDS
+            - name: peppr_LAST_SEEN_LIMIT_SECONDS
               value: '60'
-            - name: PEPR_WATCH_MODE
+            - name: peppr_WATCH_MODE
               value: 'true'
-            - name: PEPR_PRETTY_LOG
+            - name: peppr_PRETTY_LOG
               value: 'false'
             - name: LOG_LEVEL
               value: debug
       volumes:
         - name: tls-certs
           secret:
-            secretName: pepr-soak-ci-tls
+            secretName: peppr-soak-ci-tls
         - name: module
           secret:
-            secretName: pepr-soak-ci-module
+            secretName: peppr-soak-ci-module

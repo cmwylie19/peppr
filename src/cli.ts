@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { banner } from "./cli/banner";
 import build from "./cli/build";
@@ -17,14 +17,14 @@ import update from "./cli/update";
 import kfc from "./cli/kfc";
 
 if (process.env.npm_lifecycle_event !== "npx") {
-  console.warn("Pepr should be run via `npx pepr <command>` instead of `pepr <command>`.");
+  console.warn("peppr should be run via `npx peppr <command>` instead of `peppr <command>`.");
 }
 
 const program = new RootCmd();
 
 program
   .version(version)
-  .description(`Pepr (v${version}) - Type safe K8s middleware for humans`)
+  .description(`peppr (v${version}) - Type safe K8s middleware for humans`)
   .action(() => {
     if (program.args.length < 1) {
       console.log(banner);

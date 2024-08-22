@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import express, { NextFunction } from "express";
 import fs from "fs";
@@ -12,7 +12,7 @@ import { metricsCollector, MetricsCollector } from "../metrics";
 import { ModuleConfig, isWatchMode } from "../module";
 import { mutateProcessor } from "../mutate-processor";
 import { validateProcessor } from "../validate-processor";
-import { PeprControllerStore } from "./store";
+import { pepprControllerStore } from "./store";
 import { ResponseItem } from "../types";
 
 export class Controller {
@@ -44,13 +44,13 @@ export class Controller {
     this.#config = config;
     this.#capabilities = capabilities;
 
-    // Initialize the Pepr store for each capability
-    new PeprControllerStore(capabilities, `pepr-${config.uuid}-store`, () => {
+    // Initialize the peppr store for each capability
+    new pepprControllerStore(capabilities, `peppr-${config.uuid}-store`, () => {
       this.#bindEndpoints();
       onReady && onReady();
       Log.info("✅ Controller startup complete");
       // Initialize the schedule store for each capability
-      new PeprControllerStore(capabilities, `pepr-${config.uuid}-schedule`, () => {
+      new pepprControllerStore(capabilities, `peppr-${config.uuid}-schedule`, () => {
         Log.info("✅ Scheduling processed");
       });
     });
@@ -75,7 +75,7 @@ export class Controller {
   /** Start the webhook server */
   startServer = (port: number) => {
     if (this.#running) {
-      throw new Error("Cannot start Pepr module: Pepr module was not instantiated with deferStart=true");
+      throw new Error("Cannot start peppr module: peppr module was not instantiated with deferStart=true");
     }
 
     // Load SSL certificate and key
@@ -87,7 +87,7 @@ export class Controller {
     // Get the API token if not in watch mode
     if (!isWatchMode()) {
       // Get the API token from the environment variable or the mounted secret
-      this.#token = process.env.PEPR_API_TOKEN || fs.readFileSync("/app/api-token/value").toString().trim();
+      this.#token = process.env.peppr_API_TOKEN || fs.readFileSync("/app/api-token/value").toString().trim();
       Log.info(`Using API token: ${this.#token}`);
 
       if (!this.#token) {

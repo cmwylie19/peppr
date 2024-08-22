@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { GenericClass, GroupVersionKind, modelToGroupVersionKind } from "kubernetes-fluent-client";
 import { WatchAction } from "kubernetes-fluent-client/dist/fluent/types";
@@ -7,7 +7,7 @@ import { pickBy } from "ramda";
 
 import Log from "./logger";
 import { isBuildMode, isDevMode, isWatchMode } from "./module";
-import { PeprStore, Storage } from "./storage";
+import { pepprStore, Storage } from "./storage";
 import { OnSchedule, Schedule } from "./schedule";
 import {
   Binding,
@@ -27,7 +27,7 @@ const registerAdmission = isBuildMode() || !isWatchMode();
 const registerWatch = isBuildMode() || isWatchMode() || isDevMode();
 
 /**
- * A capability is a unit of functionality that can be registered with the Pepr runtime.
+ * A capability is a unit of functionality that can be registered with the peppr runtime.
  */
 export class Capability implements CapabilityExport {
   #name: string;
@@ -50,7 +50,7 @@ export class Capability implements CapabilityExport {
     const { name, every, unit, run, startTime, completions } = schedule;
     this.hasSchedule = true;
 
-    if (process.env.PEPR_WATCH_MODE === "true" || process.env.PEPR_MODE === "dev") {
+    if (process.env.peppr_WATCH_MODE === "true" || process.env.peppr_MODE === "dev") {
       // Only create/watch schedule store if necessary
 
       // Create a new schedule
@@ -72,11 +72,11 @@ export class Capability implements CapabilityExport {
   /**
    * Store is a key-value data store that can be used to persist data that should be shared
    * between requests. Each capability has its own store, and the data is persisted in Kubernetes
-   * in the `pepr-system` namespace.
+   * in the `peppr-system` namespace.
    *
    * Note: You should only access the store from within an action.
    */
-  Store: PeprStore = {
+  Store: pepprStore = {
     clear: this.#store.clear,
     getItem: this.#store.getItem,
     removeItem: this.#store.removeItem,
@@ -90,11 +90,11 @@ export class Capability implements CapabilityExport {
   /**
    * ScheduleStore is a key-value data store used to persist schedule data that should be shared
    * between intervals. Each Schedule shares store, and the data is persisted in Kubernetes
-   * in the `pepr-system` namespace.
+   * in the `peppr-system` namespace.
    *
    * Note: There is no direct access to schedule store
    */
-  ScheduleStore: PeprStore = {
+  ScheduleStore: pepprStore = {
     clear: this.#scheduleStore.clear,
     getItem: this.#scheduleStore.getItem,
     removeItemAndWait: this.#scheduleStore.removeItemAndWait,
@@ -132,7 +132,7 @@ export class Capability implements CapabilityExport {
   }
 
   /**
-   * Register the store with the capability. This is called automatically by the Pepr controller.
+   * Register the store with the capability. This is called automatically by the peppr controller.
    *
    * @param store
    */
@@ -152,7 +152,7 @@ export class Capability implements CapabilityExport {
   };
 
   /**
-   * Register the store with the capability. This is called automatically by the Pepr controller.
+   * Register the store with the capability. This is called automatically by the peppr controller.
    *
    * @param store
    */
@@ -173,7 +173,7 @@ export class Capability implements CapabilityExport {
 
   /**
    * The When method is used to register a action to be executed when a Kubernetes resource is
-   * processed by Pepr. The action will be executed if the resource matches the specified kind and any
+   * processed by peppr. The action will be executed if the resource matches the specified kind and any
    * filters that are applied.
    *
    * @param model the KubernetesObject model to match

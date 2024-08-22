@@ -1,6 +1,6 @@
 import forge from "node-forge";
 
-const caName = "Pepr Ephemeral CA";
+const caName = "peppr Ephemeral CA";
 
 export interface TLSOut {
   ca: string;

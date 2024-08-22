@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { KubernetesListObject } from "@kubernetes/client-node";
 import { K8s, kind } from "kubernetes-fluent-client";
@@ -15,20 +15,20 @@ export default function (program: RootCmd) {
 
       if (!uuid) {
         deployments = await K8s(kind.Deployment)
-          .InNamespace("pepr-system")
-          .WithLabel("pepr.dev/uuid")
+          .InNamespace("peppr-system")
+          .WithLabel("peppr.dev/uuid")
           .Get();
       } else {
         deployments = await K8s(kind.Deployment)
-          .InNamespace("pepr-system")
-          .WithLabel("pepr.dev/uuid", uuid)
+          .InNamespace("peppr-system")
+          .WithLabel("peppr.dev/uuid", uuid)
           .Get();
       }
 
       // Populate the uuidTable with the UUID and description
       deployments.items.map(deploy => {
-        const uuid = deploy.metadata?.labels?.["pepr.dev/uuid"] || "";
-        const description = deploy.metadata?.annotations?.["pepr.dev/description"] || "";
+        const uuid = deploy.metadata?.labels?.["peppr.dev/uuid"] || "";
+        const description = deploy.metadata?.annotations?.["peppr.dev/description"] || "";
         if (uuid !== "") {
           uuidTable[uuid] = description;
         }

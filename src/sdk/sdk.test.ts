@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { expect, test } from "@jest/globals";
-import { PeprValidateRequest } from "../lib/validate-request";
-import { PeprMutateRequest } from "../lib/mutate-request";
+import { pepprValidateRequest } from "../lib/validate-request";
+import { pepprMutateRequest } from "../lib/mutate-request";
 import { a } from "../lib";
 import { containers, writeEvent, getOwnerRefFrom, sanitizeResourceName } from "./sdk";
 import * as fc from "fast-check";
@@ -42,7 +42,7 @@ describe("containers", () => {
       },
     ];
     const allContainers = [...standardContainers, ...initContainers, ...ephemeralContainers];
-    const peprValidationRequest = {
+    const pepprValidationRequest = {
       Raw: {
         spec: {
           containers: standardContainers,
@@ -50,21 +50,21 @@ describe("containers", () => {
           ephemeralContainers,
         },
       },
-    } as PeprValidateRequest<a.Pod>;
+    } as pepprValidateRequest<a.Pod>;
 
-    let result = containers(peprValidationRequest);
+    let result = containers(pepprValidationRequest);
     expect(result).toEqual(expect.arrayContaining(allContainers));
     expect(result).toHaveLength(allContainers.length);
 
-    result = containers(peprValidationRequest, "containers");
+    result = containers(pepprValidationRequest, "containers");
     expect(result).toEqual(expect.arrayContaining(standardContainers));
     expect(result).toHaveLength(standardContainers.length);
 
-    result = containers(peprValidationRequest, "initContainers");
+    result = containers(pepprValidationRequest, "initContainers");
     expect(result).toEqual(expect.arrayContaining(initContainers));
     expect(result).toHaveLength(initContainers.length);
 
-    result = containers(peprValidationRequest, "ephemeralContainers");
+    result = containers(pepprValidationRequest, "ephemeralContainers");
     expect(result).toEqual(expect.arrayContaining(ephemeralContainers));
     expect(result).toHaveLength(ephemeralContainers.length);
   });
@@ -86,7 +86,7 @@ describe("containers", () => {
       },
     ];
     const allContainers = [...standardContainers, ...initContainers, ...ephemeralContainers];
-    const peprMutateRequest = {
+    const pepprMutateRequest = {
       Raw: {
         spec: {
           containers: standardContainers,
@@ -94,21 +94,21 @@ describe("containers", () => {
           ephemeralContainers,
         },
       },
-    } as PeprMutateRequest<a.Pod>;
+    } as pepprMutateRequest<a.Pod>;
 
-    let result = containers(peprMutateRequest);
+    let result = containers(pepprMutateRequest);
     expect(result).toEqual(expect.arrayContaining(allContainers));
     expect(result).toHaveLength(allContainers.length);
 
-    result = containers(peprMutateRequest, "containers");
+    result = containers(pepprMutateRequest, "containers");
     expect(result).toEqual(expect.arrayContaining(standardContainers));
     expect(result).toHaveLength(standardContainers.length);
 
-    result = containers(peprMutateRequest, "initContainers");
+    result = containers(pepprMutateRequest, "initContainers");
     expect(result).toEqual(expect.arrayContaining(initContainers));
     expect(result).toHaveLength(initContainers.length);
 
-    result = containers(peprMutateRequest, "ephemeralContainers");
+    result = containers(pepprMutateRequest, "ephemeralContainers");
     expect(result).toEqual(expect.arrayContaining(ephemeralContainers));
     expect(result).toHaveLength(ephemeralContainers.length);
   });

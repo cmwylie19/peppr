@@ -1,40 +1,40 @@
-# Tutorial - Create a Pepr Dashboard
+# Tutorial - Create a peppr Dashboard
 
 ## Introduction
 
-This tutorial will walk you through the process of creating a dashboard to display your Pepr metrics. This dashboard will present data such as the number of validation requests processed, the number of mutation requests that were allowed, the number of errors that were processed, the number of alerts that were processed, the status of the Pepr pods, and the scrape duration of the Pepr pods. This dashboard will be created using [Grafana](https://grafana.com/). The dashboard will display data from [Prometheus](https://prometheus.io/), which is a monitoring system that Pepr uses to collect metrics.
+This tutorial will walk you through the process of creating a dashboard to display your peppr metrics. This dashboard will present data such as the number of validation requests processed, the number of mutation requests that were allowed, the number of errors that were processed, the number of alerts that were processed, the status of the peppr pods, and the scrape duration of the peppr pods. This dashboard will be created using [Grafana](https://grafana.com/). The dashboard will display data from [Prometheus](https://prometheus.io/), which is a monitoring system that peppr uses to collect metrics.
 
-This tutorial is not intended for production, but instead is intended to show how to quickly scrape Pepr metrics. The [Kube Prometheus Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) provides a starting point for a more production suitable way of deploying Prometheus in prod.
+This tutorial is not intended for production, but instead is intended to show how to quickly scrape peppr metrics. The [Kube Prometheus Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) provides a starting point for a more production suitable way of deploying Prometheus in prod.
 
 An example of what the dashboard will look like is shown below:
 
-![Pepr Dashboard](../../_images/pepr-dashboard-screenshot.png)
+![peppr Dashboard](../../_images/peppr-dashboard-screenshot.png)
 
-***Note:*** *The dashboard shown above is an example of what the dashboard will look like. The dashboard will be populated with data from your Pepr instance.*
+***Note:*** *The dashboard shown above is an example of what the dashboard will look like. The dashboard will be populated with data from your peppr instance.*
 
 ## Steps
 
-### Step 1. Get Cluster Running With Your Pepr Module Deployed
+### Step 1. Get Cluster Running With Your peppr Module Deployed
 
-You can learn more about how to create a Pepr module and deploy it in the [Create a Pepr Module](010_create-pepr-module.md) tutorial. The short version is:
+You can learn more about how to create a peppr module and deploy it in the [Create a peppr Module](010_create-peppr-module.md) tutorial. The short version is:
 
 ```bash
 #Create your cluster
 k3d cluster create
 
 #Create your module
-npx pepr init
+npx peppr init
 
-#Change directory to your module that was created using `npx pepr init`
-npx pepr  dev
-kubectl apply -f capabilities/hello-pepr.samples.yaml
+#Change directory to your module that was created using `npx peppr init`
+npx peppr  dev
+kubectl apply -f capabilities/hello-peppr.samples.yaml
 
 #Deploy your module to the cluster
-npx pepr deploy
+npx peppr deploy
 ```
 
 
-### Step 2: Create and Apply Our Pepr Dashboard to the Cluster
+### Step 2: Create and Apply Our peppr Dashboard to the Cluster
 
 Create a new file called grafana-dashboard.yaml and add the following content:
 
@@ -42,10 +42,10 @@ Create a new file called grafana-dashboard.yaml and add the following content:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pepr-dashboard
+  name: peppr-dashboard
   namespace: default
 data:
-  pepr-dashboard.json: |
+  peppr-dashboard.json: |
     {
     "__inputs": [
       {
@@ -123,7 +123,7 @@ data:
         },
         "id": 18,
         "panels": [],
-        "title": "Pepr Status",
+        "title": "peppr Status",
         "type": "row"
       },
       {
@@ -131,7 +131,7 @@ data:
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "description": "Pepr pod status by pod",
+        "description": "peppr pod status by pod",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -233,7 +233,7 @@ data:
             "refId": "B"
           }
         ],
-        "title": "Pepr Status",
+        "title": "peppr Status",
         "type": "stat"
       },
       {
@@ -415,7 +415,7 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "count by(instance) (rate(pepr_errors{container=\"server\"}[$__rate_interval]))",
+            "expr": "count by(instance) (rate(peppr_errors{container=\"server\"}[$__rate_interval]))",
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "A"
@@ -426,14 +426,14 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "count by(instance) (rate(pepr_errors{container=\"watcher\"}[$__rate_interval]))",
+            "expr": "count by(instance) (rate(peppr_errors{container=\"watcher\"}[$__rate_interval]))",
             "hide": false,
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "B"
           }
         ],
-        "title": "Pepr: Error Count",
+        "title": "peppr: Error Count",
         "type": "stat"
       },
       {
@@ -441,7 +441,7 @@ data:
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "description": "Count of Pepr Alerts by pod",
+        "description": "Count of peppr Alerts by pod",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -499,7 +499,7 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "pepr_alerts{container=\"server\"}",
+            "expr": "peppr_alerts{container=\"server\"}",
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "A"
@@ -510,14 +510,14 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "pepr_alerts{container=\"watcher\"}",
+            "expr": "peppr_alerts{container=\"watcher\"}",
             "hide": false,
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "B"
           }
         ],
-        "title": "Pepr: Alert Count",
+        "title": "peppr: Alert Count",
         "type": "stat"
       },
       {
@@ -525,7 +525,7 @@ data:
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "description": "Count of Pepr Validate actions by pod",
+        "description": "Count of peppr Validate actions by pod",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -584,7 +584,7 @@ data:
             },
             "editorMode": "builder",
             "exemplar": false,
-            "expr": "pepr_validate_count{container=\"server\"}",
+            "expr": "peppr_validate_count{container=\"server\"}",
             "instant": false,
             "legendFormat": "{{instance}}",
             "range": true,
@@ -596,14 +596,14 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "pepr_validate_sum{container=\"watcher\"}",
+            "expr": "peppr_validate_sum{container=\"watcher\"}",
             "hide": false,
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "B"
           }
         ],
-        "title": "Pepr: Validate Count",
+        "title": "peppr: Validate Count",
         "type": "stat"
       },
       {
@@ -611,7 +611,7 @@ data:
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "description": "Count of Pepr mutate actions applied by pod.",
+        "description": "Count of peppr mutate actions applied by pod.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -669,7 +669,7 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "pepr_mutate_count{container=\"server\"}",
+            "expr": "peppr_mutate_count{container=\"server\"}",
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "A"
@@ -680,14 +680,14 @@ data:
               "uid": "prometheus"
             },
             "editorMode": "builder",
-            "expr": "rate(pepr_mutate_count{container=\"watcher\"}[24h])",
+            "expr": "rate(peppr_mutate_count{container=\"watcher\"}[24h])",
             "hide": false,
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "B"
           }
         ],
-        "title": "Pepr: Mutate Count",
+        "title": "peppr: Mutate Count",
         "type": "stat"
       }
     ],
@@ -703,7 +703,7 @@ data:
     },
     "timepicker": {},
     "timezone": "",
-    "title": "Pepr Dashboard",
+    "title": "peppr Dashboard",
     "uid": "j7BjgMpIk",
     "version": 17,
     "weekStart": ""
@@ -727,10 +727,10 @@ prometheus:
     - name: admission
       selector:
         matchLabels:
-          pepr.dev/controller: admission
+          peppr.dev/controller: admission
       namespaceSelector:
         matchNames:
-          - pepr-system
+          - peppr-system
       endpoints:
         - targetPort: 3000
           scheme: https
@@ -739,10 +739,10 @@ prometheus:
     - name: watcher
       selector:
         matchLabels:
-          pepr.dev/controller: watcher
+          peppr.dev/controller: watcher
       namespaceSelector:
         matchNames:
-          - pepr-system
+          - peppr-system
       endpoints:
         - targetPort: 3000
           scheme: https
@@ -765,11 +765,11 @@ grafana:
   defaultDashboardsTimezone: browser
   extraVolumeMounts:
     - mountPath: /var/lib/grafana/dashboards
-      name: pepr-dashboard
+      name: peppr-dashboard
   extraVolumes:
-    - name: pepr-dashboard
+    - name: peppr-dashboard
       configMap:
-        name: pepr-dashboard
+        name: peppr-dashboard
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
@@ -784,7 +784,7 @@ grafana:
         options:
           path: /var/lib/grafana/dashboards/default
   dashboardsConfigMaps:
-    default: pepr-dashboard
+    default: peppr-dashboard
 ```
 
 Now, install the kube-prometheus-stack Helm Chart using the values.yaml file we created.
@@ -827,7 +827,7 @@ kubectl port-forward service/monitoring-grafana 3000:80
 
 ### Step 6: View Prometheus Metrics Targets
 
-You should be able to see the Pepr targets in the Prometheus UI by visiting the following URL:
+You should be able to see the peppr targets in the Prometheus UI by visiting the following URL:
 
 ```plaintext
 http://localhost:9090/targets
@@ -855,10 +855,10 @@ NOTE: The Prometheus server URL should be something like:
 
 http://monitoring-kube-prometh-prometheus.default:9090/
 
-You should now be able to select the Pepr Dashboard from the Grafana UI in the "Dashboards" section.
+You should now be able to select the peppr Dashboard from the Grafana UI in the "Dashboards" section.
 
 Note: The dashboard may take a few minutes to populate with data.
 
 ## Summary
 
-This tutorial demonstrated how to use Prometheus and Grafana to display metrics from your Pepr instance. If you have questions about Pepr metrics or dashboards, please reach out to us on [Slack](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub Issues](https://github.com/cmwylie19/peppr/issues)
+This tutorial demonstrated how to use Prometheus and Grafana to display metrics from your peppr instance. If you have questions about peppr metrics or dashboards, please reach out to us on [Slack](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub Issues](https://github.com/cmwylie19/peppr/issues)

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { execSync } from "child_process";
 import fs from "fs";
@@ -8,7 +8,7 @@ import prompt from "prompts";
 
 import {
   codeSettings,
-  helloPepr,
+  hellopeppr,
   prettier,
   samplesYaml,
   snippet,
@@ -20,7 +20,7 @@ import { RootCmd } from "./root";
 export default function (program: RootCmd) {
   program
     .command("update")
-    .description("Update this Pepr module. Not recommended for prod as it may change files.")
+    .description("Update this peppr module. Not recommended for prod as it may change files.")
     .option("--skip-template-update", "Skip updating the template files")
     .action(async opts => {
       if (!opts.skipTemplateUpdate) {
@@ -28,7 +28,7 @@ export default function (program: RootCmd) {
           type: "confirm",
           name: "confirm",
           message:
-            "This will overwrite previously auto-generated files including the capabilities/HelloPepr.ts file.\n" +
+            "This will overwrite previously auto-generated files including the capabilities/Hellopeppr.ts file.\n" +
             "Are you sure you want to continue?",
         });
 
@@ -38,24 +38,24 @@ export default function (program: RootCmd) {
         }
       }
 
-      console.log("Updating the Pepr module...");
+      console.log("Updating the peppr module...");
 
       try {
-        // Update Pepr for the module
-        execSync("npm install pepr@latest", {
+        // Update peppr for the module
+        execSync("npm install peppr@latest", {
           stdio: "inherit",
         });
 
         // Don't update the template files if the user specified the --skip-template-update flag
         if (!opts.skipTemplateUpdate) {
-          execSync("npx pepr update-templates", {
+          execSync("npx peppr update-templates", {
             stdio: "inherit",
           });
         }
 
         console.log(`✅ Module updated successfully`);
       } catch (e) {
-        console.error(`Error updating Pepr module:`, e);
+        console.error(`Error updating peppr module:`, e);
         process.exit(1);
       }
     });
@@ -64,7 +64,7 @@ export default function (program: RootCmd) {
     .command("update-templates", { hidden: true })
     .description("Perform template updates")
     .action(async opts => {
-      console.log("Updating Pepr config and template tiles...");
+      console.log("Updating peppr config and template tiles...");
 
       try {
         // Don't update the template files if the user specified the --skip-template-update flag
@@ -81,10 +81,10 @@ export default function (program: RootCmd) {
             await write(samplePath, samplesYaml.data);
           }
 
-          // Update the HelloPepr.ts file if it exists
-          const tsPath = resolve("capabilities", helloPepr.path);
+          // Update the Hellopeppr.ts file if it exists
+          const tsPath = resolve("capabilities", hellopeppr.path);
           if (fs.existsSync(tsPath)) {
-            await write(tsPath, helloPepr.data);
+            await write(tsPath, hellopeppr.data);
           }
         }
       } catch (e) {

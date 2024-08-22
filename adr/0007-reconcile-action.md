@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-As our `Watch` processor was enhanced to become more reliable, Pepr became a stronger candidate for Kubernetes Operator and Controller development.  To facilitate this use case, we needed a built in mechanism for Pepr to guarantee consistent, ordered state changes for Kubernetes resources. 
+As our `Watch` processor was enhanced to become more reliable, peppr became a stronger candidate for Kubernetes Operator and Controller development.  To facilitate this use case, we needed a built in mechanism for peppr to guarantee consistent, ordered state changes for Kubernetes resources. 
 
 
 ## Decision

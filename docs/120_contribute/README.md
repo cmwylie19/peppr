@@ -1,6 +1,6 @@
 # Contributor Guide
 
-Thank you for your interest in contributing to Pepr! We welcome all contributions and are grateful for your help. This guide outlines how to get started with contributing to this project.
+Thank you for your interest in contributing to peppr! We welcome all contributions and are grateful for your help. This guide outlines how to get started with contributing to this project.
 
 ## Table of Contents
 
@@ -24,13 +24,13 @@ Please follow our [Code of Conduct](../../CODE_OF_CONDUCT.md) to maintain a resp
 ## Getting Started
 
 - **Repository**: [https://github.com/cmwylie19/peppr/](https://github.com/cmwylie19/peppr/)
-- **npm package**: [https://www.npmjs.com/package/pepr](https://www.npmjs.com/package/pepr)
+- **npm package**: [https://www.npmjs.com/package/peppr](https://www.npmjs.com/package/peppr)
 - **Required Node version**: `>=18.0.0`
 
 ### Setup
 
 1. Fork the repository.
-2. Clone your fork locally: `git clone https://github.com/your-username/pepr.git`.
+2. Clone your fork locally: `git clone https://github.com/your-username/peppr.git`.
 3. Install dependencies: `npm ci`.
 4. Create a new branch for your feature or fix: `git checkout -b my-feature-branch`.
 
@@ -40,7 +40,7 @@ Please follow our [Code of Conduct](../../CODE_OF_CONDUCT.md) to maintain a resp
 2. **Commit Your Changes**: Make your changes and commit them. All commits must be signed.
 3. **Run Tests**: Ensure that your changes pass all tests by running `npm test`.
 4. **Push Your Branch**: Push your branch to your fork on GitHub.
-5. **Create a Pull Request**: Open a pull request against the `main` branch of the Pepr repository. Please make sure that your PR passes all CI checks.
+5. **Create a Pull Request**: Open a pull request against the `main` branch of the peppr repository. Please make sure that your PR passes all CI checks.
 
 ### PR Requirements
 
@@ -65,8 +65,8 @@ Please follow the coding conventions and style used in the project. Use ESLint a
 ### Test a Local Development Version
 
 1. Run `npm test` and wait for completion.
-2. Change to the test module directory: `cd pepr-test-module`.
-3. You can now run any of the `npx pepr` commands.
+2. Change to the test module directory: `cd peppr-test-module`.
+3. You can now run any of the `npx peppr` commands.
 
 ## Contact
 

@@ -1,8 +1,8 @@
-# Tutorial - Create an Operator in Pepr
+# Tutorial - Create an Operator in peppr
 
 ## Introduction
 
-This tutorial will walk you through the process of building a Kubernetes Operator in Pepr. If you get stuck, browse over to the [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/pepr-operator) to see the finished code.
+This tutorial will walk you through the process of building a Kubernetes Operator in peppr. If you get stuck, browse over to the [peppr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/peppr-operator) to see the finished code.
 
 ## Background
 
@@ -15,26 +15,26 @@ If any object deployed by the Operator is deleted for any reason, the Operator w
 
 ## Steps
 
-- [Create a new Pepr Module](#create-a-new-pepr-module)
+- [Create a new peppr Module](#create-a-new-peppr-module)
 - [Create CRD](#create-crd)
 - [Create Helpers](#create-helpers)
 - [Create Reconciler](#create-reconciler) 
 - [Build and Deploy](#build-and-deploy)
  
-## Create a new Pepr Module
+## Create a new peppr Module
 
 ```bash
-npx pepr init
+npx peppr init
 
 # output
-✔ Enter a name for the new Pepr module. This will create a new directory based on the name.
+✔ Enter a name for the new peppr module. This will create a new directory based on the name.
  … operator
-✔ (Recommended) Enter a description for the new Pepr module.
+✔ (Recommended) Enter a description for the new peppr module.
  … Kubernetes Controller for WebApp Resources
-? How do you want Pepr to handle errors encountered during K8s operations? › - Use arrow-keys. Return to submit.
+? How do you want peppr to handle errors encountered during K8s operations? › - Use arrow-keys. Return to submit.
     Ignore
     Log an audit event
-❯   Reject the operation - Pepr will reject the operation and return an error to the client.
+❯   Reject the operation - peppr will reject the operation and return an error to the client.
 ```
 
 ## Create CRD
@@ -45,9 +45,9 @@ The WebApp CRD has the following properties: `theme`, `language`, and `replicas`
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: webapps.pepr.io
+  name: webapps.peppr.io
 spec:
-  group: pepr.io
+  group: peppr.io
   versions:
     - name: v1alpha1
       served: true
@@ -123,7 +123,7 @@ npx kubernetes-fluent-client crd https://gist.githubusercontent.com/cmwylie19/69
 Change the first lines of the generated file to the following:
 
 ```typescript
-import { a, RegisterKind } from "pepr";
+import { a, RegisterKind } from "peppr";
 export class WebApp extends a.GenericKind {
     spec?:       Spec;
     status?:     Status;
@@ -139,10 +139,10 @@ export const WebAppCRD = {
   apiVersion: "apiextensions.k8s.io/v1",
   kind: "CustomResourceDefinition",
   metadata: {
-    name: "webapps.pepr.io",
+    name: "webapps.peppr.io",
   },
   spec: {
-    group: "pepr.io",
+    group: "peppr.io",
     versions: [
       {
         name: "v1alpha1",
@@ -217,7 +217,7 @@ export const WebAppCRD = {
 Add a `register.ts` file to the `capabilities/crd/` folder and add the following. This will auto register the CRD on startup.
 
 ```typescript
-import { K8s, Log, kind } from "pepr";
+import { K8s, Log, kind } from "peppr";
 
 import { WebAppCRD } from "./source/webapp.crd";
 
@@ -236,7 +236,7 @@ export const RegisterCRD = () => {
 Finally add a `validate.ts` file to the `crd` folder and add the following. This will ensure that instances of the WebApp resource are in valid namespaces and have a maximum of 7 replicas.
 
 ```typescript
-import { PeprValidateRequest } from "pepr";
+import { pepprValidateRequest } from "peppr";
 
 import { WebApp } from "./generated/webapp-v1alpha1";
 
@@ -244,11 +244,11 @@ const invalidNamespaces = [
   "kube-system",
   "kube-public",
   "_unknown_",
-  "pepr-system",
+  "peppr-system",
   "default",
 ];
 
-export async function validator(req: PeprValidateRequest<WebApp>) {
+export async function validator(req: pepprValidateRequest<WebApp>) {
   const ns = req.Raw.metadata?.namespace ?? "_unknown_";
 
   if (req.Raw.spec.replicas > 7) {
@@ -274,7 +274,7 @@ In this section we will create helper functions to help with the reconciliation 
 Create a `controller` folder in the `capabilities` folder and create a `generators.ts` file. This file will contain functions that generate Kubernetes Objects for the Operator to deploy (with the ownerReferences auto-included). Since these resources are owned by the WebApp resource, they will be deleted when the WebApp resource is deleted.
 
 ```typescript
-import { kind, K8s, Log, sdk } from "pepr";
+import { kind, K8s, Log, sdk } from "peppr";
 import { WebApp } from "../crd/generated/webapp-v1alpha1";
 
 const { getOwnerRefFrom } = sdk;
@@ -307,14 +307,14 @@ function deployment(instance: WebApp) {
       name,
       namespace,
       labels: {
-        "pepr.dev/operator": name,
+        "peppr.dev/operator": name,
       },
     },
     spec: {
       replicas,
       selector: {
         matchLabels: {
-          "pepr.dev/operator": name,
+          "peppr.dev/operator": name,
         },
       },
       template: {
@@ -324,7 +324,7 @@ function deployment(instance: WebApp) {
             buildTimestamp: `${Date.now()}`,
           },
           labels: {
-            "pepr.dev/operator": name,
+            "peppr.dev/operator": name,
           },
         },
         spec: {
@@ -369,12 +369,12 @@ function service(instance: WebApp) {
       name,
       namespace,
       labels: {
-        "pepr.dev/operator": name,
+        "peppr.dev/operator": name,
       },
     },
     spec: {
       selector: {
-        "pepr.dev/operator": name,
+        "peppr.dev/operator": name,
       },
       ports: [
         {
@@ -522,8 +522,8 @@ function configmap(instance: WebApp) {
         `;
   const es = `
         <div class="top-panel">
-        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/pepr.png" alt="Pepr Logo">
-        <h1>Pepr - Controlador De Kubernetes</h1>
+        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/peppr.png" alt="peppr Logo">
+        <h1>peppr - Controlador De Kubernetes</h1>
         <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" alt="Kubernetes Logo">
     </div>
     <div class="container">
@@ -550,8 +550,8 @@ function configmap(instance: WebApp) {
 
   const en = `
         <div class="top-panel">
-        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/pepr.png" alt="Pepr Logo">
-        <h1>Pepr - Kubernetes Controller</h1>
+        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/peppr.png" alt="peppr Logo">
+        <h1>peppr - Kubernetes Controller</h1>
         <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" alt="Kubernetes Logo">
     </div>
     <div class="container">
@@ -580,7 +580,7 @@ function configmap(instance: WebApp) {
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Pepr</title>
+        <title>peppr</title>
         <style>
         ${theme === "light" ? light : dark}
         </style>
@@ -599,7 +599,7 @@ function configmap(instance: WebApp) {
       name: `web-content-${name}`,
       namespace,
       labels: {
-        "pepr.dev/operator": name,
+        "peppr.dev/operator": name,
       },
     },
     data: {
@@ -620,7 +620,7 @@ Now, create the function that reacts to changes across WebApp instances. This fu
 In the base of the `capabilities` folder, create a `reconciler.ts` file and add the following:
 
 ```typescript
-import { K8s, Log, sdk } from "pepr";
+import { K8s, Log, sdk } from "peppr";
 import Deploy from "./controller/generators";
 import { Phase, Status, WebApp } from "./crd";
 
@@ -691,7 +691,7 @@ async function updateStatus(instance: WebApp, status: Status) {
 Finally create the `index.ts` file in the `capabilities` folder and add the following:
 
 ```typescript
-import { Capability, a, Log } from "pepr";
+import { Capability, a, Log } from "peppr";
 import { WebApp } from "./crd";
 import { validator } from "./crd/validator";
 import { WebAppCRD } from "./crd/source/webapp.crd";
@@ -741,28 +741,28 @@ When(a.CustomResourceDefinition)
 // // Don't let them be deleted
 When(a.Deployment)
   .IsDeleted()
-  .WithLabel("pepr.dev/operator")
+  .WithLabel("peppr.dev/operator")
   .Watch(async deploy => {
     const instance = JSON.parse(
-      Store.getItem(deploy.metadata!.labels["pepr.dev/operator"]),
+      Store.getItem(deploy.metadata!.labels["peppr.dev/operator"]),
     ) as a.GenericKind;
     await Deploy(instance);
   });
 When(a.Service)
   .IsDeleted()
-  .WithLabel("pepr.dev/operator")
+  .WithLabel("peppr.dev/operator")
   .Watch(async svc => {
     const instance = JSON.parse(
-      Store.getItem(svc.metadata!.labels["pepr.dev/operator"]),
+      Store.getItem(svc.metadata!.labels["peppr.dev/operator"]),
     ) as a.GenericKind;
     await Deploy(instance);
   });
 When(a.ConfigMap)
   .IsDeleted()
-  .WithLabel("pepr.dev/operator")
+  .WithLabel("peppr.dev/operator")
   .Watch(async cm => {
     const instance = JSON.parse(
-      Store.getItem(cm.metadata!.labels["pepr.dev/operator"]),
+      Store.getItem(cm.metadata!.labels["peppr.dev/operator"]),
     ) as a.GenericKind;
     await Deploy(instance);
   });
@@ -782,26 +782,26 @@ Clone the Operator
 
 ```bash
 git clone https://github.com/cmwylie19/peppr-excellent-examples.git
-cd pepr-operator
+cd peppr-operator
 ```
 
-Make sure Pepr is update to date
+Make sure peppr is update to date
 
 ```bash
-npx pepr update
+npx peppr update
 ```
 
-Build the Pepr manifests (Already built with appropriate RBAC)
+Build the peppr manifests (Already built with appropriate RBAC)
 
 ```bash
-npx pepr build
+npx peppr build
 ```
 
 Deploy the Operator 
 
 ```bash
-kubectl apply -f dist/pepr-module-774fab07-77fa-517c-b5f8-c682c96c20c0.yaml
-kubectl wait --for=condition=Ready pods -l app -n pepr-system --timeout=120s
+kubectl apply -f dist/peppr-module-774fab07-77fa-517c-b5f8-c682c96c20c0.yaml
+kubectl wait --for=condition=Ready pods -l app -n peppr-system --timeout=120s
 ```
 
 Notice that the WebApp CRD has been deployed
@@ -816,7 +816,7 @@ Explain the `WebApp.spec`
 kubectl explain wa.spec
 
 # output
-GROUP:      pepr.io
+GROUP:      peppr.io
 KIND:       WebApp
 VERSION:    v1alpha1
 
@@ -842,7 +842,7 @@ Create an instance of a `WebApp` in English with the light theme and 1 replica
 kubectl create ns webapps;
 kubectl apply -f -<<EOF
 kind: WebApp
-apiVersion: pepr.io/v1alpha1
+apiVersion: peppr.io/v1alpha1
 metadata:
   name: webapp-light-en
   namespace: webapps
@@ -889,7 +889,7 @@ kubectl describe wa webapp-light-en -n webapps
 # output
 Name:         webapp-light-en
 Namespace:    webapps
-API Version:  pepr.io/v1alpha1
+API Version:  peppr.io/v1alpha1
 Kind:         WebApp
 Metadata: ...
 Spec:
@@ -935,7 +935,7 @@ Update the `WebApp` and change the theme to dark and language to spanish
 ```bash
 kubectl apply -f -<<EOF
 kind: WebApp
-apiVersion: pepr.io/v1alpha1
+apiVersion: peppr.io/v1alpha1
 metadata:
   name: webapp-light-en
   namespace: webapps
@@ -945,7 +945,7 @@ spec:
   replicas: 1 
 EOF
 #output
-webapp.pepr.io/webapp-light-en configured
+webapp.peppr.io/webapp-light-en configured
 ```
 
 Port-forward and look at the WebApp in the browser
@@ -973,6 +973,6 @@ When the WebApp is deleted, all of the resources that it created are also delete
 
 ## Conclusion
 
-In this tutorial we created a Kubernetes Operator using Pepr. We created a CRD, created helper functions to help with the reconciliation process, and created a queue and reconciler to reconcile the state of the instance with the cluster. We also built and deployed the Operator and created an instance of the WebApp resource and watched the Operator reconcile the state of the instance with the cluster. Finally, we updated and deleted the instance and watched the Operator reconcile the manifests based in the updated instance and delete the resources when the instance was deleted.
+In this tutorial we created a Kubernetes Operator using peppr. We created a CRD, created helper functions to help with the reconciliation process, and created a queue and reconciler to reconcile the state of the instance with the cluster. We also built and deployed the Operator and created an instance of the WebApp resource and watched the Operator reconcile the state of the instance with the cluster. Finally, we updated and deleted the instance and watched the Operator reconcile the manifests based in the updated instance and delete the resources when the instance was deleted.
 
-If you have questions, reach out in the [Slack channel](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub](https://github.com/cmwylie19/peppr). Also, checkout the finished example in [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/pepr-operator)
+If you have questions, reach out in the [Slack channel](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub](https://github.com/cmwylie19/peppr). Also, checkout the finished example in [peppr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/peppr-operator)

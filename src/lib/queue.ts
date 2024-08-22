@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 import { KubernetesObject } from "@kubernetes/client-node";
 import { WatchPhase } from "kubernetes-fluent-client/dist/fluent/types";
 import Log from "./logger";

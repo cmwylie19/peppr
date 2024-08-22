@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Pepr is a community-driven project. We welcome contributions of all kinds, from bug reports to feature requests to code changes. We also welcome contributions of documentation, tutorials, and examples.
+peppr is a community-driven project. We welcome contributions of all kinds, from bug reports to feature requests to code changes. We also welcome contributions of documentation, tutorials, and examples.
 
 ## Contributing
 
-You can find all the details on contributing to Pepr at:
+You can find all the details on contributing to peppr at:
 
-* [Contributing to Pepr](../120_contribute)
+* [Contributing to peppr](../120_contribute)
 
 ### Reporting Bugs
 

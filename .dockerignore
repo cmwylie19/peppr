@@ -3,5 +3,5 @@ node_modules
 Dockerfile
 Dockerfile.controller
 Dockerfile.dist
-pepr-upgrade-test
+peppr-upgrade-test
 scripts

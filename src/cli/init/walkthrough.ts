@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { promises as fs } from "fs";
 import prompt, { Answers, PromptObject } from "prompts";
@@ -15,7 +15,7 @@ export function walkthrough(): Promise<InitOptions> {
     type: "text",
     name: "name",
     message:
-      "Enter a name for the new Pepr module. This will create a new directory based on the name.\n",
+      "Enter a name for the new peppr module. This will create a new directory based on the name.\n",
     validate: async val => {
       try {
         const name = sanitizeName(val);
@@ -31,32 +31,32 @@ export function walkthrough(): Promise<InitOptions> {
   const askDescription: PromptObject = {
     type: "text",
     name: "description",
-    message: "(Recommended) Enter a description for the new Pepr module.\n",
+    message: "(Recommended) Enter a description for the new peppr module.\n",
   };
 
   const askErrorBehavior: PromptObject = {
     type: "select",
     name: "errorBehavior",
-    message: "How do you want Pepr to handle errors encountered during K8s operations?",
+    message: "How do you want peppr to handle errors encountered during K8s operations?",
     choices: [
       {
         title: "Reject the operation",
         value: Errors.reject,
         description:
-          "In the event that Pepr is down or other module errors occur, the operation will not be allowed to continue. (Recommended for production.)",
+          "In the event that peppr is down or other module errors occur, the operation will not be allowed to continue. (Recommended for production.)",
       },
       {
         title: "Ignore",
         value: Errors.ignore,
         description:
-          "In the event that Pepr is down or other module errors occur, an entry will be generated in the Pepr Controller Log and the operation will be allowed to continue. (Recommended for development, not for production.)",
+          "In the event that peppr is down or other module errors occur, an entry will be generated in the peppr Controller Log and the operation will be allowed to continue. (Recommended for development, not for production.)",
         selected: true,
       },
       {
         title: "Log an audit event",
         value: Errors.audit,
         description:
-          "Pepr will continue processing and generate an entry in the Pepr Controller log as well as an audit event in the cluster.",
+          "peppr will continue processing and generate an entry in the peppr Controller log as well as an audit event in the cluster.",
       },
     ],
   };
@@ -67,7 +67,7 @@ export function walkthrough(): Promise<InitOptions> {
 export async function confirm(
   dirName: string,
   packageJSON: { path: string; print: string },
-  peprTSPath: string,
+  pepprTSPath: string,
 ) {
   console.log(`
   To be generated:
@@ -77,11 +77,11 @@ export async function confirm(
     ├── \x1b[1m${gitignore.path}\x1b[0m
     ├── \x1b[1m${prettier.path}\x1b[0m
     ├── \x1b[1mcapabilties\x1b[0m
-    │   ├── \x1b[1mhello-pepr.samples.yaml\x1b[0m     
-    │   └── \x1b[1mhello-pepr.ts\x1b[0m     
+    │   ├── \x1b[1mhello-peppr.samples.yaml\x1b[0m     
+    │   └── \x1b[1mhello-peppr.ts\x1b[0m     
     ├── \x1b[1m${packageJSON.path}\x1b[0m
 ${packageJSON.print.replace(/^/gm, "    │   ")}
-    ├── \x1b[1m${peprTSPath}\x1b[0m
+    ├── \x1b[1m${pepprTSPath}\x1b[0m
     ├── \x1b[1m${readme.path}\x1b[0m
     └── \x1b[1m${tsConfig.path}\x1b[0m
       `);
@@ -89,7 +89,7 @@ ${packageJSON.print.replace(/^/gm, "    │   ")}
   const confirm = await prompt({
     type: "confirm",
     name: "confirm",
-    message: "Create the new Pepr module?",
+    message: "Create the new peppr module?",
   });
 
   return confirm.confirm;

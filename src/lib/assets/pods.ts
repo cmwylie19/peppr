@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { V1EnvVar } from "@kubernetes/client-node";
 import { kind } from "kubernetes-fluent-client";
@@ -9,14 +9,14 @@ import { Assets } from ".";
 import { ModuleConfig } from "../module";
 import { Binding } from "../types";
 
-/** Generate the pepr-system namespace */
+/** Generate the peppr-system namespace */
 export function namespace(namespaceLabels?: Record<string, string>) {
   if (namespaceLabels) {
     return {
       apiVersion: "v1",
       kind: "Namespace",
       metadata: {
-        name: "pepr-system",
+        name: "peppr-system",
         labels: namespaceLabels ?? {},
       },
     };
@@ -25,7 +25,7 @@ export function namespace(namespaceLabels?: Record<string, string>) {
       apiVersion: "v1",
       kind: "Namespace",
       metadata: {
-        name: "pepr-system",
+        name: "peppr-system",
       },
     };
   }
@@ -59,14 +59,14 @@ export function watcher(assets: Assets, hash: string, buildTimestamp: string, im
     kind: "Deployment",
     metadata: {
       name: app,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
       annotations: {
-        "pepr.dev/description": config.description || "",
+        "peppr.dev/description": config.description || "",
       },
       labels: {
         app,
-        "pepr.dev/controller": "watcher",
-        "pepr.dev/uuid": config.uuid,
+        "peppr.dev/controller": "watcher",
+        "peppr.dev/uuid": config.uuid,
       },
     },
     spec: {
@@ -77,7 +77,7 @@ export function watcher(assets: Assets, hash: string, buildTimestamp: string, im
       selector: {
         matchLabels: {
           app,
-          "pepr.dev/controller": "watcher",
+          "peppr.dev/controller": "watcher",
         },
       },
       template: {
@@ -87,7 +87,7 @@ export function watcher(assets: Assets, hash: string, buildTimestamp: string, im
           },
           labels: {
             app,
-            "pepr.dev/controller": "watcher",
+            "peppr.dev/controller": "watcher",
           },
         },
         spec: {
@@ -104,7 +104,7 @@ export function watcher(assets: Assets, hash: string, buildTimestamp: string, im
               name: "watcher",
               image,
               imagePullPolicy: "IfNotPresent",
-              command: ["node", "/app/node_modules/pepr/dist/controller.js", hash],
+              command: ["node", "/app/node_modules/peppr/dist/controller.js", hash],
               readinessProbe: {
                 httpGet: {
                   path: "/healthz",
@@ -198,14 +198,14 @@ export function deployment(
     kind: "Deployment",
     metadata: {
       name,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
       annotations: {
-        "pepr.dev/description": config.description || "",
+        "peppr.dev/description": config.description || "",
       },
       labels: {
         app,
-        "pepr.dev/controller": "admission",
-        "pepr.dev/uuid": config.uuid,
+        "peppr.dev/controller": "admission",
+        "peppr.dev/uuid": config.uuid,
       },
     },
     spec: {
@@ -213,7 +213,7 @@ export function deployment(
       selector: {
         matchLabels: {
           app,
-          "pepr.dev/controller": "admission",
+          "peppr.dev/controller": "admission",
         },
       },
       template: {
@@ -223,7 +223,7 @@ export function deployment(
           },
           labels: {
             app,
-            "pepr.dev/controller": "admission",
+            "peppr.dev/controller": "admission",
           },
         },
         spec: {
@@ -241,7 +241,7 @@ export function deployment(
               name: "server",
               image,
               imagePullPolicy: "IfNotPresent",
-              command: ["node", "/app/node_modules/pepr/dist/controller.js", hash],
+              command: ["node", "/app/node_modules/peppr/dist/controller.js", hash],
               readinessProbe: {
                 httpGet: {
                   path: "/healthz",
@@ -347,7 +347,7 @@ export function moduleSecret(name: string, data: Buffer, hash: string): kind.Sec
       kind: "Secret",
       metadata: {
         name: `${name}-module`,
-        namespace: "pepr-system",
+        namespace: "peppr-system",
       },
       type: "Opaque",
       data: {
@@ -359,17 +359,17 @@ export function moduleSecret(name: string, data: Buffer, hash: string): kind.Sec
 
 export function genEnv(config: ModuleConfig, watchMode = false, ignoreWatchMode = false): V1EnvVar[] {
   const noWatchDef = {
-    PEPR_PRETTY_LOG: "false",
+    peppr_PRETTY_LOG: "false",
     LOG_LEVEL: config.logLevel || "info",
   };
 
   const def = {
-    PEPR_WATCH_MODE: watchMode ? "true" : "false",
+    peppr_WATCH_MODE: watchMode ? "true" : "false",
     ...noWatchDef,
   };
 
-  if (config.env && config.env["PEPR_WATCH_MODE"]) {
-    delete config.env["PEPR_WATCH_MODE"];
+  if (config.env && config.env["peppr_WATCH_MODE"]) {
+    delete config.env["peppr_WATCH_MODE"];
   }
   const cfg = config.env || {};
   return ignoreWatchMode

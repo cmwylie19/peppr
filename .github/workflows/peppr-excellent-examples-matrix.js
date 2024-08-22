@@ -5,7 +5,7 @@ const { execSync } = require('node:child_process');
 // ----- args ----- //
 process.argv.shift() // node
 process.argv.shift() // script
-const pexex = process.argv.shift() // abs path to pepr-excellent-examples
+const pexex = process.argv.shift() // abs path to peppr-excellent-examples
 
 
 // ----- main ----- //

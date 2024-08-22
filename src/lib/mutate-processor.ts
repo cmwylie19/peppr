@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import jsonPatch from "fast-json-patch";
 import { kind } from "kubernetes-fluent-client";
@@ -10,7 +10,7 @@ import { shouldSkipRequest } from "./filter";
 import { MutateResponse, AdmissionRequest } from "./k8s";
 import Log from "./logger";
 import { ModuleConfig } from "./module";
-import { PeprMutateRequest } from "./mutate-request";
+import { pepprMutateRequest } from "./mutate-request";
 import { base64Encode, convertFromBase64Map, convertToBase64Map } from "./utils";
 
 export async function mutateProcessor(
@@ -19,7 +19,7 @@ export async function mutateProcessor(
   req: AdmissionRequest,
   reqMetadata: Record<string, string>,
 ): Promise<MutateResponse> {
-  const wrapped = new PeprMutateRequest(req);
+  const wrapped = new pepprMutateRequest(req);
   const response: MutateResponse = {
     uid: req.uid,
     warnings: [],
@@ -67,7 +67,7 @@ export async function mutateProcessor(
           return;
         }
 
-        const identifier = `${config.uuid}.pepr.dev/${name}`;
+        const identifier = `${config.uuid}.peppr.dev/${name}`;
         wrapped.Raw.metadata = wrapped.Raw.metadata || {};
         wrapped.Raw.metadata.annotations = wrapped.Raw.metadata.annotations || {};
         wrapped.Raw.metadata.annotations[identifier] = status;
@@ -105,7 +105,7 @@ export async function mutateProcessor(
         switch (config.onError) {
           case Errors.reject:
             Log.error(actionMetadata, `Action failed: ${errorMessage}`);
-            response.result = "Pepr module configured to reject on error";
+            response.result = "peppr module configured to reject on error";
             return response;
 
           case Errors.audit:

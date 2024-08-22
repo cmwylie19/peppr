@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { nsTemplate, chartYaml, watcherDeployTemplate, admissionDeployTemplate, serviceMonitorTemplate } from "./helm";
 import { expect, describe, test } from "@jest/globals";
@@ -9,7 +9,7 @@ describe("Kubernetes Template Generators", () => {
       const result = nsTemplate();
       expect(result).toContain("apiVersion: v1");
       expect(result).toContain("kind: Namespace");
-      expect(result).toContain("name: pepr-system");
+      expect(result).toContain("name: peppr-system");
     });
   });
 
@@ -48,7 +48,7 @@ describe("Kubernetes Template Generators", () => {
       expect(result).toContain("apiVersion: monitoring.coreos.com/v1");
       expect(result).toContain("kind: ServiceMonitor");
       expect(result).toContain("name: admission");
-      expect(result).toContain("pepr.dev/controller: admission");
+      expect(result).toContain("peppr.dev/controller: admission");
     });
   });
 
@@ -58,7 +58,7 @@ describe("Kubernetes Template Generators", () => {
       expect(result).toContain("apiVersion: monitoring.coreos.com/v1");
       expect(result).toContain("kind: ServiceMonitor");
       expect(result).toContain("name: watcher");
-      expect(result).toContain("pepr.dev/controller: watcher");
+      expect(result).toContain("peppr.dev/controller: watcher");
     });
   });
 });

@@ -1,4 +1,4 @@
-# Roadmap for Pepr 
+# Roadmap for peppr 
 
 _2024 Roadmap_  
 ## Phase 1: Preparation - Testing and Docs
@@ -9,7 +9,7 @@ _2024 Roadmap_
   - **Site/Documentation**:
     Improve information architecture, nail killer use-cases, and make it obvious how to get started and find your way around.
   - **Automated Testing**:
-    Focus on stories that increase confidence in protection of features and functionality. Simplify hello-pepr and bring e2e test against external repo with examples. Make sure that contributions are well-tested.
+    Focus on stories that increase confidence in protection of features and functionality. Simplify hello-peppr and bring e2e test against external repo with examples. Make sure that contributions are well-tested.
 
 ## Phase 2: Community Building, Competitive Analysis, and Feature Development
 
@@ -21,7 +21,7 @@ _2024 Roadmap_
   - **Documentation Improvements**:
     Continue to improve documentation and add more examples like Doom, find scaling limitations
   - **Competitive Analysis**:
-    Understand the competitive landscape and how/where Pepr can/does differentiate itself. Have it in the docs.
+    Understand the competitive landscape and how/where peppr can/does differentiate itself. Have it in the docs.
 
 ## Phase 3: Donation, Transition, Move Project, and Stabilization/Improvement of New Features
 
@@ -48,7 +48,7 @@ _2024 Roadmap_
 
 - **Q4**:
   - **Road to GA**:
-    Right now, Pepr itself is still in its 'development' phase. We are working on some final things before we release the official 1.0 General Availability (GA) release
+    Right now, peppr itself is still in its 'development' phase. We are working on some final things before we release the official 1.0 General Availability (GA) release
   - **Community Meetings**:
     - Monthly community meetings/steering committee meetings/contributor meetings
   - **Review Sandbox PR**

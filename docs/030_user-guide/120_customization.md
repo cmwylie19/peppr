@@ -19,31 +19,31 @@ The log format can be customized by setting the `PINO_TIME_STAMP` environment va
 With ISO:
 
 ```json
-{"level":30,"time":"2024-05-14T14:26:03.788Z","pid":16,"hostname":"pepr-static-test-7f4d54b6cc-9lxm6","method":"GET","url":"/healthz","status":200,"duration":"1 ms"}
+{"level":30,"time":"2024-05-14T14:26:03.788Z","pid":16,"hostname":"peppr-static-test-7f4d54b6cc-9lxm6","method":"GET","url":"/healthz","status":200,"duration":"1 ms"}
 ```
 
 Default (without): 
 
 ```json
-{"level":30,"time":"1715696764106","pid":16,"hostname":"pepr-static-test-watcher-559d94447f-xkq2h","method":"GET","url":"/healthz","status":200,"duration":"1 ms"}
+{"level":30,"time":"1715696764106","pid":16,"hostname":"peppr-static-test-watcher-559d94447f-xkq2h","method":"GET","url":"/healthz","status":200,"duration":"1 ms"}
 ```
 
 ## Customizing Watch Configuration 
 
-The Watch configuration is a part of the Pepr module that allows you to watch for specific resources in the Kubernetes cluster. The Watch configuration can be customized by specific enviroment variables of the Watcher Deployment and can be set in the field in the `package.json` or in the helm `values.yaml` file.
+The Watch configuration is a part of the peppr module that allows you to watch for specific resources in the Kubernetes cluster. The Watch configuration can be customized by specific enviroment variables of the Watcher Deployment and can be set in the field in the `package.json` or in the helm `values.yaml` file.
 
 | Field                        | Description                                                                                                      | Example Values                  |
 |------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| `PEPR_RESYNC_FAILURE_MAX`    | The maximum number of times to fail on a resync interval before re-establishing the watch URL and doing a relist. | default: `"5"`                |
-| `PEPR_RETRY_DELAY_SECONDS`     | The delay between retries in seconds.                                                                            | default: `"10"`                 |
-| `PEPR_LAST_SEEN_LIMIT_SECONDS` | Max seconds to go without receiving a watch event before re-establishing the watch | default: `"300"` (5 mins)       |
-| `PEPR_RELIST_INTERVAL_SECONDS` | Amount of seconds to wait before a relist of the watched resources  | default: `"1800"` (30 mins)       |
+| `peppr_RESYNC_FAILURE_MAX`    | The maximum number of times to fail on a resync interval before re-establishing the watch URL and doing a relist. | default: `"5"`                |
+| `peppr_RETRY_DELAY_SECONDS`     | The delay between retries in seconds.                                                                            | default: `"10"`                 |
+| `peppr_LAST_SEEN_LIMIT_SECONDS` | Max seconds to go without receiving a watch event before re-establishing the watch | default: `"300"` (5 mins)       |
+| `peppr_RELIST_INTERVAL_SECONDS` | Amount of seconds to wait before a relist of the watched resources  | default: `"1800"` (30 mins)       |
 
 
 
 ## Customizing with Helm
 
-Below are the available Helm override configurations after you have built your Pepr module that you can put in the `values.yaml`.
+Below are the available Helm override configurations after you have built your peppr module that you can put in the `values.yaml`.
 
 ### Helm Overrides Table
 
@@ -52,7 +52,7 @@ Below are the available Helm override configurations after you have built your P
 | `secrets.apiToken`              | Kube API-Server Token.                    | `Buffer.from(apiToken).toString("base64")`     |
 | `hash`                          | Unique hash for deployment. Do not change.| `<your_hash>`                                  |
 | `namespace.annotations`         | Namespace annotations                     | `{}`                                           |
-| `namespace.labels`              | Namespace labels                          | `{"pepr.dev": ""}`                             |
+| `namespace.labels`              | Namespace labels                          | `{"peppr.dev": ""}`                             |
 | `uuid`                          | Unique identifier for the module          | `hub-operator`                                 |
 | `admission.*`                   | Admission controller configurations       | Various, see subparameters below               |
 | `watcher.*`                     | Watcher configurations                    | Various, see subparameters below               |

@@ -4,7 +4,7 @@
     "resolveSourceMapLocations": [
       "${workspaceFolder}/**",
       "node_modules/kubernetes-fluent-client/**",
-      "node_modules/pepr/**"
+      "node_modules/peppr/**"
     ]
   }
 }

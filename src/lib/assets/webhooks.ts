@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import {
   AdmissionregistrationV1WebhookClientConfig as AdmissionRegnV1WebhookClientCfg,
@@ -12,13 +12,13 @@ import { concat, equals, uniqWith } from "ramda";
 import { Assets } from ".";
 import { Event } from "../types";
 
-const peprIgnoreLabel: V1LabelSelectorRequirement = {
-  key: "pepr.dev",
+const pepprIgnoreLabel: V1LabelSelectorRequirement = {
+  key: "peppr.dev",
   operator: "NotIn",
   values: ["ignore"],
 };
 
-const peprIgnoreNamespaces: string[] = ["kube-system", "pepr-system"];
+const pepprIgnoreNamespaces: string[] = ["kube-system", "peppr-system"];
 
 export async function generateWebhookRules(assets: Assets, isMutateWebhook: boolean) {
   const { config, capabilities } = assets;
@@ -43,7 +43,7 @@ export async function generateWebhookRules(assets: Assets, isMutateWebhook: bool
 
       const operations: string[] = [];
 
-      // CreateOrUpdate is a Pepr-specific event that is translated to Create and Update
+      // CreateOrUpdate is a peppr-specific event that is translated to Create and Update
       if (event === Event.CreateOrUpdate) {
         operations.push(Event.Create, Event.Update);
       } else {
@@ -79,10 +79,10 @@ export async function webhookConfig(
   mutateOrValidate: "mutate" | "validate",
   timeoutSeconds = 10,
 ): Promise<kind.MutatingWebhookConfiguration | kind.ValidatingWebhookConfiguration | null> {
-  const ignore = [peprIgnoreLabel];
+  const ignore = [pepprIgnoreLabel];
 
   const { name, tls, config, apiToken, host } = assets;
-  const ignoreNS = concat(peprIgnoreNamespaces, config.alwaysIgnore.namespaces || []);
+  const ignoreNS = concat(pepprIgnoreNamespaces, config.alwaysIgnore.namespaces || []);
 
   // Add any namespaces to ignore
   if (ignoreNS) {
@@ -107,7 +107,7 @@ export async function webhookConfig(
     // Otherwise, use the service
     clientConfig.service = {
       name: name,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
       path: apiPath,
     };
   }
@@ -126,7 +126,7 @@ export async function webhookConfig(
     metadata: { name },
     webhooks: [
       {
-        name: `${name}.pepr.dev`,
+        name: `${name}.peppr.dev`,
         admissionReviewVersions: ["v1", "v1beta1"],
         clientConfig,
         failurePolicy: config.onError === "reject" ? "Fail" : "Ignore",

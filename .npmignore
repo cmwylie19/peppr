@@ -17,7 +17,7 @@ jest.config.json
 /dist/cli/**/*.d.*
 /dist/fixtures
 /dist/test
-/pepr-test-module
+/peppr-test-module
 
 /src/cli
 /src/fixtures

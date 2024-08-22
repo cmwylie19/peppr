@@ -13,7 +13,7 @@ const assets: Assets = JSON.parse(`{
     "webhookTimeout": 10,
     "customLabels": {
       "namespace": {
-        "pepr.dev": ""
+        "peppr.dev": ""
       }
     },
     "alwaysIgnore": {
@@ -24,12 +24,12 @@ const assets: Assets = JSON.parse(`{
       "MY_CUSTOM_VAR": "example-value",
       "ZARF_VAR": "###ZARF_VAR_THING###"
     },
-    "peprVersion": "0.0.0-development",
+    "pepprVersion": "0.0.0-development",
     "appVersion": "0.0.1",
-    "description": "A test module for Pepr"
+    "description": "A test module for peppr"
   },
-  "path": "/Users/cmwylie19/pepr/pepr-test-module/dist/pepr-static-test.js",
-  "name": "pepr-static-test",
+  "path": "/Users/cmwylie19/peppr/peppr-test-module/dist/peppr-static-test.js",
+  "name": "peppr-static-test",
   "tls": {
     "ca": "",
     "key": "",
@@ -46,11 +46,11 @@ const assets: Assets = JSON.parse(`{
   },
   "capabilities": [
     {
-      "name": "hello-pepr",
+      "name": "hello-peppr",
       "description": "A simple example capability to show how things work.",
       "namespaces": [
-        "pepr-demo",
-        "pepr-demo-2"
+        "peppr-demo",
+        "peppr-demo-2"
       ],
       "bindings": [
         {
@@ -76,7 +76,7 @@ const assets: Assets = JSON.parse(`{
           },
           "event": "CREATE",
           "filters": {
-            "name": "pepr-demo-2",
+            "name": "peppr-demo-2",
             "namespaces": [],
             "labels": {},
             "annotations": {}
@@ -217,7 +217,7 @@ const assets: Assets = JSON.parse(`{
           "filters": {
             "name": "example-4a",
             "namespaces": [
-              "pepr-demo-2"
+              "peppr-demo-2"
             ],
             "labels": {},
             "annotations": {}
@@ -258,7 +258,7 @@ const assets: Assets = JSON.parse(`{
         },
         {
           "kind": {
-            "group": "pepr.dev",
+            "group": "peppr.dev",
             "version": "v1",
             "kind": "Unicorn"
           },
@@ -273,7 +273,7 @@ const assets: Assets = JSON.parse(`{
         },
         {
           "kind": {
-            "group": "pepr.dev",
+            "group": "peppr.dev",
             "version": "v1",
             "kind": "Unicorn"
           },
@@ -301,7 +301,7 @@ describe("namespace function", () => {
       apiVersion: "v1",
       kind: "Namespace",
       metadata: {
-        name: "pepr-system",
+        name: "peppr-system",
       },
     });
     const result1 = namespace({ one: "two" });
@@ -309,7 +309,7 @@ describe("namespace function", () => {
       apiVersion: "v1",
       kind: "Namespace",
       metadata: {
-        name: "pepr-system",
+        name: "peppr-system",
         labels: {
           one: "two",
         },
@@ -323,7 +323,7 @@ describe("namespace function", () => {
   });
 
   test("should create a namespace object with provided labels", () => {
-    const labels = { "pepr.dev/controller": "admission", "istio-injection": "enabled" };
+    const labels = { "peppr.dev/controller": "admission", "istio-injection": "enabled" };
     const result = namespace(labels);
     expect(result.metadata.labels).toEqual(labels);
   });
@@ -334,7 +334,7 @@ describe("watcher function", () => {
     const result = watcher(assets, "test-hash", "test-timestamp");
 
     expect(result).toBeTruthy();
-    expect(result!.metadata!.name).toBe("pepr-static-test-watcher");
+    expect(result!.metadata!.name).toBe("peppr-static-test-watcher");
   });
 
   test("watcher without bindings", () => {
@@ -349,7 +349,7 @@ describe("deployment function", () => {
     const result = deployment(assets, "test-hash", "test-timestamp");
 
     expect(result).toBeTruthy();
-    expect(result!.metadata!.name).toBe("pepr-static-test");
+    expect(result!.metadata!.name).toBe("peppr-static-test");
   });
 });
 describe("moduleSecret function", () => {
@@ -375,7 +375,7 @@ describe("moduleSecret function", () => {
       kind: "Secret",
       metadata: {
         name: "test-module",
-        namespace: "pepr-system",
+        namespace: "peppr-system",
       },
       type: "Opaque",
       data: {
@@ -421,8 +421,8 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_WATCH_MODE", value: "false" },
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_WATCH_MODE", value: "false" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "info" },
     ];
 
@@ -440,8 +440,8 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_WATCH_MODE", value: "true" },
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_WATCH_MODE", value: "true" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "info" },
     ];
 
@@ -463,8 +463,8 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_WATCH_MODE", value: "false" },
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_WATCH_MODE", value: "false" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "debug" },
       { name: "CUSTOM_ENV_VAR", value: "custom_value" },
     ];
@@ -485,8 +485,8 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_WATCH_MODE", value: "false" },
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_WATCH_MODE", value: "false" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "error" },
     ];
 
@@ -495,12 +495,12 @@ describe("genEnv", () => {
     expect(result).toEqual(expectedEnv);
   });
 
-  test("should not be able to override PEPR_WATCH_MODE in package.json pepr env", () => {
+  test("should not be able to override peppr_WATCH_MODE in package.json peppr env", () => {
     const config: ModuleConfig = {
       uuid: "12345",
       logLevel: "error",
       env: {
-        PEPR_WATCH_MODE: "false",
+        peppr_WATCH_MODE: "false",
       },
       alwaysIgnore: {
         namespaces: [],
@@ -508,7 +508,7 @@ describe("genEnv", () => {
     };
 
     const result = genEnv(config, true);
-    const watchMode = result.filter(env => env.name === "PEPR_WATCH_MODE")[0];
+    const watchMode = result.filter(env => env.name === "peppr_WATCH_MODE")[0];
     expect(watchMode.value).toEqual("true");
   });
 
@@ -522,8 +522,8 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_WATCH_MODE", value: "false" },
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_WATCH_MODE", value: "false" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "error" },
     ];
 
@@ -542,7 +542,7 @@ describe("genEnv", () => {
     };
 
     const expectedEnv = [
-      { name: "PEPR_PRETTY_LOG", value: "false" },
+      { name: "peppr_PRETTY_LOG", value: "false" },
       { name: "LOG_LEVEL", value: "error" },
     ];
 

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { GenericKind, GroupVersionKind, KubernetesObject, RegisterKind } from "kubernetes-fluent-client";
 
@@ -11,21 +11,21 @@ export enum Operation {
 }
 
 /**
- * PeprStore for internal use by Pepr. This is used to store arbitrary data in the cluster.
+ * pepprStore for internal use by peppr. This is used to store arbitrary data in the cluster.
  */
-export class PeprStore extends GenericKind {
+export class pepprStore extends GenericKind {
   declare data: {
     [key: string]: string;
   };
 }
 
-export const peprStoreGVK = {
-  kind: "PeprStore",
+export const pepprStoreGVK = {
+  kind: "pepprStore",
   version: "v1",
-  group: "pepr.dev",
+  group: "peppr.dev",
 };
 
-RegisterKind(PeprStore, peprStoreGVK);
+RegisterKind(pepprStore, pepprStoreGVK);
 
 /**
  * GroupVersionResource unambiguously identifies a resource. It doesn't anonymously include GroupVersion
@@ -161,9 +161,9 @@ export interface ValidateResponse extends MutateResponse {
 export type WebhookIgnore = {
   /**
    * List of Kubernetes namespaces to always ignore.
-   * Any resources in these namespaces will be ignored by Pepr.
+   * Any resources in these namespaces will be ignored by peppr.
    *
-   * Note: `kube-system` and `pepr-system` are always ignored.
+   * Note: `kube-system` and `peppr-system` are always ignored.
    */
   namespaces?: string[];
 };

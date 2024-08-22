@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import crypto from "crypto";
 import { promises as fs } from "fs";
@@ -10,13 +10,13 @@ import Log from "../logger";
 import { apiTokenSecret, service, tlsSecret, watcherService } from "./networking";
 import { deployment, moduleSecret, namespace, watcher } from "./pods";
 import { clusterRole, clusterRoleBinding, serviceAccount, storeRole, storeRoleBinding } from "./rbac";
-import { peprStoreCRD } from "./store";
+import { pepprStoreCRD } from "./store";
 import { webhookConfig } from "./webhooks";
 import { CapabilityExport, ImagePullSecret } from "../types";
 
 export async function deployImagePullSecret(imagePullSecret: ImagePullSecret, name: string) {
   try {
-    await K8s(kind.Namespace).Get("pepr-system");
+    await K8s(kind.Namespace).Get("peppr-system");
   } catch {
     await K8s(kind.Namespace).Apply(namespace());
   }
@@ -28,7 +28,7 @@ export async function deployImagePullSecret(imagePullSecret: ImagePullSecret, na
         kind: "Secret",
         metadata: {
           name,
-          namespace: "pepr-system",
+          namespace: "peppr-system",
         },
         type: "kubernetes.io/dockerconfigjson",
         data: {
@@ -46,7 +46,7 @@ export async function deploy(assets: Assets, force: boolean, webhookTimeout?: nu
 
   const { name, host, path } = assets;
 
-  Log.info("Applying pepr-system namespace");
+  Log.info("Applying peppr-system namespace");
   await K8s(kind.Namespace).Apply(namespace(assets.config.customLabels?.namespace));
 
   // Create the mutating webhook configuration if it is needed
@@ -69,8 +69,8 @@ export async function deploy(assets: Assets, force: boolean, webhookTimeout?: nu
     await K8s(kind.ValidatingWebhookConfiguration).Delete(name);
   }
 
-  Log.info("Applying the Pepr Store CRD if it doesn't exist");
-  await K8s(kind.CustomResourceDefinition).Apply(peprStoreCRD, { force });
+  Log.info("Applying the peppr Store CRD if it doesn't exist");
+  await K8s(kind.CustomResourceDefinition).Apply(pepprStoreCRD, { force });
 
   // If a host is specified, we don't need to deploy the rest of the resources
   if (host) {

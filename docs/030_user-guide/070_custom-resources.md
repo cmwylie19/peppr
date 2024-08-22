@@ -2,7 +2,7 @@
 
 ## Importing Custom Resources
 
-The [Kubernetes Fluent Client](https://github.com/defenseunicorns/kubernetes-fluent-client) supports the creation of TypeScript typings directly from Kubernetes Custom Resource Definitions (CRDs).  The files it generates can be directly incorporated into Pepr capabilities and provide a way to work with strongly-typed CRDs.
+The [Kubernetes Fluent Client](https://github.com/defenseunicorns/kubernetes-fluent-client) supports the creation of TypeScript typings directly from Kubernetes Custom Resource Definitions (CRDs).  The files it generates can be directly incorporated into peppr capabilities and provide a way to work with strongly-typed CRDs.
 
 For example (below), Istio CRDs can be imported and used as though they were intrinsic Kubernetes resources.
 
@@ -50,7 +50,7 @@ Attempting to load https://raw.githubusercontent.com/istio/istio/master/manifest
 ✅ Generated 23 files in the istio directory
 ```
 
-Observe that the `kubernetes-fluent-client` has produced the TypeScript types within the `crds` directory. These types can now be utilized in the Pepr module.
+Observe that the `kubernetes-fluent-client` has produced the TypeScript types within the `crds` directory. These types can now be utilized in the peppr module.
 
 ```typescript
 user@workstation$  cat crds/proxyconfig-v1beta1.ts
@@ -120,10 +120,10 @@ RegisterKind(ProxyConfig, {
 
 ## Using new types
 
-The generated types can be imported into Pepr directly, _there is no additional logic needed to make them to work_.
+The generated types can be imported into peppr directly, _there is no additional logic needed to make them to work_.
 
 ```typescript
-import { Capability, K8s, Log, a, kind } from "pepr";
+import { Capability, K8s, Log, a, kind } from "peppr";
 
 import { Gateway } from "../crds/gateway-v1beta1";
 import {

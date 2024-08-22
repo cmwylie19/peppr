@@ -1,15 +1,15 @@
 {
-  "name": "pepr-dev-module",
-  "description": "static test package.json for local pepr core development",
-  "pepr": {
+  "name": "peppr-dev-module",
+  "description": "static test package.json for local peppr core development",
+  "peppr": {
     "name": "Development Module",
     "uuid": "20e17cf6-a2e4-46b2-b626-75d88d96c88b",
-    "description": "Development module for pepr",
+    "description": "Development module for peppr",
     "onError": "reject",
     "logLevel": "debug",
     "customLabels": {
       "namespace": {
-        "pepr.dev": ""
+        "peppr.dev": ""
       }
     },
     "alwaysIgnore": {

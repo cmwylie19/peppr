@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { GenericClass, K8s, KubernetesObject, kind } from "kubernetes-fluent-client";
 import { K8sInit, WatchPhase } from "kubernetes-fluent-client/dist/fluent/types";
@@ -250,20 +250,20 @@ describe("WatchProcessor", () => {
     expect(mockIncRetryCount).toHaveBeenCalledWith(retryCount);
   });
 
-  it("should call parseInt with process.env.PEPR_RELIST_INTERVAL_SECONDS", async () => {
+  it("should call parseInt with process.env.peppr_RELIST_INTERVAL_SECONDS", async () => {
     const parseIntSpy = jest.spyOn(global, "parseInt");
 
-    process.env.PEPR_RELIST_INTERVAL_SECONDS = "1800";
-    process.env.PEPR_LAST_SEEN_LIMIT_SECONDS = "300";
-    process.env.PEPR_RESYNC_DELAY_SECONDS = "60";
-    process.env.PEPR_RESYNC_FAILURE_MAX = "5";
+    process.env.peppr_RELIST_INTERVAL_SECONDS = "1800";
+    process.env.peppr_LAST_SEEN_LIMIT_SECONDS = "300";
+    process.env.peppr_RESYNC_DELAY_SECONDS = "60";
+    process.env.peppr_RESYNC_FAILURE_MAX = "5";
 
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const watchCfg: WatchCfg = {
-      resyncFailureMax: parseInt(process.env.PEPR_RESYNC_FAILURE_MAX, 10),
-      resyncDelaySec: parseInt(process.env.PEPR_RESYNC_DELAY_SECONDS, 10),
-      lastSeenLimitSeconds: parseInt(process.env.PEPR_LAST_SEEN_LIMIT_SECONDS, 10),
-      relistIntervalSec: parseInt(process.env.PEPR_RELIST_INTERVAL_SECONDS, 10),
+      resyncFailureMax: parseInt(process.env.peppr_RESYNC_FAILURE_MAX, 10),
+      resyncDelaySec: parseInt(process.env.peppr_RESYNC_DELAY_SECONDS, 10),
+      lastSeenLimitSeconds: parseInt(process.env.peppr_LAST_SEEN_LIMIT_SECONDS, 10),
+      relistIntervalSec: parseInt(process.env.peppr_RELIST_INTERVAL_SECONDS, 10),
     };
 
     capabilities.push({

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { KubernetesObject } from "kubernetes-fluent-client";
 
 import { Operation, AdmissionRequest } from "./k8s";
-import { PeprMutateRequest } from "./mutate-request";
+import { pepprMutateRequest } from "./mutate-request";
 
-describe("PeprMutateRequest", () => {
+describe("pepprMutateRequest", () => {
   let mockRequest: AdmissionRequest<KubernetesObject>;
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe("PeprMutateRequest", () => {
   });
 
   it("should initialize correctly for non-DELETE operations", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.Raw).toEqual(mockRequest.object);
   });
 
@@ -53,17 +53,17 @@ describe("PeprMutateRequest", () => {
       },
     };
 
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.Raw).toEqual(mockRequest.oldObject);
   });
 
   it("should provide correct value for PermitSideEffects", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.PermitSideEffects).toEqual(true);
   });
 
   it("should provide correct value for IsDryRun", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.IsDryRun).toEqual(false);
   });
 
@@ -78,12 +78,12 @@ describe("PeprMutateRequest", () => {
         },
       },
     };
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.OldResource).toEqual(mockRequest.oldObject);
   });
 
   it("should provide access to the request object", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.Request).toEqual(mockRequest);
   });
 
@@ -93,11 +93,11 @@ describe("PeprMutateRequest", () => {
       object: undefined as unknown as KubernetesObject,
     };
 
-    expect(() => new PeprMutateRequest(mockRequest)).toThrow("unable to load the request object into PeprRequest.RawP");
+    expect(() => new pepprMutateRequest(mockRequest)).toThrow("unable to load the request object into pepprRequest.RawP");
   });
 
   it("should merge the provided object with the current resource", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.Merge({
       metadata: {
         labels: {
@@ -113,76 +113,76 @@ describe("PeprMutateRequest", () => {
   });
 
   it("should set a label", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.SetLabel("new-label", "newValue");
     expect(wrapper.Raw.metadata?.labels?.["new-label"]).toEqual("newValue");
   });
 
   it("should set an annotation", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.SetAnnotation("new-annotation", "newValue");
     expect(wrapper.Raw.metadata?.annotations?.["new-annotation"]).toEqual("newValue");
   });
 
   it("should remove an existing label", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.RemoveLabel("existing-label");
     expect(wrapper.Raw.metadata?.labels?.["existing-label"]).toBeUndefined();
   });
 
   it("should remove an existing annotation", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.RemoveAnnotation("existing-annotation");
     expect(wrapper.Raw.metadata?.annotations?.["existing-annotation"]).toBeUndefined();
   });
 
   it("should check if a label exists", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.HasLabel("existing-label")).toBeTruthy();
     expect(wrapper.HasLabel("non-existent-label")).toBeFalsy();
   });
 
   it("should check if an annotation exists", () => {
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.HasAnnotation("existing-annotation")).toBeTruthy();
     expect(wrapper.HasAnnotation("non-existent-annotation")).toBeFalsy();
   });
 
   it("should set a label when metadata and labels do not exist", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.SetLabel("new-label", "newValue");
     expect(wrapper.Raw.metadata?.labels?.["new-label"]).toEqual("newValue");
   });
 
   it("should set an annotation when metadata and annotations do not exist", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     wrapper.SetAnnotation("new-annotation", "newValue");
     expect(wrapper.Raw.metadata?.annotations?.["new-annotation"]).toEqual("newValue");
   });
 
   it("should not throw an error when removing a non-existent label", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(() => wrapper.RemoveLabel("non-existent-label")).not.toThrow();
   });
 
   it("should not throw an error when removing a non-existent annotation", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(() => wrapper.RemoveAnnotation("non-existent-annotation")).not.toThrow();
   });
 
   it("should return false for HasLabel when metadata or labels do not exist", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.HasLabel("any-label")).toBeFalsy();
   });
 
   it("should return false for HasAnnotation when metadata or annotations do not exist", () => {
     delete mockRequest.object.metadata;
-    const wrapper = new PeprMutateRequest(mockRequest);
+    const wrapper = new pepprMutateRequest(mockRequest);
     expect(wrapper.HasAnnotation("any-annotation")).toBeFalsy();
   });
 });

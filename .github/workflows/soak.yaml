@@ -50,7 +50,7 @@ on:
 # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
 
 jobs:
-  pepr-build:
+  peppr-build:
     name: controller image
     runs-on: ubuntu-latest
     steps:
@@ -59,50 +59,50 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: clone pepr
+      - name: clone peppr
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           repository: cmwylie19/peppr
-          path: pepr
+          path: peppr
 
-      - name: "set env: PEPR"
-        run: echo "PEPR=${GITHUB_WORKSPACE}/pepr" >> "$GITHUB_ENV"
+      - name: "set env: peppr"
+        run: echo "peppr=${GITHUB_WORKSPACE}/peppr" >> "$GITHUB_ENV"
 
       - name: setup node
         uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: 20
           cache: "npm"
-          cache-dependency-path: pepr
+          cache-dependency-path: peppr
 
-      - name: install pepr deps
+      - name: install peppr deps
         run: |
-          cd "$PEPR"
+          cd "$peppr"
           npm ci
 
-      - name: build pepr image
+      - name: build peppr image
         run: |
-          cd "$PEPR"
+          cd "$peppr"
           npm run build:image
 
-      - name: tar pepr image
+      - name: tar peppr image
         run: |
-          PEPR_TAR="${GITHUB_WORKSPACE}/pepr-img.tar"
-          echo "PEPR_TAR=${PEPR_TAR}" >> "$GITHUB_ENV"
-          docker image save --output "$PEPR_TAR" pepr:dev
+          peppr_TAR="${GITHUB_WORKSPACE}/peppr-img.tar"
+          echo "peppr_TAR=${peppr_TAR}" >> "$GITHUB_ENV"
+          docker image save --output "$peppr_TAR" peppr:dev
 
       - name: upload image tar artifact
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
         with:
-          name: pepr-img.tar
-          path: pepr-img.tar
+          name: peppr-img.tar
+          path: peppr-img.tar
           retention-days: 1
 
   soak-test:
     name: soak-test
     runs-on: ubuntu-latest
     needs:
-      - pepr-build
+      - peppr-build
       
     steps:
       - name: Harden Runner
@@ -119,21 +119,21 @@ jobs:
       - name: dowload image tar artifact
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
-          name: pepr-img.tar
+          name: peppr-img.tar
           path: ${{ github.workspace }}
 
-      - name: import pepr image from tar
+      - name: import peppr image from tar
         run: |
-          PEPR_TAR="${GITHUB_WORKSPACE}/pepr-img.tar"
-          echo "PEPR_TAR=${PEPR_TAR}" >> "$GITHUB_ENV"
-          docker image load --input "$PEPR_TAR"
+          peppr_TAR="${GITHUB_WORKSPACE}/peppr-img.tar"
+          echo "peppr_TAR=${peppr_TAR}" >> "$GITHUB_ENV"
+          docker image load --input "$peppr_TAR"
 
       - name: Create k3d Cluster
         run: "k3d cluster create"
         shell: bash
 
-      - name: Import pepr image into k3d
-        run: "k3d image import pepr:dev -c k3s-default"
+      - name: Import peppr image into k3d
+        run: "k3d image import peppr:dev -c k3s-default"
         shell: bash
 
       - name: Install istioctl
@@ -165,7 +165,7 @@ jobs:
           kubectl wait --for=condition=ready -n istio-system pod -l istio=pilot
           kubectl wait --for=condition=ready -n istio-system pod -l app=istio-ingressgateway
           kubectl wait --for=condition=ready -n watch-auditor pod -l app=watch-auditor
-          kubectl wait --for=condition=ready -n pepr-system pod -l app=pepr-soak-ci-watcher
+          kubectl wait --for=condition=ready -n peppr-system pod -l app=peppr-soak-ci-watcher
 
       - name: Run the soak test and collect metrics
         run: |
@@ -173,7 +173,7 @@ jobs:
           declare -A pod_map
           
           update_pod_map() {
-            for pod in $(kubectl get pods -n pepr-demo -o jsonpath='{.items[*].metadata.name}'); do
+            for pod in $(kubectl get pods -n peppr-demo -o jsonpath='{.items[*].metadata.name}'); do
               count=${pod_map[$pod]}
               if [ -z "$count" ]; then
                 pod_map[$pod]=1
@@ -189,7 +189,7 @@ jobs:
 
           collect_metrics() {
             kubectl exec metrics-collector -n watch-auditor -- curl watch-auditor:8080/metrics | grep watch_controller_failures_total > logs/auditor-log.txt
-            kubectl exec metrics-collector -n watch-auditor -- curl -k https://pepr-soak-ci-watcher.pepr-system.svc.cluster.local/metrics | egrep -E "pepr_cache_miss|pepr_resync_failure_count" > logs/informer-log.txt
+            kubectl exec metrics-collector -n watch-auditor -- curl -k https://peppr-soak-ci-watcher.peppr-system.svc.cluster.local/metrics | egrep -E "peppr_cache_miss|peppr_resync_failure_count" > logs/informer-log.txt
           }
 
           # Start collecting metrics every 5 minutes and checking pod counts every 30 minutes

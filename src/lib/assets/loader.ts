@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { fork } from "child_process";
 
@@ -12,12 +12,12 @@ import { CapabilityExport } from "../types";
  */
 export function loadCapabilities(path: string): Promise<CapabilityExport[]> {
   return new Promise((resolve, reject) => {
-    // Fork is needed with the PEPR_MODE env var to ensure the module is loaded in build mode and will send back the capabilities
+    // Fork is needed with the peppr_MODE env var to ensure the module is loaded in build mode and will send back the capabilities
     const program = fork(path, {
       env: {
         ...process.env,
         LOG_LEVEL: "warn",
-        PEPR_MODE: "build",
+        peppr_MODE: "build",
       },
     });
 
@@ -28,7 +28,7 @@ export function loadCapabilities(path: string): Promise<CapabilityExport[]> {
 
       // Iterate through the capabilities and generate the rules
       for (const capability of capabilities) {
-        console.info(`Registered Pepr Capability "${capability.name}"`);
+        console.info(`Registered peppr Capability "${capability.name}"`);
       }
 
       resolve(capabilities);

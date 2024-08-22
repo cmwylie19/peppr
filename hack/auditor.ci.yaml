@@ -25,7 +25,7 @@ status: {}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: pepr-demo
+  name: peppr-demo
   labels:
     istio-injection: enabled
 spec: {}
@@ -59,7 +59,7 @@ spec:
         - image: cmwylie19/watch-auditor:prod
           name: watch-auditor
           imagePullPolicy: IfNotPresent
-          args: ["serve", "--namespace=pepr-demo"]
+          args: ["serve", "--namespace=peppr-demo"]
           ports:
             - containerPort: 8080
           resources: {}

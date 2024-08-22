@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { kind } from "kubernetes-fluent-client";
 import { CapabilityExport } from "../types";
@@ -55,7 +55,7 @@ export function clusterRoleBinding(name: string): kind.ClusterRoleBinding {
       {
         kind: "ServiceAccount",
         name,
-        namespace: "pepr-system",
+        namespace: "peppr-system",
       },
     ],
   };
@@ -67,7 +67,7 @@ export function serviceAccount(name: string): kind.ServiceAccount {
     kind: "ServiceAccount",
     metadata: {
       name,
-      namespace: "pepr-system",
+      namespace: "peppr-system",
     },
   };
 }
@@ -77,11 +77,11 @@ export function storeRole(name: string): kind.Role {
   return {
     apiVersion: "rbac.authorization.k8s.io/v1",
     kind: "Role",
-    metadata: { name, namespace: "pepr-system" },
+    metadata: { name, namespace: "peppr-system" },
     rules: [
       {
-        apiGroups: ["pepr.dev"],
-        resources: ["peprstores"],
+        apiGroups: ["peppr.dev"],
+        resources: ["pepprstores"],
         resourceNames: [""],
         verbs: ["create", "get", "patch", "watch"],
       },
@@ -94,7 +94,7 @@ export function storeRoleBinding(name: string): kind.RoleBinding {
   return {
     apiVersion: "rbac.authorization.k8s.io/v1",
     kind: "RoleBinding",
-    metadata: { name, namespace: "pepr-system" },
+    metadata: { name, namespace: "peppr-system" },
     roleRef: {
       apiGroup: "rbac.authorization.k8s.io",
       kind: "Role",
@@ -104,7 +104,7 @@ export function storeRoleBinding(name: string): kind.RoleBinding {
       {
         kind: "ServiceAccount",
         name,
-        namespace: "pepr-system",
+        namespace: "peppr-system",
       },
     ],
   };

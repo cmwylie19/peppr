@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 
 import { K8s, kind } from "kubernetes-fluent-client";
 
 import Log from "../logger";
-import { peprStoreCRD } from "./store";
+import { pepprStoreCRD } from "./store";
 
 export async function destroyModule(name: string) {
-  const namespace = "pepr-system";
+  const namespace = "peppr-system";
 
-  Log.info("Destroying Pepr module");
+  Log.info("Destroying peppr module");
 
   await Promise.all([
     K8s(kind.MutatingWebhookConfiguration).Delete(name),
     K8s(kind.ValidatingWebhookConfiguration).Delete(name),
 
-    K8s(kind.CustomResourceDefinition).Delete(peprStoreCRD),
+    K8s(kind.CustomResourceDefinition).Delete(pepprStoreCRD),
     K8s(kind.ClusterRoleBinding).Delete(name),
     K8s(kind.ClusterRole).Delete(name),
     K8s(kind.ServiceAccount, { namespace }).Delete(name),

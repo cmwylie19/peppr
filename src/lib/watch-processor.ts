@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+// SPDX-FileCopyrightText: 2023-Present The peppr Authors
 import { K8s, KubernetesObject, WatchCfg, WatchEvent } from "kubernetes-fluent-client";
 import { WatchPhase } from "kubernetes-fluent-client/dist/fluent/types";
 import { Capability } from "./capability";
@@ -11,13 +11,13 @@ import { metricsCollector } from "./metrics";
 
 // Watch configuration
 const watchCfg: WatchCfg = {
-  resyncFailureMax: process.env.PEPR_RESYNC_FAILURE_MAX ? parseInt(process.env.PEPR_RESYNC_FAILURE_MAX, 10) : 5,
-  resyncDelaySec: process.env.PEPR_RESYNC_DELAY_SECONDS ? parseInt(process.env.PEPR_RESYNC_DELAY_SECONDS, 10) : 5,
-  lastSeenLimitSeconds: process.env.PEPR_LAST_SEEN_LIMIT_SECONDS
-    ? parseInt(process.env.PEPR_LAST_SEEN_LIMIT_SECONDS, 10)
+  resyncFailureMax: process.env.peppr_RESYNC_FAILURE_MAX ? parseInt(process.env.peppr_RESYNC_FAILURE_MAX, 10) : 5,
+  resyncDelaySec: process.env.peppr_RESYNC_DELAY_SECONDS ? parseInt(process.env.peppr_RESYNC_DELAY_SECONDS, 10) : 5,
+  lastSeenLimitSeconds: process.env.peppr_LAST_SEEN_LIMIT_SECONDS
+    ? parseInt(process.env.peppr_LAST_SEEN_LIMIT_SECONDS, 10)
     : 300,
-  relistIntervalSec: process.env.PEPR_RELIST_INTERVAL_SECONDS
-    ? parseInt(process.env.PEPR_RELIST_INTERVAL_SECONDS, 10)
+  relistIntervalSec: process.env.peppr_RELIST_INTERVAL_SECONDS
+    ? parseInt(process.env.peppr_RELIST_INTERVAL_SECONDS, 10)
     : 1800,
 };
 

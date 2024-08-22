@@ -3,20 +3,20 @@ import * as R from "ramda";
 
 import { Capability } from "./lib/capability";
 import Log from "./lib/logger";
-import { PeprModule } from "./lib/module";
-import { PeprMutateRequest } from "./lib/mutate-request";
-import * as PeprUtils from "./lib/utils";
-import { PeprValidateRequest } from "./lib/validate-request";
+import { pepprModule } from "./lib/module";
+import { pepprMutateRequest } from "./lib/mutate-request";
+import * as pepprUtils from "./lib/utils";
+import { pepprValidateRequest } from "./lib/validate-request";
 import * as sdk from "./sdk/sdk";
 
 export {
   Capability,
   K8s,
   Log,
-  PeprModule,
-  PeprMutateRequest,
-  PeprUtils,
-  PeprValidateRequest,
+  pepprModule,
+  pepprMutateRequest,
+  pepprUtils,
+  pepprValidateRequest,
   R,
   RegisterKind,
   a,

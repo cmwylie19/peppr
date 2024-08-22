@@ -1,0 +1,12 @@
+---
+apiVersion: peppr.dev/v1
+data:
+  __peppr_do_not_delete__: k-thx-bye
+  hello-peppr-example-1: was-here
+  hello-peppr-example-1-data: '{"key":"ex-1-val"}'
+  hello-peppr-watch-data: "This data was stored by a Watch Action."
+kind: pepprStore
+metadata:
+  name: peppr-static-test-store
+  namespace: peppr-system
+
