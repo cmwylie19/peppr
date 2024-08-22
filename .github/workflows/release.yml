@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: production
     permissions:
       contents: read
       packages: write
@@ -45,6 +45,7 @@ jobs:
   publish:
     needs: [slsa]
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Set up Node registry authentication
         uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
