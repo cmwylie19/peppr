@@ -42,38 +42,41 @@ jobs:
           npm install -g npm
 
           npm run version
+      - name: echo token
+        run: | 
+          echo ${{ secrets.NPM_TOKEN }}
 
-  slsa:
-    permissions:
-      id-token: write
-      contents: read
-      actions: read
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v2.0.0
-    with:
-      run-scripts: "version, ci, build"
+  # slsa:
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #     actions: read
+  #   uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v2.0.0
+  #   with:
+  #     run-scripts: "version, ci, build"
 
-  publish:
-    needs: [slsa]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Node registry authentication
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
-        with:
-          node-version: 20
-          registry-url: "https://registry.npmjs.org"
+  # publish:
+  #   needs: [slsa]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up Node registry authentication
+  #       uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+  #       with:
+  #         node-version: 20
+  #         registry-url: "https://registry.npmjs.org"
           
-      - name: Set package version
-        run: npm --no-git-tag-version version ${{ github.ref_name }} 
+  #     - name: Set package version
+  #       run: npm --no-git-tag-version version ${{ github.ref_name }} 
 
-      - name: Publish package
-        id: publish
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@v2.0.0
-        with:
-          access: public
-          node-auth-token: ${{ secrets.NPM_TOKEN }}
-          package-name: ${{ needs.slsa.outputs.package-name }}
-          package-download-name: ${{ needs.slsa.outputs.package-download-name }}
-          package-download-sha256: ${{ needs.slsa.outputs.package-download-sha256 }}
-          provenance-name: ${{ needs.slsa.outputs.provenance-name }}
-          provenance-download-name: ${{ needs.slsa.outputs.provenance-download-name }}
-          provenance-download-sha256: ${{ needs.slsa.outputs.provenance-download-sha256 }}
+  #     - name: Publish package
+  #       id: publish
+  #       uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@v2.0.0
+  #       with:
+  #         access: public
+  #         node-auth-token: ${{ secrets.NPM_TOKEN }}
+  #         package-name: ${{ needs.slsa.outputs.package-name }}
+  #         package-download-name: ${{ needs.slsa.outputs.package-download-name }}
+  #         package-download-sha256: ${{ needs.slsa.outputs.package-download-sha256 }}
+  #         provenance-name: ${{ needs.slsa.outputs.provenance-name }}
+  #         provenance-download-name: ${{ needs.slsa.outputs.provenance-download-name }}
+  #         provenance-download-sha256: ${{ needs.slsa.outputs.provenance-download-sha256 }}
