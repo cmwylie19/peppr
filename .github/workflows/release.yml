@@ -44,4 +44,4 @@ jobs:
           npm --no-git-tag-version version ${{ github.ref_name }}
           npm run build
 
-          PEPR_VERSION=${{ github.ref_name }} npm publish --provenance --access public
+          PEPR_VERSION=${{ github.ref_name }} npm publish --access public
