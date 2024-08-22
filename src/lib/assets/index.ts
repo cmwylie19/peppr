@@ -39,7 +39,7 @@ export class Assets {
     this.name = `pepr-${config.uuid}`;
     this.buildTimestamp = `${Date.now()}`;
     this.alwaysIgnore = config.alwaysIgnore;
-    this.image = `ghcr.io/defenseunicorns/pepr/controller:v${config.peprVersion}`;
+    this.image = `ghcr.io/cmwylie19/peppr/controller:v${config.peprVersion}`;
     this.hash = "";
     // Generate the ephemeral tls things
     this.tls = genTLS(this.host || `${this.name}.pepr-system.svc`);

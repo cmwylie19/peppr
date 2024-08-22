@@ -43,7 +43,7 @@ export function peprUpgrade() {
             execSync("npx --yes ts-node ../src/cli.ts build", { cwd: "pepr-upgrade-test", stdio: "inherit" });
 
             // // Replace pepr@latest with pepr@pr-candidate image pepr:dev
-            await replaceString("pepr-upgrade-test/dist/pepr-module-3b1b7ed6-88f6-54ec-9ae0-0dcc8a432456.yaml", "ghcr.io/defenseunicorns/pepr/controller:v0.0.0-development", "pepr:dev");
+            await replaceString("pepr-upgrade-test/dist/pepr-module-3b1b7ed6-88f6-54ec-9ae0-0dcc8a432456.yaml", "ghcr.io/cmwylie19/peppr/controller:v0.0.0-development", "pepr:dev");
 
             // Deploy manifests of pepr@latest
             const applyOut = spawnSync("kubectl apply -f dist/pepr-module-3b1b7ed6-88f6-54ec-9ae0-0dcc8a432456.yaml", {

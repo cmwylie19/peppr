@@ -290,7 +290,7 @@ const assets: Assets = JSON.parse(`{
       "hasSchedule": false
     }
   ],
-  "image": "ghcr.io/defenseunicorns/pepr/controller:v0.0.0-development",
+  "image": "ghcr.io/cmwylie19/peppr/controller:v0.0.0-development",
   "buildTimestamp": "1721936569867",
   "hash": "e303205079a4445946f6eacde9ec4800534653f85aca6f84539d0f7158a22569"
 }`);

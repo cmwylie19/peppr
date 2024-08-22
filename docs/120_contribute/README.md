@@ -23,7 +23,7 @@ Please follow our [Code of Conduct](../../CODE_OF_CONDUCT.md) to maintain a resp
 
 ## Getting Started
 
-- **Repository**: [https://github.com/defenseunicorns/pepr/](https://github.com/defenseunicorns/pepr/)
+- **Repository**: [https://github.com/cmwylie19/peppr/](https://github.com/cmwylie19/peppr/)
 - **npm package**: [https://www.npmjs.com/package/pepr](https://www.npmjs.com/package/pepr)
 - **Required Node version**: `>=18.0.0`
 

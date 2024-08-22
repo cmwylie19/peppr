@@ -2,10 +2,10 @@
   "name": "pepr",
   "description": "Kubernetes application engine",
   "author": "Defense Unicorns",
-  "homepage": "https://github.com/defenseunicorns/pepr",
+  "homepage": "https://github.com/cmwylie19/peppr",
   "license": "Apache-2.0",
   "bin": "dist/cli.js",
-  "repository": "defenseunicorns/pepr",
+  "repository": "cmwylie19/peppr",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -13,7 +13,7 @@
     "/dist",
     "/src"
   ],
-  "version": "0.0.0-development",
+  "version": "0.37.26-rc",
   "main": "dist/lib.js",
   "types": "dist/lib.d.ts",
   "scripts": {
@@ -26,7 +26,7 @@
     "test": "npm run test:unit && npm run test:journey",
     "test:unit": "npm run gen-data-json && jest src --coverage --detectOpenHandles --coverageDirectory=./coverage",
     "test:journey": "npm run test:journey:k3d && npm run test:journey:build && npm run test:journey:image && npm run test:journey:run",
-    "test:journey:prep": "if [ ! -d ./pepr-upgrade-test ]; then git clone https://github.com/defenseunicorns/pepr-upgrade-test.git ; fi",
+    "test:journey:prep": "if [ ! -d ./pepr-upgrade-test ]; then git clone https://github.com/cmwylie19/peppr-upgrade-test.git ; fi",
     "test:journey-wasm": "npm run test:journey:k3d && npm run test:journey:build && npm run test:journey:image && npm run test:journey:run-wasm",
     "test:journey:k3d": "k3d cluster delete pepr-dev && k3d cluster create pepr-dev --k3s-arg '--debug@server:0' --wait && kubectl rollout status deployment -n kube-system",
     "test:journey:build": "npm run build && npm pack",

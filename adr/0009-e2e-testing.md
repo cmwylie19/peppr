@@ -28,6 +28,6 @@ As these tests are expected to have a non-trivial runtime, we will run what we c
 
 ## Consequences
 
-There will be a new repo to be managed: the [Pepr Excellent Examples](https://github.com/defenseunicorns/pepr-excellent-examples).
+There will be a new repo to be managed: the [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples).
 
 There will be a fresh test report available for review, daily.

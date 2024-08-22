@@ -60,7 +60,7 @@ async function validateZarfYaml() {
     metadata: {
       name: "pepr-static-test",
       description: "Pepr Module: A test module for Pepr",
-      url: "https://github.com/defenseunicorns/pepr",
+      url: "https://github.com/cmwylie19/peppr",
       version: "0.0.1",
     },
     components: [

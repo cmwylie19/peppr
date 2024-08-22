@@ -34,7 +34,7 @@ First, in order for automation to take a given code commit through to release, w
 
 See [11. semantic-release](./0011-semantic-release.md) for more on that.
 
-Second, in order to guarantee the level of feature stability we desire for Pepr, we will need to promote the [Pepr Excellent Examples](https://github.com/defenseunicorns/pepr-excellent-examples) tests from a "run overnight for informational purposes"-status to a "run successfully before every release"-status.
+Second, in order to guarantee the level of feature stability we desire for Pepr, we will need to promote the [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples) tests from a "run overnight for informational purposes"-status to a "run successfully before every release"-status.
 
 See [12. E2E Testing](./0012-e2e-testing.md) for more on that.
 

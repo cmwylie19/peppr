@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This tutorial will walk you through the process of building a Kubernetes Operator in Pepr. If you get stuck, browse over to the [Pepr Excellent Examples](https://github.com/defenseunicorns/pepr-excellent-examples/tree/main/pepr-operator) to see the finished code.
+This tutorial will walk you through the process of building a Kubernetes Operator in Pepr. If you get stuck, browse over to the [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/pepr-operator) to see the finished code.
 
 ## Background
 
@@ -522,7 +522,7 @@ function configmap(instance: WebApp) {
         `;
   const es = `
         <div class="top-panel">
-        <img src="https://raw.githubusercontent.com/defenseunicorns/pepr/main/_images/pepr.png" alt="Pepr Logo">
+        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/pepr.png" alt="Pepr Logo">
         <h1>Pepr - Controlador De Kubernetes</h1>
         <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" alt="Kubernetes Logo">
     </div>
@@ -541,7 +541,7 @@ function configmap(instance: WebApp) {
             <h2>Hablanos!</h2>
             <p>Únate a nuestra comunidad y comience a contribuir hoy. Encuéntrenos en GitHub y únate a nuestro canal de Slack para conectarte con otros usuarios y contribuyentes.</p>
             <div class="links">
-                <a href="https://github.com/defenseunicorns/pepr" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/cmwylie19/peppr" target="_blank">GitHub Repository</a>
                 <a href="https://kubernetes.slack.com/archives/C06DGH40UCB" target="_blank">Slack Channel</a>
             </div>
         </div>
@@ -550,7 +550,7 @@ function configmap(instance: WebApp) {
 
   const en = `
         <div class="top-panel">
-        <img src="https://raw.githubusercontent.com/defenseunicorns/pepr/main/_images/pepr.png" alt="Pepr Logo">
+        <img src="https://raw.githubusercontent.com/cmwylie19/peppr/main/_images/pepr.png" alt="Pepr Logo">
         <h1>Pepr - Kubernetes Controller</h1>
         <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png" alt="Kubernetes Logo">
     </div>
@@ -568,7 +568,7 @@ function configmap(instance: WebApp) {
             <h2>Get Involved</h2>
             <p>Join our community and start contributing today. Find us on GitHub and join our Slack channel to connect with other users and contributors.</p>
             <div class="links">
-                <a href="https://github.com/defenseunicorns/pepr" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/cmwylie19/peppr" target="_blank">GitHub Repository</a>
                 <a href="https://kubernetes.slack.com/archives/C06DGH40UCB" target="_blank">Slack Channel</a>
             </div>
         </div>
@@ -781,7 +781,7 @@ _Create an ephemeral cluster. (Kind or k3d will work)_
 Clone the Operator
 
 ```bash
-git clone https://github.com/defenseunicorns/pepr-excellent-examples.git
+git clone https://github.com/cmwylie19/peppr-excellent-examples.git
 cd pepr-operator
 ```
 
@@ -975,4 +975,4 @@ When the WebApp is deleted, all of the resources that it created are also delete
 
 In this tutorial we created a Kubernetes Operator using Pepr. We created a CRD, created helper functions to help with the reconciliation process, and created a queue and reconciler to reconcile the state of the instance with the cluster. We also built and deployed the Operator and created an instance of the WebApp resource and watched the Operator reconcile the state of the instance with the cluster. Finally, we updated and deleted the instance and watched the Operator reconcile the manifests based in the updated instance and delete the resources when the instance was deleted.
 
-If you have questions, reach out in the [Slack channel](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub](https://github.com/defenseunicorns/pepr). Also, checkout the finished example in [Pepr Excellent Examples](https://github.com/defenseunicorns/pepr-excellent-examples/tree/main/pepr-operator)
+If you have questions, reach out in the [Slack channel](https://kubernetes.slack.com/archives/C06DGH40UCB) or [GitHub](https://github.com/cmwylie19/peppr). Also, checkout the finished example in [Pepr Excellent Examples](https://github.com/cmwylie19/peppr-excellent-examples/tree/main/pepr-operator)

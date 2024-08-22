@@ -6,7 +6,7 @@ import { promises as fs } from "fs";
 export async function createDockerfile(version: string, description: string, includedFiles: string[]) {
   const file = `
     # Use an official Node.js runtime as the base image
-    FROM ghcr.io/defenseunicorns/pepr/controller:v${version}
+    FROM ghcr.io/cmwylie19/peppr/controller:v${version}
   
     LABEL description="${description}"
     

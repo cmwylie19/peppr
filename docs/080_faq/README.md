@@ -93,11 +93,11 @@ npx clear-npx-cache
 
 If you want to ensure the cache has been cleared, you can check the cache directory. The location of this directory varies based on your operating system and configuration. However, you can generally find it in your system's home directory under `.npm`.
 
-**Note** - If you are inside of the Pepr Core repo (https://github.com/defenseunicorns/pepr), then it is normal for `npx pepr -V` to return `0.0.0-development`.
+**Note** - If you are inside of the Pepr Core repo (https://github.com/cmwylie19/peppr), then it is normal for `npx pepr -V` to return `0.0.0-development`.
 
 ## I've found a bug, what should I do?
 
-Please report it by opening an issue in the [Pepr GitHub repository](https://github.com/defenseunicorns/pepr/issues). Please include as much information as possible in your bug report, including:
+Please report it by opening an issue in the [Pepr GitHub repository](https://github.com/cmwylie19/peppr/issues). Please include as much information as possible in your bug report, including:
 
 * The version of Pepr you are using
 * The version of Kubernetes you are using
@@ -108,8 +108,8 @@ Security issues should be reported privately, via [email](mailto:pepr@defenseuni
 
 ## I have a feature request, what should I do?
 
-Please let us know by opening an issue in the [Pepr GitHub repository](https://github.com/defenseunicorns/pepr/issues).
+Please let us know by opening an issue in the [Pepr GitHub repository](https://github.com/cmwylie19/peppr/issues).
 
 ## How do I get help with Pepr?
 
-If you have a question about Pepr, please open an issue in the [Pepr GitHub repository](https://github.com/defenseunicorns/pepr/issues) or contact us through the Pepr channel on the Kubernetes Slack.
+If you have a question about Pepr, please open an issue in the [Pepr GitHub repository](https://github.com/cmwylie19/peppr/issues) or contact us through the Pepr channel on the Kubernetes Slack.

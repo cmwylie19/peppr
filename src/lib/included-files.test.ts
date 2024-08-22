@@ -13,7 +13,7 @@ describe("createDockerfile", () => {
     await createDockerfile(version, description, includedFiles);
 
     const generatedContent = await fs.readFile("Dockerfile.controller", "utf-8");
-    expect(generatedContent).toContain(`FROM ghcr.io/defenseunicorns/pepr/controller:v${version}`);
+    expect(generatedContent).toContain(`FROM ghcr.io/cmwylie19/peppr/controller:v${version}`);
     expect(generatedContent).toContain(`LABEL description="${description}"`);
     includedFiles.forEach(file => {
       expect(generatedContent).toContain(`ADD ${file} ${file}`);

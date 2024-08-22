@@ -26,4 +26,4 @@ You also can publish your own Pepr capabilities to NPM and import them.  A coupl
 
 - `pepr.ts` will still be used for local development, but you'll also need to publish an `index.ts` that exports your capabilities. When you build & publish the capability to NPM, you can use `npx pepr build -e index.ts` to generate the code needed for reuse by other Pepr modules.
 
-- See [Pepr Istio](https://github.com/defenseunicorns/pepr-istio) for an example of a reusable capability.
+- See [Pepr Istio](https://github.com/cmwylie19/peppr-istio) for an example of a reusable capability.

@@ -31,7 +31,7 @@ jobs:
     environment: prod
 
     steps:
-      - name: Get token to trigger defenseunicorns/pepr-docs workflow
+      - name: Get token to trigger cmwylie19/peppr-docs workflow
         id: get_workflow_trigger_token
         uses: peter-murray/workflow-application-token-action@dc0413987a085fa17d19df9e47d4677cf81ffef3 # v3.0.0
         with:
@@ -39,10 +39,10 @@ jobs:
           application_private_key: ${{ secrets.DOCS_WORKFLOW_GITHUB_APP_SECRET }}
           organization: defenseunicorns
 
-      - name: Trigger defenseunicorns/pepr-docs build & deploy workflow
+      - name: Trigger cmwylie19/peppr-docs build & deploy workflow
         env:
           GH_TOKEN: ${{ steps.get_workflow_trigger_token.outputs.token }}
         run: |
-          gh api https://api.github.com/repos/defenseunicorns/pepr-docs/dispatches \
+          gh api https://api.github.com/repos/cmwylie19/peppr-docs/dispatches \
             --input - <<< '{"event_type":"update-docs"}'
 

@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Pepr, please report it to us by sending an email to [pepr@defenseunicorns.com](mailto:pepr@defenseunicorns.com?subject=Vulnerability) or directly through the [GitHub UI](https://github.com/defenseunicorns/pepr/security/advisories/new).
+If you discover a security vulnerability in Pepr, please report it to us by sending an email to [pepr@defenseunicorns.com](mailto:pepr@defenseunicorns.com?subject=Vulnerability) or directly through the [GitHub UI](https://github.com/cmwylie19/peppr/security/advisories/new).
 
 Please include the following details in your report:
 

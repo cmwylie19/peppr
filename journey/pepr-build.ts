@@ -111,7 +111,7 @@ async function validateZarfYaml() {
   const zarfYAML = await fs.readFile(resolve(cwd, "dist", "zarf.yaml"), "utf8");
 
   // The expected image name
-  const expectedImage = `ghcr.io/defenseunicorns/pepr/controller:v${peprVer}`;
+  const expectedImage = `ghcr.io/cmwylie19/peppr/controller:v${peprVer}`;
 
   // The expected zarf yaml contents
   const expectedZarfYaml = {
@@ -119,7 +119,7 @@ async function validateZarfYaml() {
     metadata: {
       name: "pepr-static-test",
       description: "Pepr Module: A test module for Pepr",
-      url: "https://github.com/defenseunicorns/pepr",
+      url: "https://github.com/cmwylie19/peppr",
       version: "0.0.1",
     },
     components: [

@@ -23,7 +23,7 @@ jobs:
       - name: clone pepr
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: defenseunicorns/pepr
+          repository: cmwylie19/peppr
           path: pepr
 
       - name: "set env: PEPR"
@@ -75,7 +75,7 @@ jobs:
       - name: clone pepr
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: defenseunicorns/pepr
+          repository: cmwylie19/peppr
           path: pepr
 
       - name: "set env: PEPR"
@@ -84,7 +84,7 @@ jobs:
       - name: clone pepr-excellent-examples
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: defenseunicorns/pepr-excellent-examples
+          repository: cmwylie19/peppr-excellent-examples
           path: pepr-excellent-examples
 
       - name: "set env: PEXEX"
@@ -139,7 +139,7 @@ jobs:
 
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: defenseunicorns/pepr-excellent-examples
+          repository: cmwylie19/peppr-excellent-examples
           path: pepr-excellent-examples
 
       - name: "set env: PEXEX"

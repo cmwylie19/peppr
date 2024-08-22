@@ -136,7 +136,7 @@ export function zarfYaml({ name, image, config }: Assets, path: string) {
     metadata: {
       name,
       description: `Pepr Module: ${config.description}`,
-      url: "https://github.com/defenseunicorns/pepr",
+      url: "https://github.com/cmwylie19/peppr",
       version: `${config.appVersion || "0.0.1"}`,
     },
     components: [
@@ -164,7 +164,7 @@ export function zarfYamlChart({ name, image, config }: Assets, path: string) {
     metadata: {
       name,
       description: `Pepr Module: ${config.description}`,
-      url: "https://github.com/defenseunicorns/pepr",
+      url: "https://github.com/cmwylie19/peppr",
       version: `${config.appVersion || "0.0.1"}`,
     },
     components: [
