@@ -13,7 +13,7 @@
     "/dist",
     "/src"
   ],
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "dist/lib.js",
   "types": "dist/lib.d.ts",
   "scripts": {
